@@ -1,0 +1,133 @@
+<div ng-controller="PlayCtrl" >
+	<h2>{{eventCaption}}</h2>
+	<div id="location-wrapper" layout="column">
+		<div id="location-container">
+	      <div id="location-dummy"></div>
+		  <div id="location-element">
+			  <div id="location-map" ng-controller="PosCtrl as pos" style="width:100%;height:100%" 	ng-init="init(eventId)" tabindex="0">
+			  <!-- 
+			  		ng-if="participants && participants.length && participantsLoaded"
+			   -->
+				  <div class="persons-toolbar">
+					 <slick variable-width=true infinite=false adaptive-height=true settings="slickConfig">
+					 	<div ng-repeat="person in participants" class="persons-toolbar-person">
+					 		<div class="inner" ng-click="selectParticipant(person)">
+								<div style="position:absolute;top:-2px;margin-left:0px;" ng-if="person.nationality && person.nationality.length">
+									<flag country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+								</div>
+								<div class='map-toolbar-icon' style="display:inline-block;background-color:{{person.color || 'transparent'}};border:2.5px solid {{person.color || 'transparent'}};background-image:URL( {{ person.image ? person.image : (  person.gender == 'm' ? 'images/missing-male.png' : 'images/missing-female.png') }} )" />							
+								<div class='map-toolbar-alias'>{{person.alias}}</div>
+							</div>						
+						</div> 
+					 </slick>
+			 	  </div>
+			  	  <div class="favorites-toolbar" ng-if="watched && watched.length">
+					  <div ng-repeat="person in watched" class="favorites-toolbar-person">
+				 		<div class="fav-inner">
+							<div class='fav-label' style="background-color:{{person.color || 'transparent'}};">{{person.alias}}</div>							
+							<div class='fav-text' id='pgval-{{person.id}}'> - </div>
+				 		</div>
+					</div>						
+				  </div>
+				  <img src="images/fullscreen.png" class="btn-fullscreen" ng-click="toggleFullScreen()" />
+				  <!--  img src="images/earth.png" style="margin-right:36px" class="btn-fullscreen" ng-click="openEarth()" / -->
+				  <div id="crrt-timer">--:--:--</div>
+			  </div>
+		  </div>
+		</div>
+	</div>
+	<div style="position:relative;height:8em;" id="vis-wrapper">
+		<div id="vis" style="position:absolute;left:0;top:0;right:84px;height:100%;">
+        	<div id="graph"></div>
+		</div>
+		<div class="y-scale-half-grid"/>
+		<div class="play-stop-btn-cnt">
+			<div class="play-speed-slider">
+				<a ng-click="speed='1x'" class="{{speed == '1x' ? 'selected' : ''}}">1x</a> 
+				<a ng-click="speed='2x'" class="{{speed == '2x' ? 'selected' : ''}}">2x</a> 
+				<a ng-click="speed='4x'" class="{{speed == '4x' ? 'selected' : ''}}">4x</a> 
+				<a ng-click="speed='8x'" class="{{speed == '8x' ? 'selected' : ''}}">8x</a> 
+				<a ng-click="speed='16x'" class="{{speed == '16x' ? 'selected' : ''}}">16x</a> 
+			</div>
+      		<button class="play-stop-btn play"></button>
+    	</div>	
+    	<div class="vis-toolbar">
+    		    <md-select ng-model="graphMode">
+		    	<md-option ng-repeat="mode in graphModes" value="{{mode.code}}">
+		            {{mode.name}}
+		        </md-option>
+			 </md-select>
+		</div>	
+		<div class="y-scale-legend">
+			<div class="min"></div>
+			<div class="mid"></div>
+			<div class="max"></div>			
+		</div>
+	</div>
+	<div class='btn-toolbar-pos' style='text-align:right;margin-top : 0.5em;'>
+		<md-button class="md-primary md-raised" disabled ng-click="customizeVisibility($event)">Customize</md-button>
+	</div>
+</div>
+
+<script type="text/ng-template" id="customize-visibility.html">
+	
+	<md-content class="visibility-table" layout="column" style='padding:0.5em' class="noselect">
+		<div class="md-toolbar-tools" style="border-bottom: 1px solid rgba(0,0,0,0.126);">
+			Customize
+		    <div flex style="position: relative;"></div>
+				<md-button class="md-primary md-raised {{(searchName || searchClub || searchNationality) ? 'md-warn' : ''}}" ng-click="showAll($event)">{{(searchName || searchClub || searchNationality) ? "Filtered" : "All"}}</md-button>
+				<md-button class="md-primary md-raised {{(searchName || searchClub || searchNationality) ? 'md-warn' : ''}}" ng-click="clearAll($event)">Clear</md-button>
+				<md-button style='align:right;color:white;' ng-click="closeDialog()" class="md-primary md-raised" style='display:inline-block;'>Close</md-button>
+		</div>
+	    <div layout="row" style="background-color:white;padding-bottom:0.25em;">
+			<md-input-container class="md-block table-search-caption" flex>Search</md-input-container>
+			<md-input-container class="md-block">
+    	        <label>By name</label>
+        	    <input ng-model="searchName">
+          	</md-input-container>
+			<md-input-container class="md-block">
+    	        <label>By club</label>
+        	    <input ng-model="searchClub">
+          	</md-input-container>
+			<md-input-container class="md-block" style="width:4em">
+    	        <label>By nat.</label>
+        	    <input ng-model="searchNationality">
+          	</md-input-container>
+		</div>
+
+		<md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{objectCount}}" md-on-paginate="getPersons" md-page-select></md-table-pagination>
+
+		<md-table-container style="overflow:auto;max-height:25em">
+		  <table md-table md-row-select="selected" multiple ng-model="selected" md-progress="promise">
+		    <thead md-head md-order="query.order" md-on-reorder="getPersons">
+		      <tr md-row>
+		        <th md-column md-order-by="nationality" class="loctbl-gender">Nat.</th>
+		        <th md-column md-order-by="lastNameToLower" class="loctbl-lastName">Surname</th>
+		        <th md-column md-order-by="firstNameToLower" class="loctbl-firstName">Name</th>
+		        <th md-column md-numeric md-order-by="age" class="loctbl-age">Age</th>
+		        <th md-column md-order-by="clubToLower" class="loctbl-club">Club</th>
+		        <th md-column class="loctbl-description">Info</th>
+		      </tr>
+		    </thead>
+		    <tbody md-body>
+		      <tr md-row md-select="person" md-select-id="name" md-auto-select ng-repeat="person in persons.data" md-on-select="mdOnSelect()">
+		        <td md-cell class='loctbl-gender' style='background-image:URL({{person.gender == "m" ? "images/male-sign.png" : "images/female-sign.png"}})'>
+					<div class='tbl-icon' style="background-image:URL( {{ person.image ? person.image : (  person.gender == 'm' ? 'images/missing-male.png' : 'images/missing-female.png') }} )">
+					</div>
+					<div ng-if="person.nationality && person.nationality.length">
+						<flag class="tbl-flag" country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+					</div>
+				</td>
+		        <td md-cell class="loctbl-lastName">{{person.lastName}}</td>
+		        <td md-cell class="loctbl-firstName">{{person.firstName}}</td>
+		        <td md-cell class="loctbl-age">{{person.age}}</td>
+		        <td md-cell class="loctbl-club">{{person.club}}</td>
+		        <td md-cell class="loctbl-description">{{person.description}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</md-table-container>
+
+	</md-content>
+		
+</script>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>BusMap - Bus Position System</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/angular-material.css" />
+    <link rel="stylesheet" href="css/ol.css" />
+	<link rel="stylesheet" href="css/flags16.css" />
+	<link rel="stylesheet" href="css/flags32.css" />
+	<link rel="stylesheet" href="css/md-data-table.css" />
+    <link rel="stylesheet" href="css/mdColorPicker.css" />
+    <link rel="stylesheet" href="css/lf-ng-md-file-input.css" />
+    <link rel="stylesheet" href="css/ol3-popup.css" />
+    <link rel="stylesheet" href="css/vis.min.css" />
+	<link rel="stylesheet" href="css/slick.css"/>
+    <link rel="stylesheet" href="css/slick-theme.css" />
+    <link rel="stylesheet" href="css/app.css" />
+	<!-- external dependencies -->
+    <script src="script/jquery-2.2.3.min.js"></script>
+    <script src="script/moment.min.js"></script>
+    <script src="script/angular.min.js"></script>
+    <script src="script/angular-route.min.js"></script>
+    <script src="script/angular-animate.min.js"></script>
+    <script src="script/angular-aria.min.js"></script>
+    <script src="script/angular-cookies.min.js"></script>
+    <script src="script/angular-messages.min.js"></script>    
+    <script src="script/anglular-slick.js"></script>
+    <script src="script/svg-assets-cache.js"></script>
+    <script src="script/angular-material.min.js"></script>
+    <script src="script/ol.js"></script>
+    <script src="script/slick.min.js"></script>
+    <script src="script/fastclick.js"></script>
+    <script src="script/jquery.mousewheel.min.js"></script>
+    <script src="script/ng-flags.js"></script>
+    <script src="script/iso-countries.js"></script>
+    <script src="script/ol3-popup.js"></script>
+    <script src="script/vis.min.js"></script>
+	<script src="script/canvg.js"></script>         
+    <script src="../api/busmap.js"></script>
+    <script src="../api/ui.js"></script>
+
+	<!-- app dependencies -->
+    <script src="main/public.js"></script>
+
+	<!-- ui components-->
+    <script src="main/play.js"></script>
+    <script src="main/pos.js"></script>
+	<style>
+	.btn-fullscreen {
+		bottom:8.25em;
+	}
+	body.fullscreen .btn-fullscreen {
+		bottom:0;
+	}
+	md-input-container .md-errors-spacer {
+    	min-height: 0;
+	}
+	md-input-container.md-inp-fix {
+		margin:0;
+		padding:0;
+		max-width:48%;
+		margin-top : 0.25em;
+		margin-bottom : 0.75em;
+	}
+
+
+	md-sidenav.md-sidenav-left {
+	    width: 50% !important;
+	    min-width: 360px !important;
+	    max-width: 450px !important;
+	} 
+	
+	md-sidenav.md-sidenav-right {
+	    width: 350px !important;
+	    min-width: 350px !important;
+	    max-width: 350px !important;
+	} 
+	
+	md-list-item .md-button {
+		padding : 0 !important;
+	}
+	.simple-button {
+		float : right;
+		margin-left : 0.5em;
+	}
+	.simple-button:hover {
+		text-decoration : underline;
+		cursor : pointer;
+		color : black;
+	}
+	/*#parts-toolbar-toggle-button {
+		margin-left : 2.5em;
+	}*/
+	#favs-toolbar-toggle-button {
+		position:absolute;
+		right : 0;
+	}
+	#favs-toolbar-toggle-notify {
+		position:absolute;
+		right : 108px;
+		background-color : rgba(255,255,255,0.8);
+		padding : 0.5em;
+		position : absolute;
+		margin-top : 0;
+		top : 0.70em;
+	}
+	#location-map {	
+	
+		width:100%;
+		height:100%;
+		padding-bottom : 8em;
+	}
+	md-radio-button ._md-label {
+		margin-left:25px;
+	}
+	body.fullscreen #location-map {
+		padding-bottom : 0;
+	}
+	body.fullscreen .favorites-toolbar {
+		display : none;
+	}
+	#crrt-timer {
+		top : 0.78em;
+		left : 50%;
+		right : auto;
+		margin-left : -2em;
+		font-size : 120%;
+	}
+	#lrlogo { 
+		position : absolute;
+		margin-left : -88px;
+		right : 87px;
+		bottom : -80px;
+	}
+	#main-logo {
+		width : 100px;
+	}
+	.ol-zoom {
+		left: 0.25em;
+		top:  5em;
+	}
+
+	</style>	
+</head>
+<body class="root-gui">
+	<img src="images/cgradient.png" style="position:absolute;display:none;" id="proxy-image"/>
+	<div ng-controller="PlayCtrl" >
+		<img src="images/fullscreen.png" class="btn-fullscreen" ng-click="toggleFullScreen()" />
+		<!-- EXAMPLE : <div style="font-size:200%">{{eventCaption}}</div> -->
+		<div id="location-wrapper" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;">
+			<div id="location-container" style="max-height:initial;position:initial;">
+		      <div id="location-dummy"></div>
+			  <div id="location-element">
+				  <div id="location-map" ng-controller="PosCtrl as pos"	ng-init="init(eventId)" tabindex="0">
+				  	  <div class="favorites-toolbar" ng-if="watched && watched.length" style="bottom:8.1em">
+						  <div ng-repeat="person in watched" class="favorites-toolbar-person">
+					 		<div class="fav-inner">
+								<div class='fav-label' style="background-color:{{person.color || 'transparent'}};">{{person.alias}}</div>							
+								<div class='fav-text' id='pgval-{{person.id}}'> - </div>
+					 		</div>
+						</div>						
+					  </div>
+					  <div id="crrt-timer">--:--:--</div>
+				  </div>
+			  </div>
+			</div>
+		</div>
+		<md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="left">
+	      <md-toolbar class="md-theme-light">
+	      	    <md-radio-group ng-model="favGender" layout="row" style="position:absolute;font-size:65%;right:.25em;top:1.5em;">
+			      <md-radio-button value="all" style="margin-right:10px;">All</md-radio-button>
+			      <md-radio-button value="f" style="margin-right:10px;">Females</md-radio-button>
+			      <md-radio-button value="m" style="margin-right:10px;">Males</md-radio-button>
+			    </md-radio-group>
+		        <h1 class="md-toolbar-tools">Participants</h1>
+		  </md-toolbar>
+	      <md-content layout-padding="" style="padding:4px">
+		      <div layout="row">
+		          <md-input-container class="md-inp-fix" flex>
+		            <label for="favFirstName">First name</label>
+		            <input type="text" id="favFirstName" ng-model="favFirstName" md-autofocus="">
+		          </md-input-container>
+		          <md-input-container class="md-inp-fix" flex style="margin-left:0.5em;">
+		            <label for="favLastName">Last Name</label>
+		            <input type="text" id="favLastName" ng-model="favLastName" md-autofocus="">
+		          </md-input-container>
+		      </div>
+		      <div layout="row">
+		          <md-input-container class="md-inp-fix" flex>
+		            <label for="favStartPos">BIB</label>
+		            <input type="text" id="favStartPos" ng-model="favStartPos" md-autofocus="">
+		          </md-input-container>
+		          <md-input-container class="md-inp-fix" flex style="margin-left:0.5em;">
+		            <label for="favStartGroup">Group</label>
+		            <input type="text" id="favStartGroup" ng-model="favStartGroup" md-autofocus="">
+		          </md-input-container>
+		      </div>
+		      <div layout="row">
+		          <md-input-container class="md-inp-fix" flex>
+		            <label for="favClub">Club</label>
+		            <input type="text" id="favClub" ng-model="favClub" md-autofocus="">
+		          </md-input-container>
+		          <md-input-container class="md-inp-fix" flex style="margin-left:0.5em;">
+			          <label for="favClub">Type</label>
+			          <md-select ng-model="favType">
+			              <md-option ng-repeat="type in types" value="{{type.code}}">
+			                {{type.name}}
+		    	          </md-option>
+		        	  </md-select>
+		          </md-input-container>
+		      </div>			          
+		    </form>
+			<md-list>
+  				<md-subheader class="md-no-sticky">Favorites<div ng-click="addFav()" class='simple-button'>All</div><div ng-click="removeFav()"  class='simple-button'>Clear</div></md-subheader>
+	  			<md-list-item ng-if="participants && participants.length" ng-repeat="person in (filteredParticipants || participants)" ng-click="toggleFav(person.id)" class="noright">
+	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;position:absolute;padding-top:3px;">#{{person.start_pos}}</span>
+	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;margin-top:13px;">{{person.start_group||"-"}}</span>
+	    			<img style="border-radius:100%;border:2px solid {{person.color}}" alt="{{ person.firstName}} {{ person.lastName }}" ng-src="{{person.image || (person.gender == 'm' ? 'images/missing-male.png' : (person.gender == 'f' ? 'images/missing-female.png':null))  }}" class="md-avatar">	    			
+
+					<div style="position:absolute;margin-left:-62px;margin-top:-2px;" ng-if="person.nationality && person.nationality.length">
+						<flag country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+					</div>
+	    			<div ng-if="person.type" style="pointer-events:none;font-size:75%;background-color:#808080;border-radius:4px;line-height:1;color:white;padding:2px;position:absolute;margin-top:5px;">{{person.type||""}}</div>
+	    			<div ng-if="person.club" style="pointer-events:none;font-size:75%;line-height:1;color:#A0A0A0;position:absolute;margin-top:41px;">{{person.club||""}}</div>
+	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{person.first_name}} {{ person.last_name}} {{ (person.age ? "("+person.age+((" "+(person.gender||"")).toUpperCase())+")" : "") }}</p>
+	    			<md-checkbox class="md-secondary" ng-model="person.selected" ng-change="updateFav(person.id)"></md-checkbox>
+	  			</md-list-item>
+			</md-list>	    
+	      </md-content>
+	    </md-sidenav>		
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
+	      <md-content layout-padding="" style="padding:4px" ng-if="participants && participants.length">
+			<md-list>
+  				<md-subheader class="md-no-sticky">Favorites</md-subheader>
+	  			<md-list-item ng-repeat="person in participants" ng-click="showFav(person)" class="noleft" ng-if="person.selected">
+	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;position:absolute;padding-top:3px;">#{{person.start_pos}}</span>
+	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;margin-top:13px;">{{person.start_group||"-"}}</span>
+	    			<img style="border-radius:100%;border:2px solid {{person.color}}" alt="{{ person.firstName}} {{ person.lastName }}" ng-src="{{person.image || (person.gender == 'm' ? 'images/missing-male.png' : (person.gender == 'f' ? 'images/missing-female.png':null))  }}" class="md-avatar">	    			
+					<div style="position:absolute;margin-left:-62px;margin-top:-2px;" ng-if="person.nationality && person.nationality.length">
+						<flag country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+					</div>
+	    			<div ng-if="person.type" style="font-size:75%;background-color:#808080;pointer-events:none;border-radius:4px;line-height:1;color:white;padding:2px;position:absolute;margin-top:5px;">{{person.type||""}}</div>
+	    			<div ng-if="person.club" style="font-size:75%;line-height:1;color:#A0A0A0;pointer-events:none;position:absolute;margin-top:41px;">{{person.club||""}}</div>
+	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{person.first_name}} {{ person.last_name}} {{ (person.age ? "("+person.age+((" "+(person.gender||"")).toUpperCase())+")" : "") }}</p>
+	  			</md-list-item>
+			</md-list>	    
+	      </md-content>
+	    </md-sidenav>		
+		
+		<md-button id="parts-toolbar-toggle-button" class="md-primary md-raised" ng-click="toggleLeft($event)">Pers</md-button>
+		</md-button>
+		<md-button id="favs-toolbar-toggle-button" class="md-primary md-raised" ng-click="toggleRight($event)">Favs</md-button>
+		</md-button>
+		<!--<md-switch id="favs-toolbar-toggle-notify" class="md-primary md-raised" ng-if="$mdMedia('gt-md')" ng-model="doNotify" aria-label="Notify">Notify</md-switch>-->
+
+		<div style="height: 8em;position: absolute;bottom: 0;left: 0;right: 0;" id="vis-wrapper">		
+			<div id="vis" style="position:absolute;left:0;top:0;right:84px;height:100%;">
+	        	<div id="graph"></div>
+			</div>
+			<div class="y-scale-half-grid"/>
+			<div class="play-stop-btn-cnt">
+				<div class="play-speed-slider">
+					<a ng-click="speed='1x'" class="{{speed == '1x' ? 'selected' : ''}}">1x</a> 
+					<a ng-click="speed='2x'" class="{{speed == '2x' ? 'selected' : ''}}">2x</a> 
+					<a ng-click="speed='4x'" class="{{speed == '4x' ? 'selected' : ''}}">4x</a> 
+					<a ng-click="speed='8x'" class="{{speed == '8x' ? 'selected' : ''}}">8x</a> 
+					<a ng-click="speed='16x'" class="{{speed == '16x' ? 'selected' : ''}}">16x</a> 
+				</div>
+	      		<button class="play-stop-btn play"></button>
+	    	</div>	
+	    	<div class="vis-toolbar">
+	    		    <md-select ng-model="graphMode">
+			    	<md-option ng-repeat="mode in graphModes" value="{{mode.code}}">
+			            {{mode.name}}
+			        </md-option>
+				 </md-select>
+			</div>		
+			<div class="y-scale-legend">
+				<div class="min" style="top:24px"></div>
+				<div class="mid" style="top:-5px"></div>
+				<div class="max" style="top:-27px"></div>			
+			</div>
+			<a id="lrlogo" href="http://liveortung.de"><img id="main-logo" style="z-index:9999;width:224px;margin-bottom:-2px;margin-right:-4px;" src="images/logo2.svg"/></a>
+		</div>
+	</div>	
+</body>
+</html>

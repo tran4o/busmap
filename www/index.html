@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>BusMap - Bus Position System</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/angular-material.css" />
+    <link rel="stylesheet" href="css/ol.css" />
+	<link rel="stylesheet" href="css/flags16.css" />
+	<link rel="stylesheet" href="css/flags32.css" />
+	<link rel="stylesheet" href="css/md-data-table.css" />
+    <link rel="stylesheet" href="css/mdColorPicker.css" />
+    <link rel="stylesheet" href="css/lf-ng-md-file-input.css" />
+    <link rel="stylesheet" href="css/ol3-popup.css" />
+    <link rel="stylesheet" href="css/vis.min.css" />
+	<link rel="stylesheet" href="css/slick.css"/>
+    <link rel="stylesheet" href="css/slick-theme.css" />
+    <link rel="stylesheet" href="css/app.css" />
+	<!-- external dependencies -->
+    <script src="script/jquery-2.2.3.min.js"></script>
+    <script src="script/moment.min.js"></script>
+    <script src="script/angular.min.js"></script>
+    <script src="script/angular-route.min.js"></script>
+    <script src="script/angular-animate.min.js"></script>
+    <script src="script/angular-aria.min.js"></script>
+    <script src="script/angular-cookies.min.js"></script>
+    <script src="script/angular-messages.min.js"></script>    
+    <script src="script/anglular-slick.js"></script>
+    <script src="script/svg-assets-cache.js"></script>
+    <script src="script/angular-material.min.js"></script>
+    <script src="script/ol.js"></script>
+    <script src="script/tinycolor.js"></script>
+    <script src="script/md-data-table.js"></script>
+    <script src="script/slick.min.js"></script>
+	<script src="script/rgbcolor.js"></script> 
+	<script src="script/StackBlur.js"></script>
+	<script src="script/canvg.js"></script>         
+    <script src="script/fastclick.js"></script>
+    <script src="script/jquery.mousewheel.min.js"></script>
+    <script src="script/angular-img-cropper.min.js"></script>
+    <script src="script/mdColorPicker.js"></script>
+    <script src="script/ng-flags.js"></script>
+    <script src="script/lf-ng-md-file-input.js"></script>
+    <script src="script/iso-countries.js"></script>
+    <script src="script/gpx-parse-browser.js"></script>
+
+    <script src="script/ol3-popup.js"></script>
+    <script src="script/vis.js"></script>
+    
+    <script src="../api/busmap.js"></script>
+    <script src="../api/ui.js"></script>
+
+	<!-- app dependencies -->
+    <script src="main/app.js"></script>
+    <script src="main/flash.js"></script>
+    <script src="main/authentication.js"></script>
+
+	<!-- ui components-->
+    <script src="main/play.js"></script>
+    <script src="main/pos.js"></script>
+    <script src="main/home.js"></script>
+    <script src="main/events.js"></script>
+    <script src="main/location.js"></script>
+	<script src="main/login.js"></script>
+    <script src="main/register.js"></script>
+    <script src="main/profile.js"></script>
+</head>
+<body>
+	<img src="images/cgradient.png" style="position:absolute;display:none;" id="proxy-image"/>
+	
+	<div id="header-tabs" class="header-tabs hidden">	
+		<a href="#/events" class="btn btn-primary">Events</a>
+	    <a href="#/location" class="btn btn-primary">Locate</a> 		
+		<a href="#/profile" class="btn btn-primary">Settings</a>
+		&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;
+		<a href="#/logout" class="btn btn-primary">Logout</a>
+	</div>
+	<div id="header-login">
+		<span id="user-header-info"/>
+	</div>
+    <div class="jumbotron"">
+        <div class="container">
+            <div class="container-child {{[restrictedPage ? 'col-sm-12 col-sm-offset-0' : 'col-sm-8 col-sm-offset-2']}}">
+                <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                <div ng-view></div>
+            </div>
+        </div>
+    </div>
+    
+    <div style='text-align:center;'>
+	    <p>
+	            <a href="http://liveortung.de"><img id="main-logo" src="images/logo.png"/></a>
+	    </p>
+    </div>
+	
+</body>
+</html>

@@ -1,0 +1,73 @@
+﻿﻿<div ng-controller="HomeController" ng-cloak>
+	﻿<h2>Welcome to BusMap!</h2>
+	<md-button class="md-primary md-raised" ng-click="uploadGPX($event)">Upload track</md-button>
+	<p>&nbsp;</p>
+
+	<md-list ng-if="invitations && invitations.length">
+	  <md-subheader class="md-no-sticky">Waiting invitations ({{invitations ? invitations.length : 0}})</md-subheader>
+	  <md-list-item class="md-3-line" ng-repeat="item in invitations" style="padding-top:1em;">
+		<img style="background-color: {{item.color}}" class="invitation-owner-icon" data-src="{{item.ownerImage}}" />
+	    <div class="md-list-item-text" layout="column">
+	
+	      <h4>{{ item.event.name }} &nbsp;<b>{{moment(item.event.beginTime).format("DD.MM.YYYY HH:mm") }} - {{moment(item.event.endTime).format("HH:mm") }}</b> {{item.startGroup}} #{{item.startPos}}</h4>
+	      <p>{{ item.invitation }}</p>
+	      <p style='color:green;'> {{ item.totalJoined }} joined</p>
+	      <p>{{ item.totalInvited }} invited</p>
+	      <p style="font-size:80%;text-color:#A0A0A0;">
+	    		{{item.ownerText}}
+	      </p>
+	      
+	      <p>
+	      		<span class="invitation-a-button" ng-click="acceptInvitation(item)">Join</span><span class="invitation-a-button" ng-click="removeInvitation(item)">Remove</span>
+	      </p>
+	    </div>
+	  </md-list-item>
+	</md-list>
+
+	<md-list ng-if="isAdmin && missingPersons && missingPersons.length">
+	  <br/>
+	  <md-subheader class="md-no-sticky">Not registered devices</md-subheader>
+	  <md-list-item class="md-2-line" ng-repeat="item in missingPersons" style="margin-top:0.25em;margin-bottom:0.5em;min-height:1em;">
+	    <div class="md-list-item-text" layout="column">
+	      <h4><a style="color:black" href="#/register?imei={{item.imei}}">{{ item.imei }}</a> &nbsp;<b>{{moment(item.last_t).format("DD.MM.YYYY HH:mm") }}</b>&nbsp;&nbsp;<span style='color:#A0A0A0;'id='imei-{{item.imei}}-location'></span></h4>
+	      <a href='http://www.openstreetmap.org/#map=16/{{item.lat}}/{{item.lon}}' target='_blank' style='color:green;font-size:80%'> {{ item.lon }} {{ item.lat }}</a>
+	    </div>
+	  </md-list-item>
+	</md-list>
+</div>
+
+
+<script type="text/ng-template" id="upload-gpx.html">
+	<md-content class="edit-track-content" style="padding:1em;min-width:40em;">
+		<div style="background-color:#FFF0F0;padding:0.5em;color:#FF4040;font-weight:bold;">WARNING!!! Uploading data will override all non race data in the specified interval!</div>
+
+		<div id="edit-track-info-wrapper">
+			<div style="padding:0.5em;font-size:120%;">Track to upload : {{trackLength ? trackLength : 'Empty'}}</div>
+		</div>
+
+		<div id="gpx-preview-map" class="map"></div>
+
+		<lf-ng-md-file-input accept=".gpx" lf-placeholder="file to upload" lf-files="gpxFile" lf-api="api01"></lf-ng-md-file-input>
+		
+		<br/>
+		
+		<md-input-container>
+			<label for="eventDate">Date</label>
+			<input type="date" ng-model="beginTime" required>
+		</md-input-container>
+	      		  
+	    <md-input-container>
+			<label for="eventBegin">Begin</label>
+			<input type="time" ng-model="beginTime" required>
+		</md-input-container>
+			      
+	    <md-input-container>
+			<label for="eventEnd">End</label>
+			<input type="time" ng-model="endTime" required>
+		</md-input-container>
+
+		<md-button class="md-primary md-raised" ng-disabled="!beginTime || !endTime || !points || !points.length" ng-click="uploadData($event)">Upload</md-button>
+		<md-button class="md-primary md-raised" ng-click="closeDialog($event)">Close</md-button>
+	
+	</md-content>
+</script>

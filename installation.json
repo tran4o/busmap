@@ -1,0 +1,31 @@
+{
+	"db" : 
+	{
+		"location" : "localhost",
+		"username" : "VISIONR",
+		"password" : "plan4vision"
+	},
+	"server" : {
+		"httpPort" : 3000
+	},
+	"import" : {
+		"gpx" : {
+			"loop" : true
+		}
+	},
+	"limits" : 
+	{
+		"memoryCache" : {
+			"maxTiles" : 10000,
+			"maxChunks" : 10000,
+			"maxPersons" : 10000,
+			"maxEvents" : 10000,
+			"liveChunkTimeout" : 5,
+			"liveTileTimeout" : 5
+		}, 
+		"discreteDBData" : 
+		{
+			"maxRows" : 1000
+		}
+	}
+}

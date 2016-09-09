@@ -1,0 +1,42 @@
+{
+  "name": "busmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "bm": "./js/bin/bm.js",
+    "http": "./js/bin/http.js",
+    "gps": "./js/bin/gps.js",
+    "build": "./js/bin/build.js"
+  },
+  "dependencies": {
+    "basic-auth": "^1.0.3",
+    "bintrees": "^1.0.1",
+    "body-parser": "^1.15.0",
+    "browserify": "^13.0.1",
+    "colors": "^1.1.2",
+    "compression": "^1.6.2",
+    "express": "^4.13.4",
+    "gpx-parse": "^0.10.4",
+    "joose": "^3.50.0",
+    "lru-cache": "^4.0.1",
+    "minifyify": "^7.3.3",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.13.0",
+    "multer": "^1.1.0",
+    "node-geocoder": "^3.9.1",
+    "parse-color": "^1.0.0",
+    "pg": "^6.0.0",
+    "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5",
+    "socket.io-stream": "^0.9.0",
+    "watchify": "^3.7.0",
+    "winston": "^2.2.0",
+    "winston-daily-rotate-file": "^1.0.1"
+  }
+}

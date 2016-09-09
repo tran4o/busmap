@@ -1,0 +1,4 @@
+CREATE DATABASE "BUSMAP"
+  WITH ENCODING='UTF8'
+       TEMPLATE=template_postgis
+       CONNECTION LIMIT=-1;

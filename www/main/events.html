@@ -1,0 +1,317 @@
+﻿﻿<div ng-controller="EventsCtrl" class="events" layout="column" ng-cloak>
+
+    <md-radio-group ng-model="eventFilter" layout="row" style="margin-top: -3.7em;margin-bottom: 1em;margin-left: -1.3em;">
+
+      <md-radio-button value="all">All</md-radio-button>
+      <md-radio-button value="joined">Joined</md-radio-button>
+      <md-radio-button value="hosted">Hosted</md-radio-button>
+      <md-radio-button value="favorites">Favorites</md-radio-button>
+
+    </md-radio-group>
+
+  <md-content>
+    <md-tabs md-dynamic-height="true" md-selected="selectedIndex" md-border-bottom md-autoselect>    
+      <md-tab ng-repeat="tab in tabs"
+              ng-disabled="tab.disabled"
+              label="{{tab.code}}" >
+        <div class="tab{{$index%4}} to-be-removed-on-refresh" style="padding: 25px; text-align: center;">
+			<div layout="column" class="event-container">
+		      <div class="event-dummy"></div>
+			  <div class="event-element">
+				  <div id="event-map-tab-{{tab.id}}" class="event-map map">
+				  </div>
+			  </div>
+			  <a href='/www/event.html?event={{tab.id}}'>
+			  <img ondragstart="return false"; style="opacity:0.8;position:absolute;cursor:pointer;left:50%;top:50%;width:5em;height:5em;margin-left:-2.5em;margin-top:-2.5em;" src="images/play.png"/>
+			  </a> 
+			</div>
+			  <form layout="column" class="event-form">
+			    <div layout="row" layout-sm="column">
+			      <div flex style="position: relative;">
+			      </div>
+			      <md-input-container>
+			        <label for="code">Code</label>
+			        <input ng-disabled="!tab.isOwner" type="text" ng-model="tab.code" required>
+			      </md-input-container>
+			      <md-input-container>
+			        <label for="name">Name</label>
+			        <input ng-disabled="!tab.isOwner" type="text" ng-model="tab.name">
+			      </md-input-container>
+
+			      <md-input-container>
+			        <label for="eventDate">Date</label>
+			        <input ng-disabled="!tab.isOwner" type="date" ng-model="tab.beginTime" required>
+			      </md-input-container>
+	      		  
+	      		  <md-input-container>
+			        <label for="eventBegin">Begin</label>
+			        <input ng-disabled="!tab.isOwner" type="time" ng-model="tab.beginTime" required>
+			      </md-input-container>
+			      
+	      		  <md-input-container>
+			        <label for="eventEnd">End</label>
+			        <input ng-disabled="!tab.isOwner" type="time" ng-model="tab.endTime" required>
+			      </md-input-container>
+			      
+			      </div>
+			  </form>
+
+			<div style="text-align:right">
+				<div style="{{ tab.isOwner ? 'float:left' : 'text-align:left'}}">
+	            	<md-button class="md-primary md-raised" ng-disabled="hasChanged" ng-click="editParticipants($event,tab)">Participants</md-button>
+	            	<md-button class="md-primary md-raised" ng-if="tab.isOwner" ng-disabled="hasChanged" ng-click="editTrack($event,tab)">Track</md-button>
+					<md-button class="md-primary md-raised" ng-if="tab.isOwner" ng-disabled="hasChanged" ng-click="inviteParticipants($event,tab)">Invite</md-button>
+	            	<md-button class="md-primary md-raised" ng-disabled="hasChanged" ng-click="editGroups($event,tab)">Groups</md-button>
+	            	<img ng-click="setFavorite($event,tab)" class="to-fix-src fav-button-img" data-src="images/{{tab.favorite ? 'bookmark.png' : 'bookmark-gray.png'}}"/>
+	            </div>
+        	    <md-button class="event-delete-button" ng-if="tab.isOwner"  ng-disabled="hasChanged" ng-click="showConfirmRemove($event,tab)">Delete</md-button>
+	      		<md-button ng-click="saveEvent(tab)" ng-if="tab.isOwner" ng-disabled="!tab.code || !tab.code.length" class="md-primary md-raised" >Save</md-button>
+	      		<md-button ng-click="postFixEvent(tab)" ng-if="tab.isOwner" ng-disabled="!tab.code || !tab.code.length" class="md-primary md-raised" >Publish</md-button>
+            	<md-button class="md-primary md-raised" ng-if="tab.isOwner" ng-disabled="!hasChanged" ng-click="cancelEvent(tab)">Cancel</md-button>
+			</div>        	    
+        </div>
+      </md-tab>	
+    </md-tabs>
+      <div class="new-tab" ng-if="eventFilter == 'hosted'">
+			<md-button ng-click="newEvent($event)" class="">New</md-button>
+      </div>
+  </md-content>
+</div>
+
+<script type="text/ng-template" id="invite-participants.html">
+	
+	<md-content class="location-table" layout="column" style='padding:0.5em' class="noselect">
+		<div class="md-toolbar-tools" style="border-bottom: 1px solid rgba(0,0,0,0.126);">
+		    Invite users to participate
+			<div flex style="position: relative;"></div>
+			<md-button ng-disabled="!invitation || !invitation.length" class="md-primary md-raised {{(searchName || searchClub || searchNationality) ? 'md-warn' : ''}}" ng-click="inviteAll($event)">{{(searchName || searchClub || searchNationality) ? "Filtered" : "All"}}</md-button>
+			<md-button ng-disabled="!invitation || !invitation.length" class="md-primary md-raised" ng-click="inviteSelected($event)">Selected</md-button>
+			<md-button style='align:right;color:white;' ng-click="closeDialog()" class="md-primary md-raised" style='display:inline-block;'>Close</md-button>
+		</div>
+
+	    <div layout="row" style="background-color:white;">
+			<md-input-container class="md-block table-search-caption" style="width:12em;">Info</md-input-container>
+			<md-input-container flex class="md-block" style="padding-right:1em;">
+    			<label>Invitation</label>
+          		<textarea required ng-model="invitation" md-maxlength="500" rows="5" md-select-on-focus=""></textarea>
+    		</md-input-container>
+			<md-input-container class="md-block" style="">
+    			<label>Start group</label>
+        	    <input ng-model="startGroup">
+    		</md-input-container>
+		</div>
+
+	    <div layout="row" style="background-color:white;padding-bottom:0.25em;border-top:1px solid #C0C0C0">
+			<md-input-container class="md-block table-search-caption" style="width:12em;">Search</md-input-container>
+			<md-input-container flex class="md-block">
+    	        <label>By name</label>
+        	    <input ng-model="searchName">
+          	</md-input-container>
+			<md-input-container flex class="md-block">
+    	        <label>By club</label>
+        	    <input ng-model="searchClub">
+          	</md-input-container>
+			<md-input-container class="md-block" style="width:4em">
+    	        <label>By nat.</label>
+        	    <input ng-model="searchNationality">
+          	</md-input-container>
+		</div>
+
+		<!-- exact table from live demo -->
+		<md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{objectCount}}" md-on-paginate="getPersons" md-page-select></md-table-pagination>
+
+		<md-table-container style="overflow:auto;max-height:25em">
+		  <table md-table md-row-select="selected" multiple ng-model="selected" md-progress="promise">
+		    <thead md-head md-order="query.order" md-on-reorder="getPersons">
+		      <tr md-row>
+		        <th md-column md-order-by="nationality" class="loctbl-gender">Nat.</th>
+		        <th md-column md-order-by="lastNameToLower" class="loctbl-lastName">Surname</th>
+		        <th md-column md-order-by="firstNameToLower" class="loctbl-firstName">Name</th>
+		        <th md-column md-numeric md-order-by="age" class="loctbl-age">Age</th>
+		        <th md-column md-order-by="clubToLower" class="loctbl-club">Club</th>
+		        <th md-column class="loctbl-description">Info</th>
+		      </tr>
+		    </thead>
+		    <tbody md-body>
+		      <tr md-row md-select="person" md-select-id="name" md-auto-select ng-repeat="person in persons.data" md-on-select="mdOnSelect()">
+		        <td md-cell class='loctbl-gender' style='background-image:URL({{person.gender == "m" ? "images/male-sign.png" : "images/female-sign.png"}})'>
+					<div class='tbl-icon' style="background-image:URL( {{ person.image ? person.image : (  person.gender == 'm' ? 'images/missing-male.png' : 'images/missing-female.png') }} )">
+					</div>
+					<div ng-if="person.nationality && person.nationality.length">
+						<flag class="tbl-flag" country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+					</div>
+				</td>
+		        <td md-cell class="loctbl-lastName">{{person.lastName}}</td>
+		        <td md-cell class="loctbl-firstName">{{person.firstName}}</td>
+		        <td md-cell class="loctbl-age">{{person.age}}</td>
+		        <td md-cell class="loctbl-club">{{person.club}}</td>
+		        <td md-cell class="loctbl-description">{{person.description}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</md-table-container>
+
+	</md-content>
+		
+</script>
+
+<script type="text/ng-template" id="edit-participants.html">
+	
+	<md-content class="location-table" layout="column" style='padding:0.5em' class="noselect">
+		<div class="md-toolbar-tools" style="border-bottom: 1px solid rgba(0,0,0,0.126);">
+		    Invited participants
+			<div flex style="position: relative;"></div>
+			<md-button ng-if="isOwner" class="md-primary md-raised" ng-click="removeSelected($event)">Remove</md-button>
+			<md-button ng-if="isOwner" class="md-primary md-raised" ng-click="removeAll($event)">Reset</md-button>
+			<md-button style='align:right;color:white;' ng-click="closeDialog()" class="md-primary md-raised" style='display:inline-block;'>Close</md-button>
+		</div>
+
+	    <div layout="row" style="background-color:white;padding-bottom:0.25em;">
+
+			<md-input-container class="md-block table-search-caption" flex>Search</md-input-container>
+			<div style="margin-right: 2em;margin-top: 2.4em">
+		    	<md-checkbox ng-model="searchJoined">{{searchJoined ? "Joined" : "Pending"}}</md-checkbox>	
+			</div>  
+		
+			<md-input-container class="md-block">
+    	        <label>By name</label>
+        	    <input ng-model="searchName">
+          	</md-input-container>
+			<md-input-container class="md-block">
+    	        <label>By club</label>
+        	    <input ng-model="searchClub">
+          	</md-input-container>
+			<md-input-container class="md-block" style="width:4em">
+    	        <label>By nat.</label>
+        	    <input ng-model="searchNationality">
+          	</md-input-container>			
+		</div>
+	
+		<!-- exact table from live demo -->
+		<md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{objectCount}}" md-on-paginate="getPersons" md-page-select></md-table-pagination>
+
+		<md-table-container style="overflow:auto;max-height:25em">
+		  <table md-table md-row-select="selected" multiple ng-model="selected" md-progress="promise">
+		    <thead md-head md-order="query.order" md-on-reorder="getPersons">
+		      <tr md-row>
+		        <th md-column md-order-by="nationality" class="loctbl-gender">Nat.</th>
+		        <th md-column md-order-by="startPos" class="loctbl-startPos" md-numeric>Pos</th>
+		        <th md-column md-order-by="lastNameToLower" class="loctbl-lastName">Surname</th>
+		        <th md-column md-order-by="firstNameToLower" class="loctbl-firstName">Name</th>
+		        <th md-column md-order-by="age" class="loctbl-age" md-numeric>Age</th>
+		        <th md-column md-order-by="clubToLower" class="loctbl-club">Club</th>
+		        <th md-column md-order-by="startGroup" class="loctbl-startGroup">Group</th>
+		        <th md-column class="loctbl-description">Info</th>
+		      </tr>
+		    </thead>
+		    <tbody md-body>
+		      <tr md-row md-select="person" md-select-id="name" md-auto-select ng-repeat="person in persons.data" md-on-select="mdOnSelect()">
+		        <td md-cell class='loctbl-gender' style='background-image:URL({{person.gender == "m" ? "images/male-sign.png" : "images/female-sign.png"}})'>
+					<div class='tbl-icon' style="background-image:URL( {{ person.image ? person.image : (  person.gender == 'm' ? 'images/missing-male.png' : 'images/missing-female.png') }} )">
+					</div>
+					<div ng-if="person.nationality && person.nationality.length">
+						<flag class="tbl-flag" country="{{person.nationality.toLowerCase()}}" size="16"></flag>
+					</div>
+				</td>
+		        <td md-cell class="loctbl-startPos">{{person.startPos}}</td>
+		        <td md-cell class="loctbl-lastName">{{person.lastName}}</td>
+		        <td md-cell class="loctbl-firstName">{{person.firstName}}</td>
+		        <td md-cell class="loctbl-age">{{person.age}}</td>
+		        <td md-cell class="loctbl-club">{{person.club}}</td>
+		        <td md-cell class="loctbl-startGroup">{{person.startGroup}}</td>
+		        <td md-cell class="loctbl-description">{{person.description}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</md-table-container>
+
+	</md-content>
+		
+</script>
+
+<script type="text/ng-template" id="edit-groups.html">
+	<md-content class="groups-table" layout="column" style='padding:0.5em' class="noselect">
+		<div class="md-toolbar-tools" style="border-bottom: 1px solid rgba(0,0,0,0.126);">
+		    Start groups
+		</div>
+		<md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{objectCount}}" md-on-paginate="getGroups" md-page-select></md-table-pagination>
+		<md-table-container style="overflow:auto;max-height:25em">
+		  <table md-table multiple md-progress="promise">
+		    <thead md-head md-order="query.order" md-on-reorder="getGroups">
+		      <tr md-row>
+		        <th md-column md-order-by="code" class="grptbl-code">Group</th>
+		        <th md-column md-order-by="startTime" class="grptbl-code">Start</th>
+		        <th md-column md-order-by="endTime" class="grptbl-code">End</th>
+		        <th md-column md-order-by="count" class="grptbl-code">Count</th>
+		      </tr>
+		    </thead>
+		    <tbody md-body>
+		      <tr md-row md-select="group" md-select-id="group" md-auto-select ng-repeat="group in groups.data" md-on-select="mdOnSelect()">
+		        <td md-cell class="grptbl-lastName">{{group.code}}</td>
+		        <td md-cell class="grptbl-startTime" ng-click="editStartTime($event,group)" ng-class="{'md-placeholder' : !group.startTime}">{{group.startTime || 'Set time'}}</td>
+		        <td md-cell class="grptbl-endTime" ng-click="editEndTime($event,group)" ng-class="{'md-placeholder' : !group.endTime}">{{group.endTime || 'Set time'}}</td>
+		        <td md-cell class="grptbl-count">{{group.count}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</md-table-container>
+	</md-content>
+</script>
+
+<script type="text/ng-template" id="edit-track.html">
+	<md-content class="edit-track-content" style="padding:1em;min-width:40em;">
+		<div id="edit-track-info-wrapper">
+			<div id="edit-track-info">Current track  {{trackLength ? trackLength : 'Empty'}}</div>
+		</div>
+		<div id="gpx-preview-map" class="map"></div>
+		<lf-ng-md-file-input accept=".gpx" lf-placeholder="swim track to upload" lf-files="gpxSwim" lf-api="api01"></lf-ng-md-file-input>
+		<lf-ng-md-file-input accept=".gpx" lf-placeholder="bike track to upload" lf-files="gpxBike" lf-api="api01"></lf-ng-md-file-input>
+		<lf-ng-md-file-input accept=".gpx" lf-placeholder="run track to upload" lf-files="gpxRun" lf-api="api01"></lf-ng-md-file-input>
+		<br/>
+		<div layout="row" ng-if="selectedPoi">
+			<md-input-container id="hack1">
+				<label for="name">Image</label>
+			    <md-select ng-model="poiImage" style="max-width:13em;">
+			    	<md-option ng-repeat="img in imgFiles" value="{{img}}">
+				        <img ng-src="img/{{img}}" style="height:1.5em;">
+						</img>
+						{{img}}
+		    	    </md-option>
+		        </md-select>
+			</md-input-container>
+			<md-input-container>
+				<label for="name">Scale</label>
+				<input type="text" id="poiScale" ng-model="poiScale" />
+			</md-input-container>
+			<md-input-container>
+				<label for="name">X Offset</label>
+				<input type="text" id="poiX" ng-model="poiX" />
+			</md-input-container>
+			<md-input-container>
+				<label for="name">Y Offset</label>
+				<input type="text" id="poiY" ng-model="poiY" />
+			</md-input-container>
+			<md-input-container flex>
+				<label for="name">Name</label>
+				<input type="text" id="poiName" ng-model="poiName" />
+			</md-input-container>
+			<md-button class="md-primary md-raised" ng-disabled="hasChanged" ng-click="savePoiData()">Set</md-button>
+		</div>
+		<md-input-container>
+			<label for="name">Swim count</label>
+			<input type="number" ng-model="swimCount" />
+		</md-input-container>
+		<md-input-container>
+			<label for="name">Bike count</label>
+			<input type="number" ng-model="bikeCount" />
+		</md-input-container>
+		<md-input-container>
+			<label for="name">Run count</label>
+			<input type="number" ng-model="runCount" />
+		</md-input-container>
+		<md-button ng-click="closeDialog()" class="md-primary md-raised">Cancel</md-button>
+      	<md-button ng-click="saveTrack()" class="md-primary md-raised">Save</md-button>
+	</md-content>
+</script>
+
+

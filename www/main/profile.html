@@ -1,0 +1,139 @@
+<div ng-controller="ProfileCtrl" layout="column" class="md-inline-form" ng-cloak>
+<md-content md-theme="docs-dark" style="overflow:hidden">
+    <div>
+      <form id="profileForm">
+
+        <div layout-gt-sm="row">
+		
+		  <div id="img-user-profile-wrapper" >
+		  	<div id="img-user-profile-wrapper-color" style="background-color:{{user.color}}"/>
+		  	<img id="img-user-profile" ng-bind="user" style="background-color:{{user.color}}" class="profile-image md-block" ng-src="{{user.image || (user.gender == 'm' ? 'images/missing-male.png' : (user.gender == 'f' ? 'images/missing-female.png':null))  }}" ng-click="selectImage($event)"/>
+		  </div>
+		  
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>First name</label>
+            <input ng-model="user.firstName">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Last name</label>
+            <input ng-model="user.lastName">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+            <label>Birth date</label>
+            <input name="birthDate" ng-model="user.birthDate" type="date" required>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Username</label>
+			<input ng-model="user.username" type="email" disabled>
+          </md-input-container>
+
+        </div>
+		
+		<div>
+		  <md-radio-group ng-model="user.gender" layout-gt-sm="row" style="position:absolute;bottom:9px;left:111px;right:0;margin:0;">
+		      <md-radio-button value="f" >Female</md-radio-button>
+		      <md-radio-button value="m" class="md-primary">Male</md-radio-button>
+		  </md-radio-group>
+		</div>
+      </form>
+
+    </div>
+  </md-content>
+
+
+  <md-content layout-padding="">
+    <div>
+      <form name="userForm2">
+
+        <div layout-gt-xs="row">
+          <md-input-container class="md-block" flex-gt-xs="">
+            <label>Device IMEI</label>
+            <input ng-model="user.imei">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Type</label>
+            <md-select ng-model="user.type">
+              <md-option ng-repeat="type in types" value="{{type.code}}">
+                {{type.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Club</label>
+            <input ng-model="user.club">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Nationality</label>
+            <md-select ng-model="user.nationality">
+              <md-option ng-repeat="country in countries" value="{{country.code}}">
+                {{country.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+        </div>
+
+        <md-input-container class="md-block">
+          <label>Description</label>
+          <textarea ng-model="user.description" md-maxlength="500" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+        
+        <md-input-container class="md-block">
+            <label>EMail</label>
+			<input ng-model="user.email" type="email">
+        </md-input-container>
+        
+        <md-input-container class="md-block">
+          <label>SOS-Email-Template</label>
+          <textarea ng-model="user.emailTemplate" md-maxlength="500" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+      </form>
+	
+	  <div style='text-align:right'>      
+      
+      <div id='color-btn' ng-click="openColorPopup($event)" style="background-color:{{user.color}}">      
+      	  <div id='color-picker' md-color-picker ng-model="user.color"></div>	
+      </div>
+      
+      <md-button ng-click="cancelUser(user)" class="md-primary md-raised">Cancel</md-button>
+      <md-button ng-click="saveUser(user)" ng-disabled="user.imei && user.imei.length >= 20" class="md-primary md-raised">Save</md-button>
+      </div>
+    </div>
+	<!-- END MD-CONTENT -->
+  </md-content>
+</div>
+
+<!--
+PROFILE PICTURE TEMPLATE
+-->
+<script type="text/ng-template" id="crop.html">
+<div class='crop-dialog' ng-mousedown="cropDialogClick()" ng-touchstart="cropDialogClick()">
+   <input id="inputImageFile" accept="image/*" type="file" img-cropper-fileread image="sourceImage" />
+   <div>
+     	<canvas width="500" height="300" id="canvas" image-cropper image="sourceImage" cropped-image="croppedImage" crop-width="128" crop-height="128" keep-aspect="true" touch-radius="10" crop-area-bounds="bounds"></canvas>
+   </div>
+   <div ng-show="croppedImage!=null" class='cropped-image-container'><img id="cropped-image-result" ng-src="{{croppedImage}}" style='width:128px;height:128px' class='cropped-image'/></div></div>
+   <div class="uploadButtons">
+   		<md-button ng-click="resetImage()" class="md-primary md-raised">Reset</md-button>
+   		<md-button ng-click="acceptCrop()" class="md-primary md-raised">Submit</md-button>
+   		<md-button ng-click="cancelCrop()" class="md-primary md-raised">Cancel</md-button>
+   </div>
+</div>
+</script>
+
+
+
+
+
+
+
+
+
