@@ -357,6 +357,7 @@
 	  var crrEvent = null;
 	  function EditTrackController($scope, $timeout,$mdDialog) 
 	  {
+		  $scope.poiMode="min";
 		  $scope.imgFiles=parentScope.imgFiles;
 		  $scope.closeDialog=function() {
 			  $mdDialog.hide();
@@ -474,10 +475,16 @@
 							  for (var i in res) 
 							  {
 								  var p = res[i];
+								  if (p.elapsed > 1)
+									  continue;
 								  var mpos = ol.proj.transform([p.lon,p.lat], 'EPSG:4326', 'EPSG:3857');
 								  var feature = new ol.Feature(new ol.geom.Point(mpos));
 								  feature.elapsed=p.elapsed;
 								  feature.data=p;
+								  if (crrEvent.pois[p.elapsed]) {
+									  feature.name=crrEvent.pois[p.elapsed].name;
+									  feature.code=crrEvent.pois[p.elapsed].code;
+								  }
 								  feature.getIcon=function(elapsed) {
 									if (crrEvent.pois && crrEvent.pois[elapsed] ) {
 										return crrEvent.pois[elapsed];
@@ -499,7 +506,7 @@
 											if (layer == vectorPois) {
 												var a = e.coordinate[0]-feature.getGeometry().getCoordinates()[0];
 												var b = e.coordinate[1]-feature.getGeometry().getCoordinates()[1];
-												var dist = 	(a*a+b*b);
+												var dist = ($scope.poiMode == "min" ? feature.elapsed : -feature.elapsed); 	//(a*a+b*b); OLD MODE = DISTANCE
 												if (!wbest || wbest > dist) {
 													wbest=dist;
 													best=feature;
@@ -517,7 +524,9 @@
 											$scope.poiScale=$scope.selectedPoi.scale;
 											$scope.poiX=$scope.selectedPoi.x;
 											$scope.poiY=$scope.selectedPoi.y;
+											$scope.poiCode=$scope.selectedPoi.code;
 											$scope.poiName=$scope.selectedPoi.name;
+											$scope.poiElapsed=Math.round($scope.selectedPoi.elapsed*track.getTrackLength()/1000.0*100)/100+" km." ;
 									   }
 								  });
 							  });
@@ -564,7 +573,7 @@
 										rarr.unshift([p.lon,p.lat]);
 									}
 									//-------------------------------
-									if (UI.Config.gpx.isLoop) {
+									if (UI.Config.gpx.isReverse) {
 										rarr.shift();
 										for (var ps in rarr)
 											points.push(rarr[ps]);
@@ -620,6 +629,17 @@
 				  }
 
 				  
+				  $scope.removePoi = function() 
+				  {
+					  if ($scope.selectedPoi) 
+					  {						  
+						  if (!crrEvent.pois)
+							  return;
+						  delete crrEvent.pois[$scope.selectedPoi.elapsed];
+						  refreshMap();
+					  }					  
+				  };
+				  
 				  $scope.savePoiData = function() 
 				  {
 					  if ($scope.selectedPoi) 
@@ -629,6 +649,7 @@
 						  $scope.selectedPoi.x=parseFloat($("#poiX").val()) || 0;
 						  $scope.selectedPoi.y=parseFloat($("#poiY").val()) || 0;
 						  $scope.selectedPoi.name=$("#poiName").val();
+						  $scope.selectedPoi.code=$("#poiCode").val();
 						  var t = $("#hack1 md-select-value img").attr("src");
 						  if (t) 
 						  { 

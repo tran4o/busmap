@@ -58,7 +58,8 @@ var CONFIG =
 	times : {
 	},
 	timeouts : // in seconds
-	{		
+	{
+		estimationRefreshIntervalSeconds : 2,
 		deviceTimeout : consts.signalTimeout ,
 		animationFrame : Utils.mobileAndTabletCheck() ? 0.6 : 0.3,
 		gpsLocationDebugShow : 4,		// time to show gps location (debug) info
@@ -128,9 +129,11 @@ var CONFIG =
 	},
 	
 	gpx : {
-		isLoop : consts.isLoop
+		isLoop : consts.isLoop,
+		isReverse : consts.isReverse
 	},
 	appearance : {
+		defaultIsFavorite : true, // BUS MODE = true, LR = false
 		isShowStartFinish : consts.isShowStartFinish,
 		debug : 0,
 		trackColorSwim : 'rgba(86,118,255,0.75)',

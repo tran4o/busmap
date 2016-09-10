@@ -1301,7 +1301,7 @@ exports.basicLoadPersons=function(onDone)
 		});
 	});
 };
-exports.getPersonBasicByImei = function(imei) { 
+exports.getPersonBasicByImei = function(imei) {
 	return personsByImei[imei];
 };
 exports.getPersonBasicById = function(id) {

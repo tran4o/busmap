@@ -1,7 +1,8 @@
 var moment = require("moment");
 module.exports = 
 {
-	isLoop : true,				// BUS MODE = true (gpx track import is loop)
+	isLoop : true,				// BUS MODE = true (final track is looped elapsed % 1!!!)
+	isReverse : true,			// BUS MODE = true (gpx track import add reversed path too!!!)
 	isShowStartFinish : false,
 	maxDailyEventsHistory : 7,  // 1 week
 	
@@ -21,29 +22,23 @@ module.exports =
 	graphPixelResolution : 3,
 	//  FIRST RESOLUTION -> SECOND
 	// last resolution ~ half a day (1 day = 86400 seconds, 16384 = 81920)
-	resolutions : 
-	[
-	 	10,20,40,80,160,320,640,1280,2560,5120,10240,20480,40960,81920,163840	
-	],
+	resolutions : [ 10,20,40,80,160,320,640,1280,2560,5120,10240,20480,40960,81920,163840 ],
 	signalTimeout : 60, 	// seconds
 	prefferedUploadInterval : 10, // seoconds (gpx log user upload)
-	// if > this val then = this val (SOME STRANGE 99 hdop values appear?!)
-    // if > this val then = this val (SOME STRANGE 99 hdop values appear?!)
-    maxHDOP : 4,
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    startTrigerDistanceMeters : 1200,    // TODO SET ME
+	maxHDOP : 200,
+    HDOPMultipliedGPSToleranceMeters : 1,   		// 1 HDOP = 1 m 
+    maxTrackingGapInMeters : 1e20,					//BUS > SKIP
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    startTrigerDistanceMeters : 200,    // TODO SET ME
     basicTrackingGPSToleranceMeters : 60,   // VALUE OK ?
-    HDOPMultipliedGPSToleranceMeters : 16,   // extra tolerance per HDOP unit
-    upperLimitSumTrackingGPSTolerances : 200,	// MAX SUMM ALL
+    upperLimitSumTrackingGPSTolerances : 250,	// MAX SUMM ALL
     maxSpeedBasedPredictionDurationInSeconds : 60, // (10 not ok > 20!) 
-    trackingStartInMeters : 4050, // start trigger from start in meters
-    
+    trackingStartInMeters : 0, 						// start trigger from start in meters
     predictionAverageIntervalSeconds : 15,
-    maxTrackingGapInMeters : 10000,					//12km!??! NOO!!!
     rankingSpeedAverageSeconds : 60,			
-    
-    maxSpeedSwimKMH  : 20,                          //TODO 
-    maxSpeedBikeKMH  : 80,                          //TODO
-    maxSpeedRunKMH  : 35,                           //TODO
-    trackingPointPerMeters : 15                      // TODO THIS IS BRUTE FORECE CHECK QUERY
+    maxSpeedSwimKMH  : 90,                          // BUS MODE FIXED SPEED
+    maxSpeedBikeKMH  : 90,                          // BUS MODE FIXED SPEED
+    maxSpeedRunKMH   : 90,                          // BUS MODE FIXED SPEED
+    trackingPointPerMeters : 15                     // OK ? 
 }

@@ -208,7 +208,7 @@ Class("Participant",
 				var rot = track ? track.getPositionAndRotationFromElapsed(elapsed)*180/Math.PI : this.getRotation();
 				if (rot < 0)
 					rot+=360;
-				var spms = Math.ceil(speed*60*60/1000*100) / 100;
+				var spms = Math.ceil(speed*100) / 100;
 				etxt1=parseFloat(spms).toFixed(2)+" km/h";
 				if (rot != null) 
 				{

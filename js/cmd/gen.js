@@ -4,17 +4,113 @@ var fs = require("fs");
 var path = require("path");
 var moment = require("moment");
 var persons = require("../db/persons");
+var events = require("../db/events");
 var authd = require("../misc/auth");
 var gps = require("../srv/gps");
+require("../ui/Track");
 exports.execute = function(args,onDone) {
 
-	if (args.length != 1) {
+	if (args.length < 1) {
 		log.error("Invalid usage. Use lr GEN <what>!");  
 		onDone(-1);
 		return;
 	}
 	switch (args.shift()) 
 	{
+		case 'live' : 
+		{
+			// LIVE DRIVE FOR IMEI
+			var imei = args.shift();
+			if (!imei) {
+				log.error("Imei not provided "+imei);
+				onDone(-1);
+				return;
+			}
+			// DONT FORGET!
+			persons.basicLoadPersons(doLiveSim);
+			function doLiveSim() 
+			{
+				var pers = persons.getPersonBasicByImei(imei); 
+				if (!pers) 
+				{
+					log.error("CAN NOT FIND PERSON BY IMEI : "+imei);
+					onDone(-1);
+					return;
+				}			
+				events.getEventByCode(authd.admin,"TEMPLATE",function(event) 
+				{
+					if (!event) 
+					{
+						log.error("CAN NOT FIND EVENT 'TEMPLATE' !");
+						onDone(-1);
+						return;
+					}
+					
+					var speed = Math.random()*30+30; 
+					var track = new Track();
+					track.swimCount = event.swimCount || 1;
+					track.bikeCount = event.bikeCount || 1;
+					track.runCount = event.runCount || 1;
+					track.route = event.track;
+					track.init();										  
+					
+					console.log("Track length : "+track.getTrackLength()+" meters!");
+					console.log("SIMULATING FOR "+pers.firstName+" "+pers.lastName+" WITH IMEI "+imei+" FOR speed "+parseFloat(Math.round(speed * 100) / 100).toFixed(2)+" KMH");
+					
+					var spde = speed * 0.277778 / track.getTrackLength();
+					var elapsed = 0;
+					var stepSeconds = 10;
+					function doIt() 
+					{
+						var pos = track.getPositionAndRotationFromElapsed(elapsed);
+						var lon = pos[0];
+						var lat = pos[1];
+						
+						var crr = moment().format("hh:mm:ss");
+						console.log(crr+" >> ELAPSED "+elapsed+" | "+lon+" "+lat);
+						
+						elapsed+=stepSeconds * spde; 
+						
+						var toleranceMeters = 20; //Math.random(); 	// METERS
+						
+						var pmsg = 
+						{
+							imei : imei,
+							packetType : 0,
+							t :  (new Date()).getTime(),
+							lon : lon,
+							lat : lat,
+							ls : 'g',
+							sats : 0,
+							hdop : toleranceMeters,	/* meters GPS tollerance */
+							direction : 0,
+							speedInKmh : speed, 
+							alt : 0,				/* ALT */
+							gpsValid : true,
+							gsmSignal : 1,
+							ecallActive : false,
+							battVolt : 0,
+							battPercent : 0,
+							chargerActive : true,
+							isRace : true,
+							uptimeSystem :  0,
+							numberOfSteps : 0,
+							pulsRate : 0,
+							temperature : 0,
+							transmissionIntervallRate : 0,
+							isCheckGroup : true
+						};
+						gps.savePositionInDB(pmsg,function(res) {
+							console.log("OK SAVED!");
+							setTimeout(doIt,1000*stepSeconds);
+						});
+					}
+					doIt();
+				});
+			}
+			return;
+		}	
+		// RANDOM LOCATION VERY BIG!!!
 		case 'locations-full' : {
 			var btext = "01.06.2016 08:00";
 			var etext = "01.06.2016 18:00";

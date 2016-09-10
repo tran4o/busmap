@@ -5,7 +5,50 @@
 	      .controller('PlayCtrl', PlayCtrl);
     function PlayCtrl ($scope,$mdDialog,$mdMedia,$mdSidenav) 
     {
-    	$scope.favGender="all";
+	    $scope.selectCrrPoi = function(ev) {
+		    // Appending dialog to document.body to cover sidenav in docs app
+		    var confirm = $mdDialog.prompt()
+		      .title('Login as POI!')
+		      .textContent('Enter POI code.')
+		      .placeholder('Code')
+		      .targetEvent(ev);
+		    $mdDialog.show(confirm).then(function(result) {
+		    	if (!$scope.posCtrl) {
+		    		alert("Pos ctrl not initialized!");
+		    		return;
+		    	}
+		    	if (!$scope.posCtrl.pois) {
+		    		alert("No POIs defined!");
+		    		return;
+		    	}
+		    	var tc=[];
+		    	for (var k in $scope.posCtrl.pois) 
+		    	{
+		    		var pp = $scope.posCtrl.pois[k];
+		    		if (pp.code == result) {
+				    	localStorage.setItem("CRRPOI",result);
+				    	localStorage.setItem("CRRPOIN",pp.name);
+				    	$scope.crrPoiCode=result;
+				    	$scope.crrPoiName=pp.name;
+				    	$scope.posCtrl.crrPoiCode=result;
+				    	$scope.posCtrl.crrPoiName=pp.name;
+				    	return;
+		    		}
+		    		if (pp.code)
+		    			tc.push(pp.code);
+		    	}
+		    	alert("POI with this code not found. Possible candidates are : "+tc.join(" | "));
+		    }, function() {
+		    	
+		    });
+		  };
+    	$scope.crrPoiCode = "UNKNOWN";
+    	$scope.crrPoiNode = "UNKNOWN";
+    	if (localStorage.getItem("CRRPOI")) 
+    		$scope.crrPoiCode=localStorage.getItem("CRRPOI");
+    	if (localStorage.getItem("CRRPOIN")) 
+    		$scope.crrPoiName=localStorage.getItem("CRRPOIN");
+     	$scope.favGender="all";
     	$scope.favType="ALL";
     	$scope.doNotify=!(localStorage.getItem("doNotNotify") == "true");
 		$scope.types =
@@ -434,7 +477,9 @@
 	  {
 		  $scope.posCtrl=posCtrl;
 		  $scope.$apply(function() {
-			  $scope.graphMode=posCtrl.graphMode;	  
+			  $scope.graphMode=posCtrl.graphMode;
+			  posCtrl.crrPoiCode=$scope.crrPoiCode;
+			  posCtrl.crrPoiName=$scope.crrPoiName;
 		  });
 	  };
 	  $scope.posOnYScaleChange = function(minY,maxY,dataType) {

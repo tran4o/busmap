@@ -284,9 +284,9 @@ var STYLES=
 		var elapsed = feature.elapsed;
 		var icn = feature.getIcon(elapsed);
 		if (icn) {
-			//console.log(icn);
 			var g = feature.getGeometry().getCoordinates();
-			var p = [g[0]+(icn.x || 0)*resolution,g[1]-(icn.y || 0)*resolution];
+			//var p = [g[0]+(icn.x || 0)*resolution,g[1]-(icn.y || 0)*resolution];
+			var p = [g[0]+(icn.x || 0),g[1]-(icn.y || 0)];
 			arr.push(new ol.style.Style({
 				image : new ol.style.Icon({
 					src : "/img/"+icn.image,
@@ -294,6 +294,24 @@ var STYLES=
 				}),
 				geometry: new ol.geom.Point(p)
 			 }));
+		   if (feature.name) 
+		   {
+	            arr.push(new ol.style.Style({
+	                text: new ol.style.Text({
+	                    font: 'bold 12px Helvetica',
+	                    fill: new ol.style.Fill({
+	                        color: 'black'
+	                    }),
+	                    stroke: new ol.style.Stroke({
+	                      color: 'white',
+	                      width: 4
+	                    }),
+	                    text: feature.name,
+	                    offsetX: 0,
+	                    offsetY: 0
+	                })
+	            }));
+		   }
 		} else {
 			arr.push(new ol.style.Style({
 				image : new ol.style.Icon(({

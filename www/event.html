@@ -134,9 +134,6 @@
 		right : 87px;
 		bottom : -80px;
 	}
-	#main-logo {
-		width : 100px;
-	}
 	.ol-zoom {
 		left: 0.25em;
 		top:  5em;
@@ -147,7 +144,7 @@
 <body class="root-gui">
 	<img src="images/cgradient.png" style="position:absolute;display:none;" id="proxy-image"/>
 	<div ng-controller="PlayCtrl" >
-		<img src="images/fullscreen.png" class="btn-fullscreen" ng-click="toggleFullScreen()" />
+		<img src="images/logo.jpg" class="btn-fullscreen" ng-click="toggleFullScreen()"/>
 		<!-- EXAMPLE : <div style="font-size:200%">{{eventCaption}}</div> -->
 		<div id="location-wrapper" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;">
 			<div id="location-container" style="max-height:initial;position:initial;">
@@ -231,29 +228,21 @@
 	      </md-content>
 	    </md-sidenav>		
 
-		<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
-	      <md-content layout-padding="" style="padding:4px" ng-if="participants && participants.length">
-			<md-list>
-  				<md-subheader class="md-no-sticky">Favorites</md-subheader>
-	  			<md-list-item ng-repeat="person in participants" ng-click="showFav(person)" class="noleft" ng-if="person.selected">
-	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;position:absolute;padding-top:3px;">#{{person.start_pos}}</span>
-	  				<span style="text-align:right;width:3em;font-size:80%;overflow:hidden;margin-right:0.5em;margin-top:13px;">{{person.start_group||"-"}}</span>
+		<div style="position : absolute;right:0;top:0;margin-top:0.7em;margin-right:0.7em;border-radius:7px;background-color:rgba(0,0,0,0.2)">
+			<md-list style="padding:0;">
+  				<div ng-click="selectCrrPoi()" style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrPoiName}}</div>
+	  			<md-list-item ng-repeat="person in participants" ng-click="showFav(person)" class="noleft" ng-if="person.selected" style="padding-left:0.75em;padding-right:0.75em;">
 	    			<img style="border-radius:100%;border:2px solid {{person.color}}" alt="{{ person.firstName}} {{ person.lastName }}" ng-src="{{person.image || (person.gender == 'm' ? 'images/missing-male.png' : (person.gender == 'f' ? 'images/missing-female.png':null))  }}" class="md-avatar">	    			
 					<div style="position:absolute;margin-left:-62px;margin-top:-2px;" ng-if="person.nationality && person.nationality.length">
 						<flag country="{{person.nationality.toLowerCase()}}" size="16"></flag>
 					</div>
-	    			<div ng-if="person.type" style="font-size:75%;background-color:#808080;pointer-events:none;border-radius:4px;line-height:1;color:white;padding:2px;position:absolute;margin-top:5px;">{{person.type||""}}</div>
 	    			<div ng-if="person.club" style="font-size:75%;line-height:1;color:#A0A0A0;pointer-events:none;position:absolute;margin-top:41px;">{{person.club||""}}</div>
 	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{person.first_name}} {{ person.last_name}} {{ (person.age ? "("+person.age+((" "+(person.gender||"")).toUpperCase())+")" : "") }}</p>
+	    			<p style="margin-left:1em;color:white;font-weight:bold;" id="estpers-{{person.id}}">-</p>
 	  			</md-list-item>
 			</md-list>	    
-	      </md-content>
-	    </md-sidenav>		
+		</div>
 		
-		<md-button id="parts-toolbar-toggle-button" class="md-primary md-raised" ng-click="toggleLeft($event)">Pers</md-button>
-		</md-button>
-		<md-button id="favs-toolbar-toggle-button" class="md-primary md-raised" ng-click="toggleRight($event)">Favs</md-button>
-		</md-button>
 		<!--<md-switch id="favs-toolbar-toggle-notify" class="md-primary md-raised" ng-if="$mdMedia('gt-md')" ng-model="doNotify" aria-label="Notify">Notify</md-switch>-->
 
 		<div style="height: 8em;position: absolute;bottom: 0;left: 0;right: 0;" id="vis-wrapper">		
@@ -283,8 +272,8 @@
 				<div class="mid" style="top:-5px"></div>
 				<div class="max" style="top:-27px"></div>			
 			</div>
-			<a id="lrlogo" href="http://liveortung.de"><img id="main-logo" style="z-index:9999;width:224px;margin-bottom:-2px;margin-right:-4px;" src="images/logo2.svg"/></a>
 		</div>
-	</div>	
+	</div>
+	<img id="main-logo" style="z-index:9999;" src="images/logo2.png"/>
 </body>
 </html>

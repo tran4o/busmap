@@ -339,7 +339,7 @@ function startDailyEvents(isReset)
 				});
 				function onDone() {
 					oldM=crr;
-					timerDaily=setTimeout(oneCheck,1000+0*1000*60*1); // every min check
+					timerDaily=setTimeout(oneCheck,1000*60*1); // every 1 min check (TODO INST OPTION)
 				}
 			}
 		});
@@ -356,6 +356,7 @@ function checkDailyEvent(event,code,onDone,isDeleteOnExisting)
 		c.setHours(t.getHours());
 		c.setMinutes(t.getMinutes());
 		c.setSeconds(0);
+		c.setMilliseconds(0);
 		event.beginTime=c;
 	}
 	if (event.endTime) {
@@ -364,6 +365,7 @@ function checkDailyEvent(event,code,onDone,isDeleteOnExisting)
 		c.setHours(t.getHours());
 		c.setMinutes(t.getMinutes());
 		c.setSeconds(0);
+		c.setMilliseconds(0);
 		event.endTime=c;
 	}
 	events.getEventByCode(authd.admin,code,function(cevent) 

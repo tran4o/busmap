@@ -258,7 +258,7 @@
 		
 		var where=["shared_locations","onlyVisible"];
 		var events=[];
-		if (!eventId) {
+		if (eventId == undefined) {
 			loadLocalState();
 			LR.event.listIds({filter:$scope.eventFilter,selectFavorite:true},function(res) 
 			{
@@ -277,59 +277,76 @@
 				  }
 			});
 		} else {
-			LR.event.byId(eventId,function(res) {
-				if (!res || !res.id) {
-					alert("Error loading event!");
-					return;
-				}
-				levent=res;
-				loadLocalState(res);
-				if (levent.beginTime) 
-				{
-		        	var b1 = (initialDate && levent.beginTime && initialDate >= levent.beginTime.getTime());
-		        	var b2 = (initialDate && levent.endTime && initialDate <= levent.endTime.getTime());
-		        	if (!b1 || !b2)
-		        		initialDate=levent.beginTime.getTime();
-				}
-				//events.push(levent);
-				//------------------------------------------------------------------------------------------------------------------
-				LR.person.listIdsOrderBy({joined:true,event:levent.id,orderBy : "type,startPos",page:0,where:["invited"]},function(res) {
-					$scope.$apply(function() {
-						
-						var favsh = localStorage.getItem(__prefix+"-fav-hidden");
-						if (favsh) {
-							try {
-								favsh=JSON.parse(favsh);
-							}catch (e) {favsh=null};
-						} else {
-							// NEW DEFAULT VISIBILITY ONLY PROS
-							favsh={};
-							for (var e in res) {
-								if (res[e].type != "PRO") {
-									favsh[res[e].id]=1;
+			if (eventId == 0) {
+				var crr = moment().format("DD.MM.YYYY");// hh:mm:ss");
+				LR.event.byCode(crr,function(res) {
+					if (!res || !res.id) {
+						alert("Daily event not found!");
+						window.location.href="/www/";
+					}
+					eventId=res.id;
+					cntW();
+				});
+				return;
+			} else {
+				cntW();
+			}
+			function cntW() 
+			{
+				LR.event.byId(eventId,function(res) {
+					if (!res || !res.id) {
+						alert("Error loading event!");
+						return;
+					}
+					levent=res;
+					loadLocalState(res);
+					if (levent.beginTime) 
+					{
+			        	var b1 = (initialDate && levent.beginTime && initialDate >= levent.beginTime.getTime());
+			        	var b2 = (initialDate && levent.endTime && initialDate <= levent.endTime.getTime());
+			        	if (!b1 || !b2)
+			        		initialDate=levent.beginTime.getTime();
+					}
+					//events.push(levent);
+					//------------------------------------------------------------------------------------------------------------------
+					LR.person.listIdsOrderBy({joined:true,event:levent.id,orderBy : "type,startPos",page:0,where:["invited"]},function(res) {
+						$scope.$apply(function() {
+							
+							var favsh = localStorage.getItem(__prefix+"-fav-hidden");
+							if (favsh) {
+								try {
+									favsh=JSON.parse(favsh);
+								}catch (e) {favsh=null};
+							} else {
+								// NEW DEFAULT VISIBILITY ONLY PROS
+								favsh={};
+								for (var e in res) {
+									if (res[e].type != "PRO") {
+										favsh[res[e].id]=1;
+									}
 								}
 							}
-						}
-        				$scope.participantsLoaded=true;
-        				$scope.participants=res;
-        				if (res && res.length) 
-        				{
-            				for (var i=0;i<res.length;i++) {
-            					var p = res[i];
-            					p.selected=!favsh || !favsh[p.id]; 
-            				}
-        				}
-        				($scope.$parent.onParticipantsLoaded && $scope.$parent.onParticipantsLoaded(res)); 
-        				calcToolbarScroll();
-					});
-					/*LR.event.getElapsedData(levent.id,function(res){
-						if (res && res.length)
-							elapsedData=res;
+	        				$scope.participantsLoaded=true;
+	        				$scope.participants=res;
+	        				if (res && res.length) 
+	        				{
+	            				for (var i=0;i<res.length;i++) {
+	            					var p = res[i];
+	            					p.selected=!favsh || !favsh[p.id]; 
+	            				}
+	        				}
+	        				($scope.$parent.onParticipantsLoaded && $scope.$parent.onParticipantsLoaded(res)); 
+	        				calcToolbarScroll();
+						});
+						/*LR.event.getElapsedData(levent.id,function(res){
+							if (res && res.length)
+								elapsedData=res;
+							onBoot();
+						});*/
 						onBoot();
-					});*/
-					onBoot();
+					});
 				});
-			});
+			}
 		}
 
 		function calcToolbarScroll() {
@@ -357,6 +374,14 @@
 			};
 			GUI.target="location-map";			
 	        GUI.init();
+	        //------------------------------------------------
+	        // INITIAL FULLSCREEN?
+
+	        $("body").addClass("fullscreen");
+	        GUI.map.updateSize();
+	        
+	    	//$(".btn-fullscreen").click();
+
 	        //------------------------------------------------
 			if (track) 
 				GUI.zoomToTrack();
@@ -406,6 +431,15 @@
 	        //---------------------------------------------------------
 	        if (levent && levent.pois) 
 	        {
+	        	  $scope.pois = levent.pois;
+	        	  var m={};
+	        	  for (var i in $scope.pois) {
+	        		  var p = $scope.pois[i];
+	        		  if (p.code) {
+	        			  m[p.code]={elapsed:parseFloat(i),code:p.code,name:p.name};
+	        		  }
+	        	  }
+	        	  $scope.poiByCode = m;	        	  
 	              var source = GUI.elapsedLayer.getSource();
 				  for (var i in levent.pois) 
 				  {
@@ -413,6 +447,7 @@
 					  var pr = track.getPositionAndRotationFromElapsed(p.elapsed);
 					  var mpos = ol.proj.transform([pr[0],pr[1]], 'EPSG:4326', 'EPSG:3857');
 					  var feature = new ol.Feature(new ol.geom.Point(mpos));
+					  feature.name=p.name;
 					  feature.elapsed=p.elapsed;
 					  feature.data=p;
 					  feature.getIcon=function(elapsed) {
@@ -1317,6 +1352,8 @@
 	        
 	        function recalculateWatched(warr) 
 	        {
+	        	if (UI.Config.appearance.defaultIsFavorite && warr && warr.length === 0) 
+		        	warr=$scope.participants;
 	        	var arr;
 	        	if (!warr) 
 	        		arr=watched.slice();
@@ -1328,7 +1365,7 @@
 	        	var nset={};
 	        	var nlen=0;
 	        	var tnset={};
-	        	for (var i in arr) if (!isForceParticipantHidden(arr[i].id)) {nset[arr[i].id]=1;tnset[arr[i].id]=1;nlen++};
+	        	for (var i in arr) if (!isForceParticipantHidden(arr[i].id)) {nset[arr[i].id]=1;tnset[arr[i].id]=1;nlen++};	                
 	        	if (GUI.selectedParticipant1 && GUI.selectedParticipant1 && !nset[GUI.selectedParticipant1.id] && !isForceParticipantHidden(GUI.selectedParticipant1.id)) { 
 	        		arr.push(GUI.selectedParticipant1);
 	        		nset[GUI.selectedParticipant1.id]=1;nlen++
@@ -1625,7 +1662,7 @@
         			if (l1[8] && l2[8])
         				hdop = l1[8]+(l2[8]-l1[8])*fract;
         			if (l1[9] && l2[9])
-        				speed = (l1[9]+(l2[9]-l1[9])*fract)/3.6;
+        				speed = (l1[9]+(l2[9]-l1[9])*fract);
         			var avail1 = l1[4];		// 0 = BEST availablity 
         			var avail2 = l2[4];
         			var isz = UI.Config.timeouts.deviceTimeout/UI.Config.location.step; 
@@ -1721,10 +1758,36 @@
 		        part.elapsed=elapsed;
 	        	part.rotation=rotation;
 	        	if (speed != undefined )
-	        		part.speed=speed;
-	        	
+	        		part.speed=speed;	        	
 	        	part.glon=glon;
 	        	part.glat=glat;
+	        	
+    			//---------------------------------
+	        	// BUS MODE -> ESTIMATION OF TIME TO CURRENT POI
+        		if (elapsed != undefined && levent && $scope.poiByCode && $scope.crrPoiCode) 
+        		{
+        			var poi = $scope.poiByCode[$scope.crrPoiCode];
+        			if (poi) 
+        			{
+        				var tval="-";
+            			var te = elapsed % 1;
+            			var de = poi.elapsed-te;
+            			if (poi.elapsed < te)
+            				de+=1;
+            			var lenm = trackLength*de;
+        				if (speed > 0) {
+        					var durs = lenm/(speed*0.27777777777778);
+        		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
+            				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+        				} else {
+        					// SPEED NOT AVAIL -> display distance in km
+            				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+        				}
+        				//console.log(part.code+" | TVAL : "+tval);
+        			}
+        		}
+    			//---------------------------------
+	        	
 				var geom = part.geometry;
 				if (geom) 
 				{
@@ -2031,9 +2094,24 @@
 	    		}
 	        }
 	        //----------------------------------------------------------------------
+	        var lastEstRef;
 	        function doGUIUpdate() 
 	        {
 	        	GUI.refreshHTML();
+	        	
+	        	var c = (new Date()).getTime();
+	        	if (!lastEstRef || c-lastEstRef > UI.Config.timeouts.estimationRefreshIntervalSeconds*1000) 
+	        	{
+	        		lastEstRef=c;
+		        	// REFRESH ESTIMATE BUS TIME
+					for (var i in participantsCache) 
+					{
+						var part = participantsCache[i];
+						if (part.displayText) {
+							$("#estpers-"+part.id).html(part.displayText);
+						}
+					}
+	        	}
 	        }
 	        //----------------------------------------------------------------------
 	        timeline.on("rangechanged",function() {
@@ -2207,9 +2285,9 @@
 					var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
 					var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 					if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-					    requestFullScreen.call(docEl);$("body").addClass("fullscreen")
+					    requestFullScreen.call(docEl);$("body").addClass("fullscreen");
 					} else {
-					    cancelFullScreen.call(doc);$("body").removeClass("fullscreen")
+					    cancelFullScreen.call(doc);$("body").removeClass("fullscreen");
 					}
 	    		} else {
 		    		if ($("body").hasClass("fullscreen")) {
@@ -2234,7 +2312,7 @@
 	    			arr.push(i);
 	    		if (!arr.length)
 	    			return;
-	    		console.log(arr.join(","));
+	    		//console.log(arr.join(","));
 	    		var url="/busmap.kml?t="+t+"&eid="+eid+"&dur="+dur+"&ids="+arr.join(",");
 	    		window.open(url,"_blank");
 	    		//console.log(url);

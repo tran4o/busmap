@@ -214,23 +214,23 @@ Class("Track",
 			}
 		},
 		//-----------------------------------------------------------------
-		getPositionAndRotationFromElapsed : function(elapsed) {
-					var rr=null;
+		getPositionAndRotationFromElapsed : function(elapsed) 
+		{
+			elapsed=elapsed%1;
+			if (elapsed == 0) 
+				return [this.coords[0][0],this.coords[0][1],0];
+			var rr=null;
 			var cc = this.coords;	// PROJECTED ROUTE
 			var ll = this.distancesElapsed.length-1;
 			var si = 0;
-			while (si < ll && si+500 < ll && this.distancesElapsed[si+500] < elapsed ) {
+			while (si < ll && si+500 < ll && this.distancesElapsed[si+500] < elapsed )
 				si+=500;
-			}
-			while (si < ll && si+250 < ll && this.distancesElapsed[si+250] < elapsed ) {
+			while (si < ll && si+250 < ll && this.distancesElapsed[si+250] < elapsed )
 				si+=250;
-			}
-			while (si < ll && si+125 < ll && this.distancesElapsed[si+125] < elapsed ) {
+			while (si < ll && si+125 < ll && this.distancesElapsed[si+125] < elapsed )
 				si+=125;
-			}
-			while (si < ll && si+50 < ll && this.distancesElapsed[si+50] < elapsed ) {
+			while (si < ll && si+50 < ll && this.distancesElapsed[si+50] < elapsed )
 				si+=50;
-			}
 			for (var i=si;i<ll;i++) 
 			{
 				if (this.distancesElapsed[i] < elapsed && this.distancesElapsed[i+1] >= elapsed) 

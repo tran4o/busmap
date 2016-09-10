@@ -884,10 +884,23 @@ function postFixEvent(event,onDone)
 				runStart/=res;
 			console.log("COLLECTED TOTAL : "+points.length+" TRACKING POINTS!");
 			var arr=[];
+			
+
 			for (var i=0;i<points.length;i++) {
 				var p = points[i];
 				arr.push("(ST_MAKEPOINT("+event.id+","+event.id+"),ST_MAKEPOINT("+p.pos[0]+","+p.pos[1]+"),"+p.elapsed/cres+")");
 			}
+			//-----------------------------------------------------------------------------------------------------------------------
+			// NEW BUS MODE > ADD ELAPSED 1..2 AS EXTRA LOOP DATA
+			if (consts.isLoop) 
+			{
+				for (var i=0;i<points.length;i++) 
+				{ 
+					var p = points[i];
+					arr.push("(ST_MAKEPOINT("+event.id+","+event.id+"),ST_MAKEPOINT("+p.pos[0]+","+p.pos[1]+"),"+(p.elapsed/cres+1.0)+")");
+				}
+			}
+			//-----------------------------------------------------------------------------------------------------------------------
 			if (!arr.length) {
 				cleanupWork(); 
 			} else {
@@ -1184,20 +1197,20 @@ function initTrackingStoredProcedure()
 	   // event data
 	   ,",EV AS (SELECT bike_start_elapsed,run_start_elapsed,start_elapsed,track_length,start_lon,start_lat FROM tracking.events WHERE id = (SELECT event FROM DT) )"
 	   // last seen
-	   ,",LS AS (SELECT elapsed,tpos,speed_in_kmh,hdop,i,id FROM tracking.position_soft WHERE event = (SELECT event FROM DT) AND person = (SELECT person FROM DT) AND i = (SELECT i FROM DT)-1 )"	
+	   ,",LS AS (SELECT (elapsed-floor(elapsed)) AS elapsed,elapsed AS oe,tpos,speed_in_kmh,hdop,i,id FROM tracking.position_soft WHERE event = (SELECT event FROM DT) AND person = (SELECT person FROM DT) AND i = (SELECT i FROM DT)-1 )"	
 	   // final search radius
 	   ,",FS AS ( SELECT LEAST("+consts.basicTrackingGPSToleranceMeters+"+"+consts.HDOPMultipliedGPSToleranceMeters+"*(SELECT hdop FROM LS),"+consts.upperLimitSumTrackingGPSTolerances+") as radius )"
 
 	   // last distinct, used ONLY for the TRACKED MINIMUM (MT)
-	   ,",LT_PRE AS (SELECT elapsed,tpos,speed_in_kmh,hdop,i FROM tracking.position_soft WHERE event = (SELECT event FROM DT) AND person = (SELECT person FROM DT) AND elapsed <= (SELECT elapsed FROM LS) AND elapsed < (SELECT elapsed FROM LS) ORDER BY i DESC LIMIT 1)"	
+	   ,",LT_PRE AS (SELECT (elapsed-floor(elapsed)) AS elapsed,tpos,speed_in_kmh,hdop,i FROM tracking.position_soft WHERE event = (SELECT event FROM DT) AND person = (SELECT person FROM DT) AND elapsed < (SELECT oe FROM LS) ORDER BY i DESC LIMIT 1)"	
 	   // IF NOT LT THEN USE LS (fixes the start position bug and jump from the initial state)
-	   ,",LT AS (SELECT * FROM LT_PRE UNION ALL SELECT elapsed,tpos,speed_in_kmh,hdop,i FROM LS WHERE (SELECT id FROM LT_PRE) IS NULL)"	
+	   ,",LT AS (SELECT * FROM LT_PRE UNION ALL SELECT (elapsed-floor(elapsed)) AS elapsed,tpos,speed_in_kmh,hdop,i FROM LS WHERE (SELECT id FROM LT_PRE) IS NULL)"	
 	   
 	   // UPPER LIMIT FOR MINIMUM BASEC 
 	   ,",ES AS ( SELECT SUM(speed_in_kmh)*0.2778*("+maxLastTrackedSpeedCoef*10+"::float8) AS diff FROM tracking.position_soft WHERE event = (SELECT event FROM DT) AND person = (SELECT person FROM DT) AND i >= (SELECT i FROM LT) AND i <= (SELECT i FROM DT) )"	
 	   ,",EM AS ( SELECT elapsed+(SELECT diff FROM ES)/(SELECT track_length FROM EV) AS elapsed FROM LT ) \n"
 	   // TRACKED (MINIMUM) tracking candidate with elapsed >= LS.elapsed 
-	   ,",MT AS (SELECT elapsed,pos FROM tracking.event_elapsed WHERE ST_DISTANCE((SELECT pos FROM DT),pos,true) <= (SELECT radius FROM FS) AND elapsed >= (SELECT elapsed FROM LS) AND elapsed <= LEAST( (SELECT elapsed FROM EM), (SELECT elapsed FROM LS)+("+consts.maxTrackingGapInMeters+"::float8)/(SELECT track_length FROM EV)) AND geom_event && (SELECT ST_MAKEPOINT(event,event) FROM DT) ORDER BY elapsed LIMIT 1) "
+	   ,",MT AS (SELECT elapsed,pos FROM tracking.event_elapsed WHERE ST_DISTANCE((SELECT pos FROM DT),pos,true) <= (SELECT radius FROM FS) AND elapsed >= (SELECT elapsed FROM LS) AND elapsed <= LEAST( (SELECT elapsed FROM EM) , (SELECT elapsed FROM LS)+("+consts.maxTrackingGapInMeters+"::float8)/(SELECT track_length FROM EV)) AND geom_event && (SELECT ST_MAKEPOINT(event,event) FROM DT) ORDER BY elapsed LIMIT 1) "
 
 	   // UPPER LIMIT BASED ON COEF * SPEED  
 	   ,",E AS ( SELECT elapsed + ((SELECT speed_in_kmh*0.2778 FROM DT)*("+maxSpeedCoef*10+"::float8)+"+extraMaxMeters+")/(SELECT track_length FROM EV) AS elapsed FROM LS ) \n"
@@ -1206,20 +1219,19 @@ function initTrackingStoredProcedure()
 	   ,",T2 AS (SELECT *,rank() OVER (ORDER BY id) as rnk FROM T1 ) "
 	   ,",T3 AS (SELECT * FROM T2 WHERE id-(SELECT MIN(id) FROM T1)+1 = rnk ORDER BY ST_DISTANCE(pos,(SELECT pos FROM DT)) LIMIT 1) "
 	   
-	   // TRACKED
-	   ,",T AS ( SELECT COALESCE((SELECT elapsed FROM T3),(SELECT elapsed FROM MT)) AS elapsed,COALESCE((SELECT pos FROM T3),(SELECT pos FROM MT)) AS pos)"
+	   // TRACKED (NEW : SUPPORT LOOPS)  
+	   ,",T AS ( SELECT COALESCE((SELECT elapsed FROM T3),(SELECT elapsed FROM MT)) + COALESCE((SELECT floor(oe) FROM LS),0) AS elapsed,COALESCE((SELECT pos FROM T3),(SELECT pos FROM MT)) AS pos)"
 
-	   // start position (calculate only if no last point)
-	   ,",SP AS (SELECT (SELECT start_elapsed FROM EV) AS elapsed,ST_MAKEPOINT((SELECT start_lon FROM EV),(SELECT start_lat FROM EV)) AS pos WHERE (SELECT elapsed FROM LS) IS NULL AND ST_Distance((SELECT ST_MAKEPOINT(start_lon,start_lat) FROM EV),(SELECT pos FROM DT),true) <= "+consts.startTrigerDistanceMeters+" ) "
+	   // start position = MIN ELAPSED (ONY IF NO LS = LASTSEEN!!)
+	   ,",SP AS (SELECT elapsed,pos FROM tracking.event_elapsed WHERE (SELECT elapsed FROM LS) IS NULL AND ST_DISTANCE(pos,(SELECT pos FROM DT),true) < "+consts.startTrigerDistanceMeters+" AND geom_event && (SELECT ST_MAKEPOINT(event,event) FROM DT) ORDER BY elapsed LIMIT 1) "
 
 	   // final result coalesce (tracked,last,tracked_start)
 	   ,",RES AS (SELECT" +
-	   		" CASE WHEN (SELECT elapsed FROM T) IS NOT NULL THEN (SELECT elapsed FROM T) WHEN (SELECT elapsed FROM LS) IS NOT NULL THEN (SELECT elapsed FROM LS) WHEN (SELECT elapsed FROM SP ) IS NOT NULL THEN (SELECT elapsed FROM SP ) ELSE NULL END AS elapsed " +
+	   		" CASE WHEN (SELECT elapsed FROM T) IS NOT NULL THEN (SELECT elapsed FROM T) WHEN (SELECT oe FROM LS) IS NOT NULL THEN (SELECT oe FROM LS) WHEN (SELECT elapsed FROM SP ) IS NOT NULL THEN (SELECT elapsed FROM SP ) ELSE NULL END AS elapsed " +
 	   		",CASE WHEN (SELECT pos FROM T) IS NOT NULL THEN (SELECT pos FROM T) WHEN (SELECT tpos FROM LS) IS NOT NULL THEN (SELECT tpos FROM LS) WHEN (SELECT pos FROM SP ) IS NOT NULL THEN (SELECT pos FROM SP ) ELSE NULL END AS tpos " +
 	   		") UPDATE tracking.position_soft SET tpos=res.tpos,elapsed=res.elapsed FROM res WHERE id = sid;\n"
 	   +" END; $BODY$ LANGUAGE 'plpgsql'"	   		
 	].join("\n");
-	//console.log(sql);
 	var dbcon = driver.connect(function(err,pgclient,done) 
 	{
 		if (err) 
@@ -1240,47 +1252,4 @@ function initTrackingStoredProcedure()
 		});
 	});
 };
-
-/*
-exports.getFullParticipantsInfo=function(auth,id,onDone) 
-{
-	var sql = "SELECT person.first_name,person.code,person.id,person.last_name,person.club,person.type,person.birth_date,person.gender,person.nationality,(image is NOT NULL AND length(image) > 0) AS has_image,event_participant.start_pos,event_participant.start_groug FROM tracking.person JOIN tracking.event_participant ON participant = person.id AND joined AND event_participant.event = $1";
-	var dbcon = driver.connect(function(err,pgclient,done) 
-	{
-		if (err) 
-		{
-			log.error("Error on connecting to postgresql  : "+err);
-			if (done)
-				done();
-			onDone(-1);
-			return;
-		}
-		var args=[id];
-		pgclient.query(sql,args, 					 
-			function(err, result) {
-			if (done)
-				done();
-			    if(err) {
-			      log.warn("Query : "+sql);
-			      log.error('Error selecting person by query in POSTGRE : ',err);
-				  onDone(-1);
-			      return;
-			    }
-				if (result && result.rows && result.rows.length) {
-					var arr=[];
-					function one() {
-						var p = result.rows.shift();
-						if (!p)
-							return onDone(arr);
-						parsePerson(auth,p,function(r) {
-							arr.push(r);
-						});
-					}
-					one();
-				} else {
-					onDone([]);
-				}
-		  });
-	});
-};*/
 

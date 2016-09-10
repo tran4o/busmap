@@ -63,9 +63,56 @@ exports.start = function(args,onDone)
 		  });
 	};
 	//------------------------------------------------
+	app.post("/recv",function(req,res,next) {
+		res.set('Content-Type', 'application/json');
+		if (!req.body) 
+			return res.send({ err : "can not parse body!" });
+		if (!req.body.imei) 
+			return res.send({ err : "imei not in the json body!" });
+		if (!req.body.t) 
+			return res.send({ err : "t not in the json body!" });
+		if (!req.body.lon) 
+			return res.send({ err : "lon not in the json body!" });
+		if (!req.body.lat) 
+			return res.send({ err : "lat not in the json body!" });
+		// { imei : "BUS0001",t : 12312312321 /* long time */, lon : 12.123, lat : 12.123, speed : 32.23 /*kmh*/ , radius : 60.23 /* meters * /,alt : 123.123 /meters*/,  }   
+		var body = req.body;
+		var pmsg = 
+		{
+			imei : body.imei,
+			packetType : 0,
+			t :  body.t,
+			lon : body.lon,
+			lat : body.lat,
+			ls : 'g',
+			sats : 0,
+			hdop : body.radius || 1,	/* meters GPS tollerance */
+			direction : 0,
+			speedInKmh : body.speed || 0, 
+			alt : body.alt || 0,				/* ALT */
+			gpsValid : true,
+			gsmSignal : 1,
+			ecallActive : false,
+			battVolt : 0,
+			battPercent : 0,
+			chargerActive : true,
+			isRace : true,
+			uptimeSystem :  0,
+			numberOfSteps : 0,
+			pulsRate : 0,
+			temperature : 0,
+			transmissionIntervallRate : 0,
+			isCheckGroup : true
+		};
+		gps.savePositionInDB(pmsg,function(result) {
+			console.log(pmsg);
+			res.send({ ok : 1 });
+		});
+	});
+	
 	app.get("/",function(req,res,next) {
 		res.set('Content-Type', 'text/html');
-		res.redirect("/www/event.html?event=29");
+		res.redirect("/www/event.html?event=0");
 		return next();
 	});
 	app.get("/busmap.kml",function(req,res) 
@@ -92,6 +139,18 @@ exports.start = function(args,onDone)
 			return res.sendStatus(404);
 		}
 	});
+	app.get("/list-img.json",function(req,res) 
+	{
+		res.set('Content-Type', 'application/json');
+		try {
+			var files = fs.readdirSync(inst.installDir+"/www/img");
+			res.send(JSON.stringify(files));
+		} catch (e) {	
+			log.error("Error listing img/* : "+e);
+			return res.sendStatus(404);
+		}
+	});
+
 	//------------------------------------------------
 	app.use('/personImages/', express.static(inst.installDir + '/tmp/person'));
 	app.use('/www', express.static(inst.installDir + '/www/'));
