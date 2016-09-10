@@ -405,6 +405,8 @@ exports.start = function(args,onDone)
 	persons.basicLoadPersons(function() {
 		server.listen(port);
 		log.info("Started server on http port "+port);
+		// START DAILY EVENT CLONE 
+		gps.resetDailyEventOldStateCache();
 	});
 };
 
@@ -476,3 +478,4 @@ function getGPSLocationName(data,onDone)
 		onDone(dres);
 	});
 }
+

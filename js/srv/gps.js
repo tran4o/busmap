@@ -22,7 +22,7 @@ exports.start = function(args,onDone)
 	persons.basicLoadPersons(doConnect);
 	function doConnect() 
 	{
-		startDailyEvents();
+		log.error("gps NOT NEEDED ANYMORE!!!");
 	}		
 };
 
