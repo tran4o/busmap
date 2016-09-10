@@ -43,7 +43,7 @@
 		    });
 		  };
     	$scope.crrPoiCode = "UNKNOWN";
-    	$scope.crrPoiNode = "UNKNOWN";
+    	$scope.crrPoiName = "UNKNOWN";
     	if (localStorage.getItem("CRRPOI")) 
     		$scope.crrPoiCode=localStorage.getItem("CRRPOI");
     	if (localStorage.getItem("CRRPOIN")) 
