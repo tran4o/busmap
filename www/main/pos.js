@@ -244,16 +244,16 @@
 		        		yScale.min=json.minY;
 		        	if (json.maxY !== undefined)
 		        		yScale.max=json.maxY;
-		        	var t = (new Date()).getTime();
-		        	if (!event || !(t >= event.beginTime && t <= event.endTime)) {
-			        	if (json.crrt)
-			        		initialDate=json.crrt;
-		        	} else {
-		        		mode = "play";
-		        		//PLAYINGGG
-		        	}
 		    	}
 		    }
+        	var t = (new Date()).getTime();
+        	if (!event || !(t >= event.beginTime && t <= event.endTime)) {
+	        	if (json.crrt)
+	        		initialDate=json.crrt;
+        	} else {
+        		mode = "play";
+        		//PLAYINGGG
+        	}
 		}
 		
 		var where=["shared_locations","onlyVisible"];
