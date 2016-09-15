@@ -1082,8 +1082,7 @@
 			        		}
 			        		//6,7 = glon,glat
 			        		//8,9 = hdop,speed_in_kmh
-			        		// NEW AVERAGE SPEED (FOR BUS TIME AVERAGES)
-			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmhAverage];
+			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmh];
 			        	}
 			        	//---------------------------------------------------------------
 		    			GUI.pathByPerson=pathByPerson;
