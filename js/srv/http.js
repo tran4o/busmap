@@ -478,4 +478,3 @@ function getGPSLocationName(data,onDone)
 		onDone(dres);
 	});
 }
-

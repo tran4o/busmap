@@ -481,7 +481,7 @@
 								  var feature = new ol.Feature(new ol.geom.Point(mpos));
 								  feature.elapsed=p.elapsed;
 								  feature.data=p;
-								  if (crrEvent.pois[p.elapsed]) {
+								  if (crrEvent.pois && crrEvent.pois[p.elapsed]) {
 									  feature.name=crrEvent.pois[p.elapsed].name;
 									  feature.code=crrEvent.pois[p.elapsed].code;
 								  }

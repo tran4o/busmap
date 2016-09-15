@@ -10,6 +10,7 @@ var authd = require("../misc/auth");
 var persons = require("../db/persons");
 var events = require("../db/events");
 
+var CHECK_INTERVAL = 1000*60*1;// every 1 min check (TODO INST OPTION)
 var lastEcallTimes = {};
 exports.start = function(args,onDone) 
 {
@@ -302,13 +303,17 @@ function startDailyEvents(isReset)
 		clearTimeout(timerDaily);
 	}
 	oldM=undefined;
-	timerDaily=undefined;	
+	timerDaily=undefined;
+	if (inst && inst.json && inst.json.server && inst.json.server.disableDailyEventScheduler) {
+		console.log("DISABLING DAILY EVENT SCHEDULER from installation's server.disableDailyEventScheduler!")
+		return;
+	}
 	// cnst.maxDailyEventsHistory	
 	function oneCheck() 
 	{
 		var crr = moment().format("DD.MM.YYYY");// hh:mm:ss");
 		if (oldM == crr)
-			return;
+			return setTimeout(oneCheck,CHECK_INTERVAL);
 		events.getDailyEvents(function(res) {
 			var toDel=[]; 
 			while (res.length > (cnst.maxDailyEventsHistory || 10)) {
@@ -339,7 +344,7 @@ function startDailyEvents(isReset)
 				});
 				function onDone() {
 					oldM=crr;
-					timerDaily=setTimeout(oneCheck,1000*60*1); // every 1 min check (TODO INST OPTION)
+					timerDaily=setTimeout(oneCheck,CHECK_INTERVAL); 
 				}
 			}
 		});
