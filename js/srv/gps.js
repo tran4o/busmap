@@ -138,7 +138,7 @@ exports.savePositionInDB = function(pmsg,onDone)
 		   +",INP AS ( INSERT INTO tracking.position(person,packet_type,t,pos,geom_t,location_sensor,sats,hdop,speed_in_kmh,speed_in_kmh_average,gsm_signal,ecall_active,batt_volt,batt_percent,charger_active,is_race,uptime_system,alt,grp,lon,lat,direction,gps_valid,number_of_steps,puls_rate,temperature,transmission_intervall_rate,event) VALUES "+rdata+" RETURNING event,person,t,pos,speed_in_kmh,speed_in_kmh_average,hdop,alt)\n"
 		   +events.getInterpolationQuery() // ,RES AS (...)
 		   +" \nINSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail FROM RES ) RETURNING tracking.TRACKPOS(id)";	
-	console.log(sql+"\n");
+	//console.log(sql+"\n");
 	//----------------
 	saveQueue.push(sql);
 	doneHandlers.push(onDone);
