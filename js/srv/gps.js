@@ -116,7 +116,6 @@ exports.savePositionInDB = function(pmsg,onDone)
 		selGrp="COALESCE((SELECT MAX(J.grp) FROM tracking.position AS J WHERE J.person = "+pmsg.person+" AND J.t >= "+(pmsg.t-cnst.signalTimeout*1000)+" AND J.t < "+pmsg.t+"),"+pmsg.t+")";
 	else if (typeof pmsg.grp == "number") 
 		selGrp=pmsg.grp;
-	var selAvgSpd="(SELECT (SUM(J.speed_in_kmh)+("+(pmsg.speedInKmh || 0)+"::real)) / (COUNT(J.speed_in_kmh)::real+1.0) FROM tracking.position AS J where J.person = "+pmsg.person+" AND J.t >= "+(pmsg.t-cnst.averageSpeedDurationSeconds*1000)+" AND J.t < "+pmsg.t+")"; 
 	var gc = Math.floor((pmsg.t-cnst.timeOrigin)/(1000*cnst.locationStep));
 	var rdata = "("+fix(pmsg.person)+","+fix(pmsg.packetType)+","+fix(pmsg.t)+",ST_MakePoint("+fix(pmsg.lon)+","+fix(pmsg.lat)+"),ST_MakePoint("+gc+","+gc+"),"+fix(pmsg.ls)+","+fix(pmsg.sats)+","+fix(pmsg.hdop)
 		+","+fix(pmsg.speedInKmh)+","+selAvgSpd+","+fix(pmsg.gsmSignal)+","
