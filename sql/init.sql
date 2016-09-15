@@ -123,6 +123,7 @@ ALTER TABLE tracking.position
         ADD COLUMN hdop DOUBLE PRECISION NOT NULL DEFAULT 0,
         ADD COLUMN direction DOUBLE PRECISION,
         ADD COLUMN speed_in_kmh DOUBLE PRECISION NOT NULL DEFAULT 0,
+        ADD COLUMN speed_in_kmh_average DOUBLE PRECISION NOT NULL DEFAULT 0,
         ADD COLUMN alt DOUBLE PRECISION NOT NULL DEFAULT 0,
         ADD COLUMN gps_valid BOOLEAN NOT NULL DEFAULT false,
         ADD COLUMN gsm_signal DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -223,7 +224,8 @@ ALTER TABLE tracking.position_soft
 		ADD COLUMN tpos GEOMETRY(POINT),
         ADD COLUMN hdop DOUBLE PRECISION NOT NULL DEFAULT 0,
         ADD COLUMN avail DOUBLE PRECISION NOT NULL DEFAULT 0,				
-        ADD COLUMN speed_in_kmh DOUBLE PRECISION NOT NULL DEFAULT 0;
+        ADD COLUMN speed_in_kmh DOUBLE PRECISION NOT NULL DEFAULT 0,
+        ADD COLUMN speed_in_kmh_average DOUBLE PRECISION NOT NULL DEFAULT 0;
 
 CREATE INDEX s_person_idx ON tracking.position_soft (person);
 CREATE INDEX s_tracking_person_event_i_elapsed ON tracking.position_soft (event,person,i,elapsed);

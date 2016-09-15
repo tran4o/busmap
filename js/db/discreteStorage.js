@@ -232,7 +232,7 @@ function getDataDirect(event,person,intv,level,onDone)
 			if (event) {
 				ew=" AND event = "+parseInt(event);
 			}
-			var sql = "SELECT 0 as rank, elapsed,ST_X("+(event ? "tpos" : "pos")+") AS lon,ST_Y("+(event ? "tpos" : "pos")+") AS lat,ST_X(pos) as glon,ST_Y(pos) as glat,avail,hdop,i*"+consts.locationStep*1000+"+"+consts.timeOrigin+" AS t,person,i,speed_in_kmh FROM tracking.position_soft WHERE i >= $1 AND i < $2 AND person = $3 "+ew+" ORDER BY i";
+			var sql = "SELECT 0 as rank, elapsed,ST_X("+(event ? "tpos" : "pos")+") AS lon,ST_Y("+(event ? "tpos" : "pos")+") AS lat,ST_X(pos) as glon,ST_Y(pos) as glat,avail,hdop,i*"+consts.locationStep*1000+"+"+consts.timeOrigin+" AS t,person,i,speed_in_kmh,speed_in_kmh_average FROM tracking.position_soft WHERE i >= $1 AND i < $2 AND person = $3 "+ew+" ORDER BY i";
 			var args=[dofs,dofse,-person];
 			pgclient.query(sql,args,function(err, result) {
 				if (done)
@@ -265,6 +265,8 @@ function getDataDirect(event,person,intv,level,onDone)
 						r.hdop=e.hdop;
 					if (e.speed_in_kmh != undefined)
 						r.speedInKmh=e.speed_in_kmh;
+					if (e.speed_in_kmh_average != undefined)
+						r.speedInKmhAverage=e.speed_in_kmh_average;
 					res.push(r);
 				}
 				onDone(res);
@@ -314,6 +316,7 @@ function getDataDirect(event,person,intv,level,onDone)
 			  'SUM(X.sats)::BIGINT AS sats,'+
 			  'AVG(X.hdop) AS hdop,'+
 			  'AVG(X.speed_in_kmh) AS speed_in_kmh,'+
+			  'AVG(X.speed_in_kmh_average) AS speed_in_kmh_average,'+
 			  'AVG(X.batt_volt) AS batt_volt,'+
 			  'AVG(X.batt_percent) AS batt_percent,'+
 			  'AVG(X.temperature) AS temperature,'+
@@ -399,6 +402,8 @@ function getDataDirect(event,person,intv,level,onDone)
 							r.sats=e.sats;
 						if (e.speed_in_kmh != undefined)
 							r.speedInKmh=e.speed_in_kmh;
+						if (e.speed_in_kmh_average != undefined)
+							r.speedInKmhAverage=e.speed_in_kmh_average;
 						if (e.batt_volt != undefined)
 							r.battVolt=e.batt_volt;
 						if (e.batt_percent != undefined)

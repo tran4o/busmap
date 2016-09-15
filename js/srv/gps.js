@@ -116,9 +116,11 @@ exports.savePositionInDB = function(pmsg,onDone)
 		selGrp="COALESCE((SELECT MAX(J.grp) FROM tracking.position AS J WHERE J.person = "+pmsg.person+" AND J.t >= "+(pmsg.t-cnst.signalTimeout*1000)+" AND J.t < "+pmsg.t+"),"+pmsg.t+")";
 	else if (typeof pmsg.grp == "number") 
 		selGrp=pmsg.grp;
+	var selAvgSpd="(SELECT (SUM(J.speed_in_kmh)+("+(pmsg.speedInKmh || 0)+"::real)) / (COUNT(J.speed_in_kmh)::real+1.0) FROM tracking.position AS J where J.person = "+pmsg.person+" AND J.t >= "+(pmsg.t-cnst.averageSpeedDurationSeconds*1000)+" AND J.t < "+pmsg.t+")"; 
 	var gc = Math.floor((pmsg.t-cnst.timeOrigin)/(1000*cnst.locationStep));
-	var rdata = "("+fix(pmsg.person)+","+fix(pmsg.packetType)+","+fix(pmsg.t)+",ST_MakePoint("+fix(pmsg.lon)+","+fix(pmsg.lat)+"),ST_MakePoint("+gc+","+gc+"),"+fix(pmsg.ls)+","+fix(pmsg.sats)+","+fix(pmsg.hdop)+","+fix(pmsg.speedInKmh)+","+
-	 	fix(pmsg.gsmSignal)+","+fix(pmsg.ecallActive)+","+fix(pmsg.battVolt)+","+fix(pmsg.battPercent)+","+fix(pmsg.chargerActive)+","+fix(pmsg.isRace)+","+fix(pmsg.uptimeSystem)+","+fix(pmsg.alt || 0)+","+selGrp
+	var rdata = "("+fix(pmsg.person)+","+fix(pmsg.packetType)+","+fix(pmsg.t)+",ST_MakePoint("+fix(pmsg.lon)+","+fix(pmsg.lat)+"),ST_MakePoint("+gc+","+gc+"),"+fix(pmsg.ls)+","+fix(pmsg.sats)+","+fix(pmsg.hdop)
+		+","+fix(pmsg.speedInKmh)+","+selAvgSpd+","+fix(pmsg.gsmSignal)+","
+		+fix(pmsg.ecallActive)+","+fix(pmsg.battVolt)+","+fix(pmsg.battPercent)+","+fix(pmsg.chargerActive)+","+fix(pmsg.isRace)+","+fix(pmsg.uptimeSystem)+","+fix(pmsg.alt || 0)+","+selGrp
 	 	+","+fix(pmsg.lon)+","+fix(pmsg.lat)	 
 	 	+","+fix(pmsg.direction)
 	 	+","+fix(pmsg.gpsValid == undefined ? true : pmsg.gpsValid)
@@ -131,9 +133,9 @@ exports.savePositionInDB = function(pmsg,onDone)
 	//-------------------------------------------------------------------------------------
 	var eview=events.getEventQuery(pmsg.t,pmsg.person);	
 	var sql="WITH "+eview+"\n"
-		   +",INP AS ( INSERT INTO tracking.position(person,packet_type,t,pos,geom_t,location_sensor,sats,hdop,speed_in_kmh,gsm_signal,ecall_active,batt_volt,batt_percent,charger_active,is_race,uptime_system,alt,grp,lon,lat,direction,gps_valid,number_of_steps,puls_rate,temperature,transmission_intervall_rate,event) VALUES "+rdata+" RETURNING event,person,t,pos,speed_in_kmh,hdop,alt)\n"
+		   +",INP AS ( INSERT INTO tracking.position(person,packet_type,t,pos,geom_t,location_sensor,sats,hdop,speed_in_kmh,speed_in_kmh_average,gsm_signal,ecall_active,batt_volt,batt_percent,charger_active,is_race,uptime_system,alt,grp,lon,lat,direction,gps_valid,number_of_steps,puls_rate,temperature,transmission_intervall_rate,event) VALUES "+rdata+" RETURNING event,person,t,pos,speed_in_kmh,speed_in_kmh_average,hdop,alt)\n"
 		   +events.getInterpolationQuery() // ,RES AS (...)
-		   +" \nINSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,alt,avail FROM RES ) RETURNING tracking.TRACKPOS(id)";	
+		   +" \nINSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail FROM RES ) RETURNING tracking.TRACKPOS(id)";	
 	//console.log(sql+"\n");
 	//----------------
 	saveQueue.push(sql);

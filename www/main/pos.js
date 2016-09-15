@@ -1082,7 +1082,8 @@
 			        		}
 			        		//6,7 = glon,glat
 			        		//8,9 = hdop,speed_in_kmh
-			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmh];
+			        		// NEW AVERAGE SPEED (FOR BUS TIME AVERAGES)
+			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmhAverage];
 			        	}
 			        	//---------------------------------------------------------------
 		    			GUI.pathByPerson=pathByPerson;
@@ -1160,7 +1161,8 @@
 		        					// VALID SIGNAL ? (only for path not for graph!)
 		        					if (v.lon && v.lat) 
 		        					{
-		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmh:v.speedInKmh});
+		        						// NEW AVERAGE SPEED 
+		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmh:v.speedInKmhAverage});
 		        					}
 		        				}
 		        			}

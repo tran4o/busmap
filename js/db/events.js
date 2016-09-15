@@ -1126,9 +1126,8 @@ function calcEventParticipant(tFrom,tTo,person,onDone)
 					return;
 				}
 				pgclient.query(sql=(
-					 "WITH INP AS (SELECT pos,t,hdop,speed_in_kmh,person,event,alt FROM tracking.position WHERE id = "+r.id+")\n "
 					+getInterpolationQuery()
-					+"\n,X AS ( INSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,alt,avail FROM RES ) RETURNING id,person,i,alt ) "
+					+"\n,X AS ( INSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail FROM RES ) RETURNING id,person,i,alt ) "
 					+"SELECT tracking.TRACKPOS(id) FROM X"
 					),[],function(err, result) 
 				{
@@ -1158,14 +1157,14 @@ function getInterpolationQuery()
 	/* CALCULATED CURRENT SPEED */
 	 ",A_LP AS ( SELECT ST_DISTANCE(pos,(SELECT pos FROM INP),true) / (((SELECT t FROM inp) - t)/1000.0) * 3.6   AS cspeed FROM tracking.position WHERE person = (SELECT person FROM INP) AND t < (SELECT t from INP) AND pos IS NOT NULL ORDER BY t desc LIMIT 1)\n"
 	/* FIXED CURRENT RECORD. pos is not null > skip for input queries */
-	+",A_POS AS ( SELECT t,pos,alt,CASE WHEN speed_in_kmh > 0 THEN speed_in_kmh ELSE (SELECT cspeed FROM A_LP) END AS speed_in_kmh,LEAST(hdop,"+consts.maxHDOP+") AS hdop FROM INP WHERE pos IS NOT NULL )\n"
+	+",A_POS AS ( SELECT t,pos,alt,CASE WHEN speed_in_kmh > 0 THEN speed_in_kmh ELSE (SELECT cspeed FROM A_LP) END AS speed_in_kmh,speed_in_kmh_average,LEAST(hdop,"+consts.maxHDOP+") AS hdop FROM INP WHERE pos IS NOT NULL )\n"
 	
 	/* LAST DEFINED POS */
-	+",L_POS_PRE AS ( SELECT pos,alt,t,speed_in_kmh,hdop FROM tracking.position WHERE (((SELECT event FROM INP) IS NULL AND t >= (SELECT t FROM INP)-"+consts.signalTimeout*1000+" OR event = (SELECT event FROM INP))) AND person = (SELECT person FROM INP) AND t < (SELECT t FROM INP) AND pos IS NOT NULL ORDER BY t DESC LIMIT 1)\n"
+	+",L_POS_PRE AS ( SELECT pos,alt,t,speed_in_kmh,speed_in_kmh_average,hdop FROM tracking.position WHERE (((SELECT event FROM INP) IS NULL AND t >= (SELECT t FROM INP)-"+consts.signalTimeout*1000+" OR event = (SELECT event FROM INP))) AND person = (SELECT person FROM INP) AND t < (SELECT t FROM INP) AND pos IS NOT NULL ORDER BY t DESC LIMIT 1)\n"
 	/* CALCULATED LAST SPEED */
 	+",L_LP AS ( SELECT ST_DISTANCE(pos,(SELECT pos FROM L_POS_PRE),true) / (((SELECT t FROM L_POS_PRE) - t)/1000.0) * 3.6   AS cspeed FROM tracking.position WHERE person = (SELECT person FROM INP) AND t < (SELECT t from L_POS_PRE) ORDER BY t desc LIMIT 1)\n"
 	/* FIXED LST RECORD */
-	+",L_POS AS ( SELECT t,pos,alt,CASE WHEN speed_in_kmh > 0 THEN speed_in_kmh ELSE (SELECT cspeed FROM L_LP) END AS speed_in_kmh,LEAST(hdop,"+consts.maxHDOP+") AS hdop FROM L_POS_PRE WHERE pos IS NOT NULL )\n"
+	+",L_POS AS ( SELECT t,pos,alt,CASE WHEN speed_in_kmh > 0 THEN speed_in_kmh ELSE (SELECT cspeed FROM L_LP) END AS speed_in_kmh,speed_in_kmh_average,LEAST(hdop,"+consts.maxHDOP+") AS hdop FROM L_POS_PRE WHERE pos IS NOT NULL )\n"
 
 	// DBG 
 	//+",DBG AS ( SELECT ceil(((SELECT t FROM L_POS)-"+consts.timeOrigin+") / "+consts.locationStep*1000+"::real)::int8 AS R1 , floor(((SELECT t FROM A_POS)-"+consts.timeOrigin+") / "+consts.locationStep*1000+"::real)::int8 AS R2    ) "
@@ -1178,7 +1177,7 @@ function getInterpolationQuery()
 	+",I2 AS ( SELECT i,(t-(SELECT t FROM L_POS))/(((SELECT t FROM A_POS)-(SELECT t FROM L_POS))::float8) as fract,(t-(SELECT t FROM L_POS))/("+(consts.locationStep*1000)+"::float8) AS avail FROM I1)\n"
 
 	// FINALLY : we have 2 points with all defined values and 1 fraction coef (PFUUUUUUFUUOOOOKK!!)
-	+",RES AS ( SELECT (SELECT person FROM INP) AS person,(SELECT event FROM INP),i,ST_MAKEPOINT(i,i) as geom_i,ST_Line_Interpolate_Point(ST_MAKELINE((SELECT pos FROM L_POS),(SELECT pos FROM A_POS)),fract) AS pos,COALESCE((SELECT speed_in_kmh FROM L_POS)+((SELECT speed_in_kmh FROM A_POS)-(SELECT speed_in_kmh FROM L_POS))*fract,0) AS speed_in_kmh, (SELECT hdop FROM L_POS)+((SELECT hdop FROM A_POS)-(SELECT hdop FROM L_POS))*fract AS hdop, (SELECT alt FROM L_POS)+((SELECT alt FROM A_POS)-(SELECT alt FROM L_POS))*fract AS alt,avail FROM I2 ORDER BY i)";
+	+",RES AS ( SELECT (SELECT person FROM INP) AS person,(SELECT event FROM INP),i,ST_MAKEPOINT(i,i) as geom_i,ST_Line_Interpolate_Point(ST_MAKELINE((SELECT pos FROM L_POS),(SELECT pos FROM A_POS)),fract) AS pos,COALESCE((SELECT speed_in_kmh FROM L_POS)+((SELECT speed_in_kmh FROM A_POS)-(SELECT speed_in_kmh FROM L_POS))*fract,0) AS speed_in_kmh, COALESCE((SELECT speed_in_kmh_average FROM L_POS)+((SELECT speed_in_kmh_average FROM A_POS)-(SELECT speed_in_kmh_average FROM L_POS))*fract,0) AS speed_in_kmh_average, (SELECT hdop FROM L_POS)+((SELECT hdop FROM A_POS)-(SELECT hdop FROM L_POS))*fract AS hdop, (SELECT alt FROM L_POS)+((SELECT alt FROM A_POS)-(SELECT alt FROM L_POS))*fract AS alt,avail FROM I2 ORDER BY i)";
 	return sql;
 } 
 

@@ -6,6 +6,8 @@ module.exports =
 	isShowStartFinish : false,
 	maxDailyEventsHistory : 7,  // 1 week
 	
+	averageSpeedDurationSeconds : 60*10, //10 minutes TODO SET RIGHT VALUE!!!
+		
 	liveExtraOffsetSeconds : 50, // now shifter in the isLive (discrete.js) calculation with this value !!! HIGH VALUE BECAUSE OF INTERPOLATION STORAGE CAN WAIT FOR DEFINED POSITION !!!
 	liveConsistencyDisplayOffset : 60, // initial time shift
 	minDisplayOffset : 30, // lower offset 
