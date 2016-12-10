@@ -217,6 +217,10 @@
 	}
 
 	function isForceParticipantHidden(id) {
+		// TODO FIX ME ?!? MIGRATION FROM LR > BM
+		if (0 == 0)
+			return false;
+		
 		if (!_softVisMap) 
 		{
 			_softVisMap={};
