@@ -470,6 +470,9 @@
 	  };
 	  //--------------------------------------------
 	  $scope.onParticipantsLoaded = function(participants) {
+		  // SELECTED HARDCODED BUSMAP TODO REDESIGN!
+		  for (var i in participants)
+			  participants[i].selected=true;
 		  $scope.participants = participants;
 		  $scope.participantsLoaded=true;
 	  };
