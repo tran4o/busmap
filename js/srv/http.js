@@ -65,6 +65,7 @@ exports.start = function(args,onDone)
 	//------------------------------------------------
 	app.post("/recv",function(req,res,next) {
 		res.set('Content-Type', 'application/json');
+		console.log(req.body);
 		if (!req.body) 
 			return res.send({ err : "can not parse body!" });
 		if (!req.body.imei) 
