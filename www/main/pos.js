@@ -440,10 +440,13 @@
 	        	  for (var i in $scope.pois) {
 	        		  var p = $scope.pois[i];
 	        		  if (p.code) {
-	        			  m[p.code]={elapsed:parseFloat(i),code:p.code,name:p.name};
+	        			  m[p.code]={elapsed:parseFloat(i),code:p.code,name:p.name,image:p.image};
 	        		  }
 	        	  }
-	        	  $scope.poiByCode = m;	        	  
+	        	  $scope.$apply(function() {
+		        	  $scope.poiByCode = m;
+	        	  });
+	        	  
 	              var source = GUI.elapsedLayer.getSource();
 				  for (var i in levent.pois) 
 				  {
@@ -1769,26 +1772,56 @@
 	        	
     			//---------------------------------
 	        	// BUS MODE -> ESTIMATION OF TIME TO CURRENT POI
-        		if (elapsed != undefined && levent && $scope.poiByCode && $scope.crrPoiCode) 
+        		if (elapsed != undefined && levent && (($scope.poiByCode && $scope.crrPoiCode) || $scope.crrBus) ) 
         		{
-        			var poi = $scope.poiByCode[$scope.crrPoiCode];
-        			if (poi) 
+        			if ($scope.crrBus) 
         			{
-        				var tval="-";
-            			var te = elapsed % 1;
-            			var de = poi.elapsed-te;
-            			if (poi.elapsed < te)
-            				de+=1;
-            			var lenm = trackLength*de;
-        				if (speed > 0) {
-        					var durs = lenm/(speed*0.27777777777778);
-        		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
-            				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
-        				} else {
-        					// SPEED NOT AVAIL -> display distance in km
-            				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+        				if ($scope.crrBus == part.code) 
+        				{
+            				// BUS         				
+            				for (var i in $scope.pois) 
+            				{
+                    			var poi = $scope.pois[i];
+                    			if (poi) 
+                    			{
+                    				var tval="-";
+                        			var te = elapsed % 1;
+                        			var de = poi.elapsed-te;
+                        			if (poi.elapsed < te)
+                        				de+=1;
+                        			var lenm = trackLength*de;
+                    				if (speed > 0) {
+                    					var durs = lenm/(speed*0.27777777777778);
+                    		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
+                        				poi.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+                    				} else {
+                    					// SPEED NOT AVAIL -> display distance in km
+                    					poi.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+                    				}
+                    			}
+            				}
         				}
-        				//console.log(part.code+" | TVAL : "+tval);
+        			} else {
+        				// STATION 
+            			var poi = $scope.poiByCode[$scope.crrPoiCode];
+            			if (poi) 
+            			{
+            				var tval="-";
+                			var te = elapsed % 1;
+                			var de = poi.elapsed-te;
+                			if (poi.elapsed < te)
+                				de+=1;
+                			var lenm = trackLength*de;
+            				if (speed > 0) {
+            					var durs = lenm/(speed*0.27777777777778);
+            		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
+                				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+            				} else {
+            					// SPEED NOT AVAIL -> display distance in km
+                				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+            				}
+            				//console.log(part.code+" | TVAL : "+tval);
+            			}
         			}
         		}
     			//---------------------------------
@@ -2114,6 +2147,13 @@
 						var part = participantsCache[i];
 						if (part.displayText) {
 							$("#estpers-"+part.id).html(part.displayText);
+						}
+					}
+					for (var i in $scope.pois) 
+					{
+						var poi = $scope.pois[i];
+						if (poi.displayText) {
+							$("#estpois-"+poi.code).html(poi.displayText);
 						}
 					}
 	        	}
