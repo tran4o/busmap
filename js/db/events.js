@@ -1126,7 +1126,7 @@ function calcEventParticipant(tFrom,tTo,person,onDone)
 					return;
 				}
 				pgclient.query(sql=(
-					 "WITH INP AS (SELECT pos,t,hdop,speed_in_kmh,speed_in_kmh_average,person,event,alt, FROM tracking.position WHERE id = "+r.id+")\n "
+					 "WITH INP AS (SELECT pos,t,hdop,speed_in_kmh,speed_in_kmh_average,person,event,alt FROM tracking.position WHERE id = "+r.id+")\n "
 					+getInterpolationQuery()
 					+"\n,X AS ( INSERT INTO tracking.position_soft(i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail) (SELECT i,geom_i,person,event,pos,hdop,speed_in_kmh,speed_in_kmh_average,alt,avail FROM RES ) RETURNING id,person,i,alt ) "
 					+"SELECT tracking.TRACKPOS(id) FROM X"
