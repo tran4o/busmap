@@ -445,12 +445,7 @@ Class("Gui",
 	        		}*/
 					if (part.rotation != undefined && part.speed > 0 && part.isWatched && part.avail > 0.5 ) 
 					{
-						// opc,rotation = xr
-						if (typeof hackRotation == "undefined") {
-			        		ctx.rotate(-part.rotation);
-						} else {
-			        		ctx.rotate(hackRotation(part.rotation));
-						}
+			        	ctx.rotate(-rot+Math.PI/2);
 		        		ctx.scale(32,32);
 		        		ctx.drawImage(Utils.renderArrow(32,32,part.color),0.55,-0.5,1,1);
 		        		ctx.scale(1/32,1/32);
