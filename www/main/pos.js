@@ -383,6 +383,10 @@
 
 	        $("body").addClass("fullscreen");
 	        GUI.map.updateSize();
+
+	        // ROTATION ROTATION ROTATION
+	        GUI.map.getView().setRotation(Math.PI/2);
+	      
 	        
 	    	//$(".btn-fullscreen").click();
 
