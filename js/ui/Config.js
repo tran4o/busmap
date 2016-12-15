@@ -7,6 +7,7 @@ var CONFIG =
 		modes : 
 		{
 			"speed" : { name : "Speed (km/h)" , pro : "speedInKmh", unit : "km/h"}, 	 
+			"speedAvg" : { name : "AVG speed (1h) (km/h)" , pro : "speedInKmhAverage", unit : "km/h"}, 	 
 			"elapsed" : { name : "Elapsed (%)" , pro : "elapsed", unit : "km" , multiply : "trackLen"},		 
 			"grprank" : { name : "GRP Rank #" , pro : "grprank" },	
 			"genrank" : { name : "GEN Rank #" , pro : "genrank" },	
