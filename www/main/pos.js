@@ -1173,7 +1173,7 @@
 		        					if (v.lon && v.lat) 
 		        					{
 		        						// NEW AVERAGE SPEED 
-		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmhExact : speedInKmh,speedInKmh:v.speedInKmhAverage});
+		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmhExact:v.speedInKmh,speedInKmh:v.speedInKmhAverage});
 		        					}
 		        				}
 		        			}
