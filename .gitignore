@@ -1,3 +1,4 @@
+*.swp
 .projects
 node_modules
 tmp
