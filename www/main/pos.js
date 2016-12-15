@@ -1093,7 +1093,8 @@
 			        		}
 			        		//6,7 = glon,glat
 			        		//8,9 = hdop,speed_in_kmh
-			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmh];
+			        		//10 = speed_in_kmh_exact
+			        		pm[m.i]=[m.lon,m.lat,m.i,m.elapsed,m.avail,m.rank,m.glon,m.glat,m.hdop,m.speedInKmh,m.speedInKmhExact];
 			        	}
 			        	//---------------------------------------------------------------
 		    			GUI.pathByPerson=pathByPerson;
@@ -1172,7 +1173,7 @@
 		        					if (v.lon && v.lat) 
 		        					{
 		        						// NEW AVERAGE SPEED 
-		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmh:v.speedInKmhAverage});
+		        						nitems.push({ avail:v.avail,lon:v.lon,lat:v.lat,hdop:v.hdop,elapsed:v.elapsed,t:v.t,person:person,i:v.i,glon:v.glon,glat:v.glat,rank:v.rank,speedInKmhExact : speedInKmh,speedInKmh:v.speedInKmhAverage});
 		        					}
 		        				}
 		        			}
@@ -1592,6 +1593,7 @@
         		var rot=undefined;
     			var accel=undefined;
     			var speed=undefined;
+    			var speedExact=undefined;
     			var elapsed=undefined;
     			var elapsed1=undefined;
     			var elapsed2=undefined;
@@ -1675,6 +1677,8 @@
         				hdop = l1[8]+(l2[8]-l1[8])*fract;
         			if (l1[9] && l2[9])
         				speed = (l1[9]+(l2[9]-l1[9])*fract);
+        			if (l1[10] && l2[10])
+        				speedExact = (l1[10]+(l2[10]-l1[10])*fract);
         			var avail1 = l1[4];		// 0 = BEST availablity 
         			var avail2 = l2[4];
         			var isz = UI.Config.timeouts.deviceTimeout/UI.Config.location.step; 
@@ -1691,7 +1695,7 @@
         			if (avail2 > isz)
         				avail2 = isz;
         			part.avail = 0.5+(1.0-(avail1+(avail2-avail1)*fract)/isz)/2.0; // interpolate from 1 (zero
-            		guiSelectedChanged |= setParticipantLocation(part,lon,lat,elapsed,hdop,glon,glat,speed,accel,rot,rank);
+            		guiSelectedChanged |= setParticipantLocation(part,lon,lat,elapsed,hdop,glon,glat,speed,accel,rot,rank,speedExact);
         			showParticipant(id);
         		} else {
         			//console.log("NOT OK WITH "+Object.keys(part.loc)+"!");
@@ -1761,7 +1765,7 @@
 	        //----------------------------------------------------------------------
 	        // LOCATION LOADING /ANIMATION / DYNAMIC PARTICIPANT CREATIONG
 	        //----------------------------------------------------------------------
-	        function setParticipantLocation(part,lon,lat,elapsed,hdop,glon,glat,speed,acceleration,rotation,rank) 
+	        function setParticipantLocation(part,lon,lat,elapsed,hdop,glon,glat,speed,acceleration,rotation,rank,speedExact) 
 	        {
 	        	part.rank=rank;
 	        	part.isWatched=fwset[part.id];
@@ -1771,6 +1775,7 @@
 	        	part.rotation=rotation;
 	        	if (speed != undefined )
 	        		part.speed=speed;	        	
+	        	part.speedExact=speedExact;	        	
 	        	part.glon=glon;
 	        	part.glat=glat;
 	        	

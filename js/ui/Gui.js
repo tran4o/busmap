@@ -444,8 +444,8 @@ Class("Gui",
 	        			ctx.fillText(Math.round(part.elapsed*1000)/1000,0,-15+2);
 	        		}*/
 	        		
-	        		/* MIN SPEED TODO ADD CONFIG */
-					if (part.rotation != undefined && part.speed > 4 /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
+	        		/* MIN SPEED 3 km/h TODO ADD CONFIG */
+					if (part.rotation != undefined && part.speedExact > 3 /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
 					{
 						console.log(part.speed); 
 						// opc,rotation = xr 
