@@ -443,7 +443,9 @@ Class("Gui",
 		        		ctx.fillStyle = "black";
 	        			ctx.fillText(Math.round(part.elapsed*1000)/1000,0,-15+2);
 	        		}*/
-					if (part.rotation != undefined && part.speed > 0 && part.isWatched && part.avail > 0.5 ) 
+	        		
+	        		/* MIN SPEED TODO ADD CONFIG */
+					if (part.rotation != undefined && part.speed > 4 /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
 					{
 						// opc,rotation = xr
 						if (typeof hackRotation == "undefined") {
