@@ -576,7 +576,7 @@ Class("Gui",
 			});
 			
 			var proxiesLayer=this.proxiesLayer;
-			var map;			
+			var map;		
 			this.map = new ol.Map({
 			  /*interactions: ol.interaction.defaults().extend(
 			  [

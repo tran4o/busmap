@@ -229,9 +229,9 @@
 	    </md-sidenav>		
 
 		<div style="position : absolute;right:0;top:0;margin-top:0.7em;margin-right:0.7em;border-radius:7px;background-color:rgba(0,0,0,0.2)">
-			<md-list style="padding:0;">
+			<md-list ng-if="!crrBus" style="padding:0;">
   				<div ng-click="selectCrrPoi()" style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrPoiName}}</div>
-	  			<md-list-item ng-repeat="person in participants" ng-click="showFav(person)" class="noleft" ng-if="person.selected" style="padding-left:0.75em;padding-right:0.75em;">
+	  			<md-list-item ng-repeat="person in participants" class="noleft" style="padding-left:0.75em;padding-right:0.75em;">
 	    			<img style="border-radius:100%;border:2px solid {{person.color}}" alt="{{ person.firstName}} {{ person.lastName }}" ng-src="{{person.image || (person.gender == 'm' ? 'images/missing-male.png' : (person.gender == 'f' ? 'images/missing-female.png':null))  }}" class="md-avatar">	    			
 					<div style="position:absolute;margin-left:-62px;margin-top:-2px;" ng-if="person.nationality && person.nationality.length">
 						<flag country="{{person.nationality.toLowerCase()}}" size="16"></flag>
@@ -240,7 +240,15 @@
 	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{person.first_name}} {{ person.last_name}} {{ (person.age ? "("+person.age+((" "+(person.gender||"")).toUpperCase())+")" : "") }}</p>
 	    			<p style="margin-left:1em;color:white;font-weight:bold;" id="estpers-{{person.id}}">-</p>
 	  			</md-list-item>
-			</md-list>	    
+			</md-list>	 
+			<md-list ng-if="crrBus" style="padding:0;">
+  				<div style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrBus}}</div>
+	  			<md-list-item ng-repeat="poi in pois" class="noleft" style="padding-left:0.75em;padding-right:0.75em;">
+	    			<img style="border-radius:100%;" alt="{{ poi.name }}" ng-src="img/{{poi.image}}" class="md-avatar">	    			
+	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{poi.name}}</p>
+	    			<p style="margin-left:1em;color:white;font-weight:bold;" id="estpois-{{poi.code}}">-</p>
+	  			</md-list-item>
+			</md-list>   
 		</div>
 		
 		<!--<md-switch id="favs-toolbar-toggle-notify" class="md-primary md-raised" ng-if="$mdMedia('gt-md')" ng-model="doNotify" aria-label="Notify">Notify</md-switch>-->

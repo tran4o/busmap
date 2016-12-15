@@ -32,6 +32,7 @@
 				    	$scope.crrPoiName=pp.name;
 				    	$scope.posCtrl.crrPoiCode=result;
 				    	$scope.posCtrl.crrPoiName=pp.name;
+				    	$scope.posCtrl.crrBus=$scope.crrBus;
 				    	return;
 		    		}
 		    		if (pp.code)
@@ -42,7 +43,7 @@
 		    	
 		    });
 		  };
-    	$scope.crrPoiCode = "UNKNOWN";
+		$scope.crrPoiCode = "UNKNOWN";
     	$scope.crrPoiName = "UNKNOWN";
     	if (localStorage.getItem("CRRPOI")) 
     		$scope.crrPoiCode=localStorage.getItem("CRRPOI");
@@ -156,6 +157,11 @@
     	$scope.toggleLeft = buildToggler('left');
     	$scope.toggleRight = buildToggler('right');
     	$scope.eventId = parseInt(getParameterByName("event"));
+    	
+    	$scope.crrBus = getParameterByName("bus");
+    	if ($scope.crrBus && !$scope.crrBus.length) 
+    		$scope.crrBus=undefined;
+    	
 	   onLiveLankBoot(function() {
 	       LR.event.byId($scope.eventId,function(res) {
 	    	   setTimeout(function() {
@@ -470,6 +476,8 @@
 	  };
 	  //--------------------------------------------
 	  $scope.onParticipantsLoaded = function(participants) {
+		  // SELECTED HARDCODED BUSMAP TODO REDESIGN!
+		  for (var i in participants) participants[i].selected=true;
 		  $scope.participants = participants;
 		  $scope.participantsLoaded=true;
 	  };
@@ -480,7 +488,14 @@
 			  $scope.graphMode=posCtrl.graphMode;
 			  posCtrl.crrPoiCode=$scope.crrPoiCode;
 			  posCtrl.crrPoiName=$scope.crrPoiName;
+		      posCtrl.crrBus=$scope.crrBus;
 		  });
+		  $scope.pois={};
+		  for (var i in $scope.posCtrl.pois) {
+			  if ($scope.posCtrl.pois[i] && $scope.posCtrl.pois[i].code) {
+				  $scope.pois[i]=$scope.posCtrl.pois[i];
+			  }
+		  }
 	  };
 	  $scope.posOnYScaleChange = function(minY,maxY,dataType) {
 		  var midY=Math.floor((minY+maxY)*50.0*$scope.posCtrl.getGraphMultiplier())/100.0;

@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC",
+  "scripts": {
+	"project": "concurrently --kill-others \"npm run gps\" \"npm run http\"",
+	"gps": "nodemon ./js/bin/gps.js",
+	"http": "nodemon ./js/bin/http.js",
+	"build": "nodemon ./js/bin/build.js"
+  },
   "bin": {
     "bm": "./js/bin/bm.js",
     "http": "./js/bin/http.js",
@@ -38,5 +41,8 @@
     "watchify": "^3.7.0",
     "winston": "^2.2.0",
     "winston-daily-rotate-file": "^1.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.1.0"
   }
 }
