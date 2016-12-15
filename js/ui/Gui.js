@@ -446,7 +446,7 @@ Class("Gui",
 					if (part.rotation != undefined && part.speed > 0 && part.isWatched && part.avail > 0.5 ) 
 					{
 						// opc,rotation = xr
-						if (typeof window.hackRotation == "undefined" && true) {
+						if (typeof window.hackRotation == "undefinedKOR") {
 			        		ctx.rotate(-part.rotation);
 						} else {
 			        		ctx.rotate(window.hackRotation(part.rotation));
