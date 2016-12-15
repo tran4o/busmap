@@ -447,6 +447,7 @@ Class("Gui",
 	        		/* MIN SPEED TODO ADD CONFIG */
 					if (part.rotation != undefined && part.speed > 4 /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
 					{
+						console.log(part.speed);
 						// opc,rotation = xr 
 						if (typeof hackRotation == "undefined") {
 							ctx.rotate(-part.rotation+Math.PI/2);
