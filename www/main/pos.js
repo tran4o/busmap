@@ -445,7 +445,7 @@
 	        {
 	        	
 	        	  $scope.pois = {};
-	        	  for (var i in levent.pois) if (i.code)
+	        	  for (var i in levent.pois) if (levent.pois[i].code)
 	        		  $scope.pois[i]=levent.pois[i];
 	        	  var m={};
 	        	  for (var i in $scope.pois) {
