@@ -5,6 +5,7 @@
 	var defColor = "rgba(0,0,0,0.45)";
 	var defCenter = [11.617602,48.130851 ]; // MÜNCHEN TODO CHANGE
 	var initialDate = (new Date().getTime())-UI.Config.timeouts.liveConsistencyDisplayOffset*1000;	//2 min // TODO ADD CONFIG
+	var crrBus = undefined;
 	var crrTimeDiscrete;
 	var fwset={};
 	var wset={};
@@ -337,8 +338,8 @@
 	            				for (var i=0;i<res.length;i++) {
 	            					var p = res[i];
 	            					p.selected=!favsh || !favsh[p.id];
-	            					if (p.imei == $scope.crrBus) {
-	            						$scope.crrBus=p.id;
+	            					if (crrBus == undefined && p.imei == $scope.crrBus) {
+	            						crrBus=p.id;
 	            					}
 	            				}
 	        				}
@@ -1784,11 +1785,11 @@
 	        	
     			//---------------------------------
 	        	// BUS MODE -> ESTIMATION OF TIME TO CURRENT POI
-        		if (elapsed != undefined && levent && (($scope.poiByCode && $scope.crrPoiCode) || $scope.crrBus) ) 
+        		if (elapsed != undefined && levent && (($scope.poiByCode && $scope.crrPoiCode) || crrBus)) 
         		{
-        			if ($scope.crrBus) 
+        			if (crrBus) 
         			{
-        				if ($scope.crrBus == part.id) 
+        				if (crrBus == part.id) 
         				{
             				// BUS         				
             				for (var i in $scope.pois) 
