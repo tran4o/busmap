@@ -388,10 +388,17 @@ Class("Gui",
 					var opc = part.opacity;
 					if (part.avail != undefined)
 						opc*=part.avail;
-					var col = part.color;
 					var r = 1;
 					if (!part.isWatched)
 						r*=0.85;
+					
+					if (typeof crrBus != undefined && part.imei == crrBus) {
+						console.log("OK BUS >>>");
+						r*=2;
+						part.color="#FF4040";
+					}
+					
+					var col = part.color;
 					var tt = undefined;
 					if (opc <= 0.01)
 						continue;

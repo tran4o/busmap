@@ -162,7 +162,7 @@
     	$scope.toggleRight = buildToggler('right');
     	$scope.eventId = parseInt(getParameterByName("event"));
     	
-    	$scope.crrBus = getParameterByName("bus");
+    	window.crrBus = $scope.crrBus = getParameterByName("bus");
     	var ppoi = getParameterByName("poi");
     	if (ppoi) {
         	$scope.crrPoiCode=ppoi;
