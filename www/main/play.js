@@ -506,7 +506,7 @@
 				  posCtrl.crrPoiName=$scope.crrPoiName;
 			  else {
 				  for (var i in $scope.pois) if ($scope.pois[i].code == $scope.crrPoiCode) {
-				      posCtrl.crrPoiName=$scope.pois[i].name;
+				      $scope.crrPoiName=posCtrl.crrPoiName=$scope.pois[i].name;
 					  break;
 				  }
 			  }
