@@ -106,7 +106,7 @@ exports.savePositionInDB = function(pmsg, onDone) {
     else if (typeof pmsg.grp == "number")
         selGrp = pmsg.grp;
 
-    var selAvgSpd = "(SELECT COALESCE(AVG(J.speed_in_kmh),0.0) FROM tracking.position AS J WHERE J.speed_in_kmh >= "+cnst.stopSpeedLimitKmh+" AND J.person = " + pmsg.person + " AND J.t >= " + (pmsg.t - cnst.averageSpeedDurationSeconds * 1000) + " AND J.t < " + pmsg.t + ")";
+    var selAvgSpd = "(SELECT COALESCE(AVG(J.speed_in_kmh),0.0) FROM tracking.position AS J WHERE J.speed_in_kmh >= 0.00001 AND J.person = " + pmsg.person + " AND J.t >= " + (pmsg.t - cnst.averageSpeedDurationSeconds * 1000) + " AND J.t < " + pmsg.t + ")";
 
     var gc = Math.floor((pmsg.t - cnst.timeOrigin) / (1000 * cnst.locationStep));
     var rdata = "(" + fix(pmsg.person) + "," + fix(pmsg.packetType) + "," + fix(pmsg.t) + ",ST_MakePoint(" + fix(pmsg.lon) + "," + fix(pmsg.lat) + "),ST_MakePoint(" + gc + "," + gc + ")," + fix(pmsg.ls) + "," + fix(pmsg.sats) + "," + fix(pmsg.hdop) +

@@ -5,7 +5,7 @@ module.exports =
 	isReverse : true,			// BUS MODE = true (gpx track import add reversed path too!!!)
 	isShowStartFinish : false,
 	maxDailyEventsHistory : 7,  // 1 week
-	stopSpeedLimitKmh : 3, // lower limit for speed epsilon (check if stopped) 3km/h  
+	stopSpeedLimitKmh : 6, // lower limit for speed epsilon (check if stopped) 3km/h  
 	
 	averageSpeedDurationSeconds : 60*60, //60 minutes TODO SET RIGHT VALUE!!!
 		
