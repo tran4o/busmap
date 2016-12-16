@@ -1827,6 +1827,10 @@
             				var tval="-";
                 			var te = elapsed % 1;
                 			var de = poi.elapsed-te;
+                			/* TODO ADD IN CONFIG 30 METERS TOLLERANCE */
+                			if (te > poi.elapsed && poi.elapsed-te < 30 / trackLength)
+                				te=poi.elapsed;
+                			
                 			if (poi.elapsed < te)
                 				de+=1;
                 			var lenm = trackLength*de;
