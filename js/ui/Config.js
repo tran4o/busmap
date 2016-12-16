@@ -79,7 +79,8 @@ var CONFIG =
 		maxParticipantStateHistory : 1000, // number of elements
 		popupEnsureVisibleWidth : 200,
 		popupEnsureVisibleHeight: 120,
-		maxParticipantsInToolbar : 50
+		maxParticipantsInToolbar : 50,
+		stopSpeedLimitKmh : consts.stopSpeedLimitKmh
 	},
 	simulation : {
 		pingInterval : 10,  // interval in seconds to ping with gps data

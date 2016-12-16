@@ -445,7 +445,7 @@ Class("Gui",
 	        		}*/
 	        		 
 	        		/* MIN SPEED 3 km/h TODO ADD CONFIG */
-					if (part.rotation != undefined && part.speedExact > 3 /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
+					if (part.rotation != undefined && part.speedExact >= CONFIG.constraints.stopSpeedLimitKmh /*km/h*/ && part.isWatched && part.avail > 0.5 ) 
 					{
 						// opc,rotation = xr 
 						if (typeof hackRotation == "undefined") {
