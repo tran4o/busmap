@@ -1490,8 +1490,10 @@
 			            },500);
 	        		}
 		            var pw = $("#vis .vis-time-axis").width();
-		            if (pw > 20) 
-		            {
+		            if (!pw) {
+		        		// HACKINTOSH -> hidden bar just update HTML data
+		        		doGUIUpdate();
+		            } else if (pw > 20) {
 		            	pw=Math.round(pw);	
 			            var w = timeline.getWindow(); 
 			            if (!saveStateHandle) 
