@@ -339,7 +339,7 @@
 	            					var p = res[i];
 	            					p.selected=!favsh || !favsh[p.id];
 	            					if (crrBus == undefined && p.imei == $scope.crrBus) {
-	            						crrBus=p.id;
+	            						window.crrBus=crrBus=p.id;
 	            					}
 	            				}
 	        				}
