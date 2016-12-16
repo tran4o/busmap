@@ -392,13 +392,10 @@ Class("Gui",
 					if (!part.isWatched)
 						r*=0.85;
 					
-					/*if (typeof crrBus != "undefined" && part.imei == crrBus) {
-						
-					}*/
-					r*=2;
-					part.color="#FF4040";
-					console.log(part);
-					
+					if (typeof crrBus != "undefined" && part.id == crrBus) {
+						r*=2;
+						part.color="#FF4040";
+					}
 					var col = part.color;
 					var tt = undefined;
 					if (opc <= 0.01)
