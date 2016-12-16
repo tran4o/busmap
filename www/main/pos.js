@@ -336,7 +336,10 @@
 	        				{
 	            				for (var i=0;i<res.length;i++) {
 	            					var p = res[i];
-	            					p.selected=!favsh || !favsh[p.id]; 
+	            					p.selected=!favsh || !favsh[p.id];
+	            					if (p.imei == $scope.crrBus) {
+	            						$scope.crrBus=p.id;
+	            					}
 	            				}
 	        				}
 	        				($scope.$parent.onParticipantsLoaded && $scope.$parent.onParticipantsLoaded(res)); 
@@ -1785,7 +1788,7 @@
         		{
         			if ($scope.crrBus) 
         			{
-        				if ($scope.crrBus == part.imei) 
+        				if ($scope.crrBus == part.id) 
         				{
             				// BUS         				
             				for (var i in $scope.pois) 
