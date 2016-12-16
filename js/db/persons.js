@@ -616,9 +616,9 @@ exports.listPersonIdsOrderBy = function(auth,data,onDone)
 		}
 	}
 	// TODO REMOVE ME
-	/*console.log("JOIN : "+join);
+	console.log("JOIN : "+join);
 	console.log("WHERE : "+where);
-	console.log("SQL : "+sql);*/
+	console.log("SQL : "+sql);
 	var dbcon = driver.connect(function(err,pgclient,done) 
 	{
 		if (err) 
