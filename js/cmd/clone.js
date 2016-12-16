@@ -8,8 +8,8 @@ var events = require("../db/events");
 
 events.cloneEvent(5, 
 	moment().format('DD.MM.YYYY'),
-	(new Date('2016-12-15T01:00:00.000Z')).getTime(),
-	(new Date('2016-12-15T23:00:00.000Z')).getTime(), 
+	(new Date(moment().format("YYYY-MM-DD")+'T04:00:00.000Z')).getTime(),
+	(new Date(moment().format("YYYY-MM-DD")+'T21:30:00.000Z')).getTime(), 
 	function() { console.log('cerated'); }
 );
 
