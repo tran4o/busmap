@@ -2166,7 +2166,7 @@
 					}
 					var sorted=[];
 					for (var i in $scope.pois)
-						sorted.push(pois[i]);
+						sorted.push($scope.pois[i]);
 					sorted.sort(function(a,b) {
 						if (a.sortNum < b.sortNum)
 							return -1;
