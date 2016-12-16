@@ -49,6 +49,10 @@
     		$scope.crrPoiCode=localStorage.getItem("CRRPOI");
     	if (localStorage.getItem("CRRPOIN")) 
     		$scope.crrPoiName=localStorage.getItem("CRRPOIN");
+    	
+    	
+    	
+    	
      	$scope.favGender="all";
     	$scope.favType="ALL";
     	$scope.doNotify=!(localStorage.getItem("doNotNotify") == "true");
@@ -159,6 +163,11 @@
     	$scope.eventId = parseInt(getParameterByName("event"));
     	
     	$scope.crrBus = getParameterByName("bus");
+    	var ppoi = getParameterByName("poi");
+    	if (ppoi) {
+        	$scope.crrPoiCode=ppoi;
+        	$scope.crrPoiName=undefined;
+    	}
     	if ($scope.crrBus && !$scope.crrBus.length) 
     		$scope.crrBus=undefined;
     	
@@ -483,19 +492,26 @@
 	  };
 	  $scope.registerPosCtrl = function(posCtrl) 
 	  {
-		  $scope.posCtrl=posCtrl;
-		  $scope.$apply(function() {
-			  $scope.graphMode=posCtrl.graphMode;
-			  posCtrl.crrPoiCode=$scope.crrPoiCode;
-			  posCtrl.crrPoiName=$scope.crrPoiName;
-		      posCtrl.crrBus=$scope.crrBus;
-		  });
 		  $scope.pois={};
 		  for (var i in $scope.posCtrl.pois) {
 			  if ($scope.posCtrl.pois[i] && $scope.posCtrl.pois[i].code) {
 				  $scope.pois[i]=$scope.posCtrl.pois[i];
 			  }
 		  }
+		  $scope.posCtrl=posCtrl;
+		  $scope.$apply(function() {
+			  $scope.graphMode=posCtrl.graphMode;
+			  posCtrl.crrPoiCode=$scope.crrPoiCode;
+			  if ($scope.crrPoiName) 
+				  posCtrl.crrPoiName=$scope.crrPoiName;
+			  else {
+				  for (var i in $scope.pois) if ($scope.pois[i].code == $scope.crrPoiCode) {
+				      posCtrl.crrPoiName=$scope.pois[i].name;
+					  break;
+				  }
+			  }
+		      posCtrl.crrBus=$scope.crrBus;
+		  });
 	  };
 	  $scope.posOnYScaleChange = function(minY,maxY,dataType) {
 		  var midY=Math.floor((minY+maxY)*50.0*$scope.posCtrl.getGraphMultiplier())/100.0;
