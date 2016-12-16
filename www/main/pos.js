@@ -1785,7 +1785,7 @@
         		{
         			if ($scope.crrBus) 
         			{
-        				if ($scope.crrBus == part.code) 
+        				if ($scope.crrBus == part.imei) 
         				{
             				// BUS         				
             				for (var i in $scope.pois) 
