@@ -2179,7 +2179,10 @@
 						var poi = sorted.shift();
 						$("#estpois-"+code).html(poi.displayText||"");
 						$("#estpois-name-"+code).html(poi.name||"");
-						$("#estpois-img-"+code).attr("src","img/"+poi.img);
+						if (poi.image) 
+							$("#estpois-img-"+code).attr("src","img/"+poi.image);
+						else
+							$("#estpois-img-"+code).attr("src","");
 					}
 				}
 	        }
