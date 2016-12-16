@@ -443,13 +443,13 @@
 	        //---------------------------------------------------------
 	        if (levent && levent.pois) 
 	        {
-	        	  $scope.pois = levent.pois;
+	        	
+	        	  for (var i in levent.pois) if (i.code)
+	        		  $scope.pois[i]=levent.pois[i];
 	        	  var m={};
 	        	  for (var i in $scope.pois) {
 	        		  var p = $scope.pois[i];
-	        		  if (p.code) {
-	        			  m[p.code]={elapsed:parseFloat(i),code:p.code,name:p.name,image:p.image};
-	        		  }
+	        		  m[p.code]={elapsed:parseFloat(i),code:p.code,name:p.name,image:p.image};
 	        	  }
 	        	  $scope.$apply(function() {
 		        	  $scope.poiByCode = m;
