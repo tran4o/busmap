@@ -585,7 +585,7 @@ exports.listPersonIdsOrderBy = function(auth,data,onDone)
 	if (where.length)
 		where=" WHERE ("+where+")";
 	var sql;
-	var sAlias = "X.code,X.image,X.nationality,X.color,(substring(COALESCE(X.first_name,'?') FROM 1 FOR 1) || substring(COALESCE(X.last_name ,'?') FROM 1 FOR 1))";
+	var sAlias = "X.imei,X.code,X.image,X.nationality,X.color,(substring(COALESCE(X.first_name,'?') FROM 1 FOR 1) || substring(COALESCE(X.last_name ,'?') FROM 1 FOR 1))";
 	if (data.isCount) 
 	{
 		sql = "SELECT COUNT(X.id) AS id FROM tracking.persons AS X "+join+" "+where;
@@ -793,7 +793,7 @@ function parsePersonImage(r,onDone)
 exports.parsePerson=parsePerson;
 function parsePerson(auth,r,onDone) 
 {
-	var res={code : r.code,id : r.id,firstName : r.first_name, lastName : r.last_name, nationality : r.nationality, club : r.club, gender : r.gender, username : r.username,password : r.password ,userGroup : r.user_group,imei:r.imei,description:r.description,email:r.email,emailTemplate:r.email_template,type:r.type,color:r.color };
+	var res={imei:r.imei,code : r.code,id : r.id,firstName : r.first_name, lastName : r.last_name, nationality : r.nationality, club : r.club, gender : r.gender, username : r.username,password : r.password ,userGroup : r.user_group,imei:r.imei,description:r.description,email:r.email,emailTemplate:r.email_template,type:r.type,color:r.color };
 	// be sure updates are saved in personsByImei
 	var rr = {id:r.id,type:r.type,firstName:r.first_name,lastName:r.last_name,color:r.color,nationality:r.nationality};
 	if (personsByImei && r.imei) 
