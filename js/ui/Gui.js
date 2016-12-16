@@ -393,7 +393,7 @@ Class("Gui",
 						r*=0.85;
 					
 					if (typeof crrBus != "undefined" && part.imei == crrBus) {
-						console.log("OK BUS >>>");
+						console.log("OK BUS >>>",part);
 						r*=2;
 						part.color="#FF4040";
 					}
