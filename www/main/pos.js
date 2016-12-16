@@ -1827,9 +1827,12 @@
             				var tval="-";
                 			var te = elapsed % 1;
                 			var de = poi.elapsed-te;
+                			
                 			/* TODO ADD IN CONFIG 30 METERS TOLLERANCE */
-                			if (te > poi.elapsed && poi.elapsed-te < 30 / trackLength)
+                			if (te > poi.elapsed && te-poi.elapsed < 30 / trackLength) {
                 				te=poi.elapsed;
+                				de =0;
+                			}
                 			
                 			if (poi.elapsed < te)
                 				de+=1;
