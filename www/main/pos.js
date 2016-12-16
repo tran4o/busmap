@@ -1807,9 +1807,11 @@
                     					var durs = lenm/(speed*0.27777777777778);
                     		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                         				poi.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+                        				poi.sortNum=durs;
                     				} else {
                     					// SPEED NOT AVAIL -> display distance in km
                     					poi.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+                        				poi.sortNum=1000;	//some hardcoded value
                     				}
                     			}
             				}
@@ -2162,14 +2164,24 @@
 							$("#estpers-"+part.id).html(part.displayText);
 						}
 					}
-					for (var i in $scope.pois) 
-					{
-						var poi = $scope.pois[i];
-						if (poi.displayText) {
-							$("#estpois-"+poi.code).html(poi.displayText);
-						}
+					var sorted=[];
+					for (var i in $scope.pois)
+						sorted.push(pois[i]);
+					sorted.sort(function(a,b) {
+						if (a.sortNum < b.sortNum)
+							return -1;
+						if (a.sortNum > b.sortNum)
+							return 1;
+						return 0;
+					});
+					for (var i in $scope.pois) {
+						var code = $scope.pois[i].code;
+						var poi = sorted.shift();
+						$("#estpois-"+code).html(poi.displayText||"");
+						$("#estpois-name-"+code).html(poi.name||"");
+						$("#estpois-img-"+code).attr("src","img/"+poi.img);
 					}
-	        	}
+				}
 	        }
 	        //----------------------------------------------------------------------
 	        timeline.on("rangechanged",function() {

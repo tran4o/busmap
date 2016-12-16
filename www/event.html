@@ -244,8 +244,8 @@
 			<md-list ng-if="crrBus" style="padding:0;">
   				<div style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrBus}}</div>
 	  			<md-list-item ng-repeat="poi in pois" class="noleft" style="padding-left:0.75em;padding-right:0.75em;">
-	    			<img style="border-radius:100%;" alt="{{ poi.name }}" ng-src="img/{{poi.image}}" class="md-avatar">	    			
-	    			<p style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{poi.name}}</p>
+	    			<img id="estpois-img-{{poi.code}}" style="border-radius:100%;" alt="{{ poi.name }}" ng-src="img/{{poi.image}}" class="md-avatar">	    			
+	    			<p id="estpois-name-{{poi.code}}" style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{poi.name}}</p>
 	    			<p style="margin-left:1em;color:white;font-weight:bold;" id="estpois-{{poi.code}}">-</p>
 	  			</md-list-item>
 			</md-list>   
