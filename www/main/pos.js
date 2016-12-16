@@ -27,7 +27,7 @@
     // TODO 1000 (1sec) config option
     
     var notifTimes={};
-    var doNotNotify=(localStorage.getItem("doNotNotify") == "true");
+    var doNotNotify=(localStorage.getItem("doNotify") != "true");
     var pendingNotif=false;
 	function notification(person,ct,type,data,alias) 
 	{
