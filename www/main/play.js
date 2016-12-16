@@ -492,13 +492,13 @@
 	  };
 	  $scope.registerPosCtrl = function(posCtrl) 
 	  {
+		  $scope.posCtrl=posCtrl;
 		  $scope.pois={};
 		  for (var i in $scope.posCtrl.pois) {
 			  if ($scope.posCtrl.pois[i] && $scope.posCtrl.pois[i].code) {
 				  $scope.pois[i]=$scope.posCtrl.pois[i];
 			  }
 		  }
-		  $scope.posCtrl=posCtrl;
 		  $scope.$apply(function() {
 			  $scope.graphMode=posCtrl.graphMode;
 			  posCtrl.crrPoiCode=$scope.crrPoiCode;
