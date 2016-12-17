@@ -316,7 +316,8 @@ var STYLES=
 			arr.push(new ol.style.Style({
 				image : new ol.style.Icon(({
 					src : "images/pixel.png",
-					scale : 1.5/(resolution)
+					scale : 1.5/(resolution),
+					opacity : 0.8
 				}))
 			 }));
 		}
