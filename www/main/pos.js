@@ -2171,20 +2171,20 @@
 		        	// REFRESH ESTIMATE BUS TIME
 	        		
 	        		var sorted=[];
-					for (var i in participantsCache) 
-						sorted.push(participantsCache[i]);
+					for (var i in $scope.participants) 
+						sorted.push($scope.participants[i]);
 					sorted.sort(function(a,b) {
+						a=participantsCache[a.id];
+						b=participantsCache[b.id];
 						if (a.sortNum < b.sortNum)
 							return -1;
 						if (a.sortNum > b.sortNum)
 							return 1;
 						return 0;
 					});
-					var keys = Object.keys($scope.participants);
-					console.log(keys);
 					for (var i in sorted) 
 					{
-						var id = $scope.participants[keys[i]].id;
+						var id = $scope.participants[i].id;
 						var part = sorted.shift();						
 						$("#estpers-name-"+id).html(part.first_name+" "+part.last_name+" "+(part.age ? "("+part.age+((" "+(part.gender||"")).toUpperCase())+")" : ""));
 						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
