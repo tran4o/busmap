@@ -2,7 +2,7 @@ var moment = require("moment");
 module.exports = 
 {
 	isLoop : true,				// BUS MODE = true (final track is looped elapsed % 1!!!)
-	isReverse : true,			// BUS MODE = true (gpx track import add reversed path too!!!)
+	isReverse : false,			// BUS MODE = true (NOW FALSE 2016 DEC ) (gpx track import add reversed path too!!!)
 	isShowStartFinish : false,
 	maxDailyEventsHistory : 7,  // 1 week
 	stopSpeedLimitKmh : 6, // lower limit for speed epsilon (check if stopped) 3km/h  
