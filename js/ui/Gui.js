@@ -384,10 +384,14 @@ Class("Gui",
 			    // UFFFF
 			    var cbus = typeof crrBus != "undefined" ? crrBus : undefined;
 				arr.sort(function(a,b) {
+					console.log(cbus+" | A : ",a);
+					console.log(cbus+" | B : ",b);
 					var a1=(a.id == cbus ? 0:1);
 					var a2=(a.id == cbus ? 0:1);
-					a1=(a.isWatched?0:1);
-					a2=(b.isWatched?0:1);
+					if (a1 < a2)
+						return 
+					if (a1 > a2)
+						return;
 					a1=(a.isWatched?0:1);
 					a2=(b.isWatched?0:1);
 					if (a1 < a2)
