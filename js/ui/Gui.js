@@ -211,11 +211,11 @@ Class("Gui",
 	        });
 			
 			
-			/*var proj = new ol.proj.Projection({
+			var proj = new ol.proj.Projection({
 		        code: 'EPSG:3857',
 		        units: 'm',
 		        extent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
-		    });*/
+		    });
 			
 			var staticImageLayer = new ol.layer.Image({
 			    source: new ol.source.ImageStatic({
