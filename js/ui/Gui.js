@@ -217,7 +217,7 @@ Class("Gui",
 		        extent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
 		    });*/
 			
-			that.staticImageLayer = new ol.layer.Image({
+			this.staticImageLayer = new ol.layer.Image({
 			    source: new ol.source.ImageStatic({
 			      url: 'img/background.png',
 			      imageSize: [1295, 950],
