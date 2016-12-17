@@ -1841,9 +1841,11 @@
             					var durs = lenm/(speed*0.27777777777778);
             		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                 				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+                				part.sortNum=durs;
             				} else {
             					// SPEED NOT AVAIL -> display distance in km
-                				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km"; 
+                				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km";
+                				part.sortNum=1000;
             				}
             				//console.log(part.code+" | TVAL : "+tval);
             			}
@@ -2167,12 +2169,28 @@
 	        	{
 	        		lastEstRef=c;
 		        	// REFRESH ESTIMATE BUS TIME
+	        		
+	        		var sorted=[];
 					for (var i in participantsCache) 
+						sorted.push(participantsCache[i]);
+					sorted.sort(function(a,b) {
+						if (a.sortNum < b.sortNum)
+							return -1;
+						if (a.sortNum > b.sortNum)
+							return 1;
+						return 0;
+					});
+					var keys = Object.keys($scope.participants);
+					console.log(keys);
+					for (var i in sorted) 
 					{
-						var part = participantsCache[i];
-						if (part.displayText) {
-							$("#estpers-"+part.id).html(part.displayText);
-						}
+						var id = $scope.participants[keys[i]].id;
+						var part = sorted.shift();						
+						$("#estpers-name-"+id).html(part.first_name+" "+part.last_name+" "+(part.age ? "("+part.age+((" "+(part.gender||"")).toUpperCase())+")" : ""));
+						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
+						$("#estpers-img-"+id).attr("src",img);
+						if (part.displayText)
+							$("#estpers-"+id).html(part.displayText);
 					}
 					var sorted=[];
 					for (var i in $scope.pois)
