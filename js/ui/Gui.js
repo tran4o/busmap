@@ -206,7 +206,7 @@ Class("Gui",
 			this.popup2.setOffset([0,148]);
 			var ts;
 			this.tileLayer = new ol.layer.Tile({
-	        	//source: ( ts = new ol.source.OSM()),
+	        	source: ( ts = new ol.source.OSM()),
 	        	projection: 'EPSG:3857'
 	        });
 			var canvas;
