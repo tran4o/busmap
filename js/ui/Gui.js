@@ -209,6 +209,15 @@ Class("Gui",
 	        	source: ( ts = new ol.source.OSM()),
 	        	visible: false
 	        });
+			
+			var staticImageLayer = new ol.layer.Image({
+			    source: new ol.source.ImageStatic({
+			      url: 'img/background.svg',
+			      imageSize: [1295, 950],
+			      imageExtent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
+			    })
+			  });
+			
 			var canvas;
             var ctx;
             var lsize;
@@ -597,6 +606,7 @@ Class("Gui",
 			  target: this.target,
 			  layers: [
 			        this.tileLayer,
+			        this.staticImageLayer,
 					this.trackLayer,
 					this.elapsedLayer
 			  ],
