@@ -2198,7 +2198,7 @@
 						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
 						$("#estpers-img-"+id).attr("src",img);
 						part = participantsCache[part.id];
-						if (part.displayText)
+						if (part && part.displayText)
 							$("#estpers-"+id).html(part.displayText);
 					}
 					var sorted=[];
