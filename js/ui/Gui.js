@@ -219,6 +219,7 @@ Class("Gui",
 			
 			var staticImageLayer = new ol.layer.Image({
 			    source: new ol.source.ImageStatic({
+			      url: 'img/background.png',
 			      imageSize: [1295, 950],
 			      imageExtent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248] ,
 			      projection: proj,
