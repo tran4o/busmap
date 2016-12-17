@@ -2176,7 +2176,13 @@
 					sorted.sort(function(a,b) {
 						a=participantsCache[a.id];
 						b=participantsCache[b.id];
-						if (!a || !b)
+						var k1 = a ? 0 : 1;
+						var k2 = b ? 0 : 1;
+						if (k1 < k2)
+							return -1;
+						if (k1 > k2)
+							return 1;
+						if (!a)
 							return 0;
 						if (a.sortNum < b.sortNum)
 							return -1;
