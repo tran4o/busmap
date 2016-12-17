@@ -627,6 +627,10 @@ md-dialog.fixed-dialog {
 	top : 0.25em;
 }
 
+.ol-viewport {
+	background-color : white !important;
+}
+
 .ol-attribution {
 	right : 0.25em;
 	top : 0.25em;
