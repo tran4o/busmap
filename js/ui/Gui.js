@@ -476,7 +476,9 @@ Class("Gui",
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
 	        		
-	        		
+	        		if (part.id == cbus) {
+	        			console.log("UFFF GUI : "+part.wbest,part);
+	        		}
 	        		if (part.id == cbus && part.wbest) {
 	        			if (animFrame) {
 			        		ctx.fillText(part.wbest[0],0,5);
