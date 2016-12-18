@@ -105,6 +105,16 @@
     animation-name: weatherwind;
 }
 
+.wind .weather.rain:after {
+    animation-name: weather2windslow;
+    -webkit-animation-name : weather2windslow; 
+}
+
+.wind .weather.rain:before,.wind .weather.rain:after {
+    -webkit-animation-name: weatherwindslow;
+    animation-name: weatherwindslow;
+}
+
 /* animation keyframes */
 @-webkit-keyframes weatherwind {
      from { background-position: 0px 0px; }
@@ -121,4 +131,22 @@
 @keyframes weather2wind {
    from { background-position: 64px 64px; }
     to { background-position: 4160px 1088px; }
+}
+
+
+@-webkit-keyframes weatherwindslow {
+     from { background-position: 0px 0px; }
+    to { background-position: 1024px 1024px; }
+}
+@keyframes weatherwindslow {
+   from { background-position: 0px 0px; }
+    to { background-position: 1024px 1024px; }
+}
+@-webkit-keyframes weather2windslow {
+    from { background-position: 64px 64px; }
+    to { background-position: 1088px 1088px; }
+}
+@keyframes weather2windslow {
+   from { background-position: 64px 64px; }
+    to { background-position: 1088px 1088px; }
 }
