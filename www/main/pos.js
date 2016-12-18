@@ -2194,6 +2194,10 @@
 							return 1;
 						return 0;
 					});
+					
+					// TODO WRITE ME CLEANER
+					if ($scope.crrPoiCode)
+						window.crrBus = sorted[0].id;
 					for (var i in sorted) 
 					{
 						var id = $scope.participants[i].id;
