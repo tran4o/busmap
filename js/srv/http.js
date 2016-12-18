@@ -407,7 +407,6 @@ exports.start = function(args, onDone) {
     });
     //---------------------
     app.all("/weather/*", function(req, res) {
-        apiProxy.web(req, res, {target: "http://forecast.io/"});
     });
     //---------------------
     persons.basicLoadPersons(function() {
