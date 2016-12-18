@@ -1816,7 +1816,7 @@
                         				poi.displayText = Math.round(durs/60)+" min. ("+html+")"; 
                     		        	if (best == undefined || durs < best) {
                     		        		best=durs;
-                    		        		wbest=[html,poi.displayText];
+                    		        		wbest=[html,Math.round(durs/60)+" min."];
                     		        	}
                         				poi.sortNum=durs;
                     				} else {
@@ -1856,7 +1856,7 @@
                 				part.sortNum=durs;
                 				if (best == undefined || durs < best) {
             		        		best=durs;
-            		        		wbest=[html,part.displayText];
+            		        		wbest=[html,Math.round(durs/60)+" min."];
             		        	}
             				} else {
             					// SPEED NOT AVAIL -> display distance in km
