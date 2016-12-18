@@ -1379,10 +1379,12 @@ body.root-gui {
 	height : 100%;
 }
 
-.forecast_embed {
+#forecast_embed {
 	position : absolute;
 	z-index: 999999 !important;
 	right : 0;
 	bottom : 0;
-	border : 0;	
+	border : 0;
+	width : 256px;
+	height : auto;	
 }
