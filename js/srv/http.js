@@ -402,15 +402,10 @@ exports.start = function(args, onDone) {
         });
         //--------------------------------------------------
     });
-    //---------------------    
-    var httpProxy = require('http-proxy');
-    var apiProxy = httpProxy.createProxyServer({target: 'http://forecast.io/weather/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk'});
-    app.all("/weather/*", function(req, res) {
-        apiProxy.web(req, res);
-    });
-    apiProxy.on('error', function (error, req, res) {
-        console.log('proxy error', error);
-    });
+    //---------------------
+    var proxy = require('express-http-proxy');
+    //var apiProxy = httpProxy.createProxyServer({target: 'http://forecast.io/weather/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk'});
+    app.use('/weather', proxy('www.google.com'));
     //---------------------
     persons.basicLoadPersons(function() {
         server.listen(port);
