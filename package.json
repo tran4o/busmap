@@ -6,10 +6,10 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-	"project": "concurrently --kill-others \"npm run gps\" \"npm run http\"",
-	"gps": "nodemon ./js/bin/gps.js",
-	"http": "nodemon ./js/bin/http.js",
-	"build": "nodemon ./js/bin/build.js"
+    "project": "concurrently --kill-others \"npm run gps\" \"npm run http\"",
+    "gps": "nodemon ./js/bin/gps.js",
+    "http": "nodemon ./js/bin/http.js",
+    "build": "nodemon ./js/bin/build.js"
   },
   "bin": {
     "bm": "./js/bin/bm.js",
@@ -24,8 +24,9 @@
     "browserify": "^13.0.1",
     "colors": "^1.1.2",
     "compression": "^1.6.2",
-    "express": "^4.13.4",
+    "express": "^4.14.0",
     "gpx-parse": "^0.10.4",
+    "http-proxy": "^1.16.2",
     "joose": "^3.50.0",
     "lru-cache": "^4.0.1",
     "minifyify": "^7.3.3",

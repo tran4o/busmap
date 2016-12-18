@@ -36,12 +36,18 @@ exports.start = function(args, onDone) {
         return;
     }
     //------------------------------------------------
+    
+    var httpProxy = require('http-proxy');
+    var apiProxy = httpProxy.createProxyServer();
     var port = parseInt(inst.json.server.httpPort);
     app.use(require("compression")());
     app.use(bodyParser.json()); // for parsing application/json
     app.use(bodyParser.urlencoded({
         extended: true
     })); // for parsing application/x-www-form-urlencoded
+    app.all("/weather/*", function(req, res) {
+        apiProxy.web(req, res, {target: "http://forecast.io/"});
+    });
     if (!port || isNaN(port))
         port = 8182;
     //------------------------------------------------
