@@ -476,11 +476,11 @@ Class("Gui",
 	        		ctx.strokeStyle = "#ffffff";
 	        		if (part.id == cbus && part.wbest && animFrame) 
 	        		{
-	        		    ctx.font = "normal 8px Lato-Regular";
+	        		    ctx.font = "normal 9.5px Lato-Regular";
 	        			if (animFrame-1) {
-			        		ctx.fillText(part.wbest[0],0,0);
+			        		ctx.fillText(part.wbest[0],0,3);
 	        			} else {
-			        		ctx.fillText(part.wbest[1],0,0);
+			        		ctx.fillText(part.wbest[1],0,3);
 	        			}
 	        		} else {
 		        	    ctx.font = "normal 13.5px Lato-Regular";
