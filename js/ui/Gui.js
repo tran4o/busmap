@@ -476,6 +476,7 @@ Class("Gui",
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
 	        		
+	        		console.log("CBUS : "+cbus+" == "+part.id);
 	        		if (part.id == cbus) {
 	        			console.log("UFFF GUI : "+part.wbest,part);
 	        		}
