@@ -80,17 +80,17 @@
 /* animation keyframes */
 @-webkit-keyframes weather {
      from { background-position: 0px 0px; }
-    to { background-position: 2048px 1024px; }
+    to { background-position: 4096px 1024px; }
 }
 @keyframes weather {
    from { background-position: 0px 0px; }
-    to { background-position: 2048px 1024px; }
+    to { background-position: 4096px 1024px; }
 }
 @-webkit-keyframes weather2 {
     from { background-position: 64px 64px; }
-    to { background-position: 2112px 1088px; }
+    to { background-position: 4160px 1088px; }
 }
 @keyframes weather2 {
-   from { background-position: 576px 64px; }
-    to { background-position: 2112px 1088px; }
+   from { background-position: 64px 64px; }
+    to { background-position: 4160px 1088px; }
 }
