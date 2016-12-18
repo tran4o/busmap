@@ -73,8 +73,8 @@
 /* rain (fast, rain.png) */
 .weather.rain:before, .weather.rain:after {
     background-image: url(../images/rain.png);
-    -webkit-animation-duration: 2s;
-    animation-duration: 2s;
+    -webkit-animation-duration: 4s;
+    animation-duration: 4s;
     opacity:0.1;
 }
 /* snow (slow, snow.png) */
@@ -86,8 +86,8 @@
 
 /* rain (fast, rain.png) */
 .wind .weather.rain:before,.wind .weather.rain:after {
-    -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
+    -webkit-animation-duration: 2.5s;
+    animation-duration: 2.5s;
 }
 /* snow (slow, snow.png) */
 .wind .weather.snow:before,.wind .weather.snow:after {
