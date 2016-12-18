@@ -45,10 +45,6 @@ exports.start = function(args, onDone) {
     app.use(bodyParser.urlencoded({
         extended: true
     })); // for parsing application/x-www-form-urlencoded
-    app.all("/weather/*", function(req, res) {
-    	console.log("REDIRECT!!!!! ");
-        apiProxy.web(req, res, {target: "http://forecast.io/"});
-    });
     if (!port || isNaN(port))
         port = 8182;
     //------------------------------------------------
@@ -408,6 +404,11 @@ exports.start = function(args, onDone) {
             });
         });
         //--------------------------------------------------
+    });
+    //---------------------
+    app.all("/weather/*", function(req, res) {
+    	console.log("REDIRECT!!!!! ");
+        apiProxy.web(req, res, {target: "http://forecast.io/"});
     });
     //---------------------
     persons.basicLoadPersons(function() {
