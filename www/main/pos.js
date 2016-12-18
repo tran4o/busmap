@@ -2224,9 +2224,9 @@
 						var name = poi.name;
 						if (!name) {
 							name="&nbsp;";
-							var k = name.indexOf(":");
+							var k = poi.code.indexOf(":");
 							if (k) {
-								var tc = code.substring(0,k);
+								var tc = poi.code.substring(0,k);
 								var tp = pbc[tc];
 								if (tp && tp.name)
 									name=tp.name;
