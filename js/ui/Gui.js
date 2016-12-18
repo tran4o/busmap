@@ -477,14 +477,22 @@ Class("Gui",
 	        		ctx.strokeStyle = "#ffffff";
 	        		
 	        		console.log("CBUS : "+cbus+" == "+part.id);
-	        		if (part.id == cbus) {
-	        			console.log("UFFF GUI : "+part.wbest,part);
-	        		}
-	        		if (part.id == cbus && part.wbest) {
-	        			if (animFrame) {
-			        		ctx.fillText(part.wbest[0],0,5);
+	        		if (part.id == cbus && that.participantsCache) {
+	        			var pp = that.participantsCache[part.id];
+	        			if (pp) 
+	        			{
+		        			console.log("UFFF GUI : ",pp.wbest,pp);
+			        		if (pp.wbest) {
+			        			if (animFrame) {
+					        		ctx.fillText(pp.wbest[0],0,5);
+			        			} else {
+					        		ctx.fillText(pp.wbest[1],0,5);
+			        			}
+			        		} else {
+				        		ctx.fillText(part.code,0,5);
+			        		}
 	        			} else {
-			        		ctx.fillText(part.wbest[1],0,5);
+			        		ctx.fillText(part.code,0,5);
 	        			}
 	        		} else {
 		        		ctx.fillText(part.code,0,5);
