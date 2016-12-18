@@ -2230,6 +2230,12 @@
 								var tp = pbc[tc];
 								if (tp && tp.name)
 									name=tp.name;
+								tp = pbc[tc+":1"];
+								if (tp && tp.name)
+									name=tp.name;
+								tp = pbc[tc+":2"];
+								if (tp && tp.name)
+									name=tp.name;
 							}
 						}
 						$(document.getElementById("estpois-"+code)).html(poi.displayText||"-");
