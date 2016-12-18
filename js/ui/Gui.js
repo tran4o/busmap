@@ -474,8 +474,6 @@ Class("Gui",
 	        		ctx.textAlign = "center";
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
-	        		
-	        		console.log("CBUS : "+cbus+" == "+part.id);
 	        		if (part.id == cbus && part.wbest) 
 	        		{
 	        		    ctx.font = "normal 10.5px Lato-Regular";
