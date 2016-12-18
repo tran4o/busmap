@@ -2215,8 +2215,8 @@
 					for (var i in $scope.pois) {
 						var code = $scope.pois[i].code;
 						var poi = sorted.shift();
-						$(document.getElementById("estpois-"+code)).html(poi.displayText||"");
-						$(document.getElementById("estpois-name-"+code)).html(poi.name||"");
+						$(document.getElementById("estpois-"+code)).html(poi.displayText||"-");
+						$(document.getElementById("estpois-name-"+code)).html(poi.name||"-");
 						if (poi.image) 
 							$(document.getElementById("estpois-img-"+code)).attr("src","img/"+poi.image);
 						else
