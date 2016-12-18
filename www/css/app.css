@@ -1384,14 +1384,13 @@ body.root-gui {
 	position : absolute;
 	z-index: 999999 !important;
 	right : 0;
-	top : 0;
+	top : -58px;
 	border : 0;
 	width : 100%;
 	height : 245px;	
 	-webkit-transform: scale(0.75, 0.75); /* Safari */
     transform: scale(0.75, 0.75);
     pointer-events : none;
-    opacity : 0.76;
 }
 
 body.fullscreen #forecast_embed {
