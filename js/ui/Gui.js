@@ -477,8 +477,8 @@ Class("Gui",
 	        		ctx.strokeStyle = "#ffffff";
 	        		
 	        		console.log("CBUS : "+cbus+" == "+part.id);
-	        		if (part.id == cbus && that.participantsCache) {
-	        			var pp = that.participantsCache[part.id];
+	        		if (part.id == cbus/* && that.participantsCache*/) {
+	        			var pp = part; //that.participantsCache[part.id];
 	        			if (pp) 
 	        			{
 		        			console.log("UFFF GUI : ",pp.wbest,pp);

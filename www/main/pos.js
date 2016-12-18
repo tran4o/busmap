@@ -1830,6 +1830,7 @@
         				}
         			} else {
         				// STATION 
+    					var wbest = undefined;
             			var poi = $scope.poiByCode[$scope.crrPoiCode];
             			if (poi) 
             			{
@@ -1853,6 +1854,10 @@
             		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                 				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
                 				part.sortNum=durs;
+                				if (best == undefined || durs < best) {
+            		        		best=durs;
+            		        		wbest=[html,part.displayText];
+            		        	}
             				} else {
             					// SPEED NOT AVAIL -> display distance in km
                 				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km";
