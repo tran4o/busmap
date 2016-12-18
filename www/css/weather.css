@@ -51,6 +51,24 @@
     -webkit-animation-duration: 4.5s;
     animation-duration: 4.5s;
 }
+/* animation keyframes */
+@-webkit-keyframes weather {
+    from { background-position: 0 0px; }
+    to { background-position: 0 1024px; }
+}
+@keyframes weather {
+    from { background-position: 0 0px; }
+    to { background-position: 0 1024px; }
+}
+@-webkit-keyframes weather2 {
+    from { background-position: 64px 64px; }
+    to { background-position: 64px 1088px; }
+}
+@keyframes weather2 {
+    from { background-position: 64px 64px; }
+    to { background-position: 64px 1088px; }
+}
+
 
 /* rain (fast, rain.png) */
 .weather.rain:before, .weather.rain:after {
@@ -76,21 +94,30 @@
     animation-duration: 3s;
 }
 
+.wind .weather:after {
+    animation-name: weather2wind;
+    -webkit-animation-name : weather2wind; 
+}
+
+.wind .weather:before,.wind .weather:after {
+    -webkit-animation-name: weatherwind;
+    animation-name: weatherwind;
+}
 
 /* animation keyframes */
-@-webkit-keyframes weather {
+@-webkit-keyframes weatherwind {
      from { background-position: 0px 0px; }
     to { background-position: 4096px 1024px; }
 }
-@keyframes weather {
+@keyframes weatherwind {
    from { background-position: 0px 0px; }
     to { background-position: 4096px 1024px; }
 }
-@-webkit-keyframes weather2 {
+@-webkit-keyframes weather2wind {
     from { background-position: 64px 64px; }
     to { background-position: 4160px 1088px; }
 }
-@keyframes weather2 {
+@keyframes weather2wind {
    from { background-position: 64px 64px; }
     to { background-position: 4160px 1088px; }
 }
