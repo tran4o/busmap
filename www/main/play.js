@@ -26,8 +26,8 @@
 		    	{
 		    		var pp = $scope.posCtrl.pois[k];
 		    		if (pp.code == result) {
-				    	localStorage.setItem("CRRPOI",result);
-				    	localStorage.setItem("CRRPOIN",pp.name);
+				    	//localStorage.setItem("CRRPOI",result);
+				    	//localStorage.setItem("CRRPOIN",pp.name);
 				    	$scope.crrPoiCode=result;
 				    	$scope.crrPoiName=pp.name;
 				    	$scope.posCtrl.crrPoiCode=result;
@@ -45,12 +45,10 @@
 		  };
 		$scope.crrPoiCode = "UNKNOWN";
     	$scope.crrPoiName = "UNKNOWN";
-    	if (localStorage.getItem("CRRPOI")) 
+    	/*if (localStorage.getItem("CRRPOI")) 
     		$scope.crrPoiCode=localStorage.getItem("CRRPOI");
     	if (localStorage.getItem("CRRPOIN")) 
-    		$scope.crrPoiName=localStorage.getItem("CRRPOIN");
-    	
-    	
+    		$scope.crrPoiName=localStorage.getItem("CRRPOIN");*/
     	
     	
      	$scope.favGender="all";
