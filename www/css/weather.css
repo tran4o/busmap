@@ -95,26 +95,30 @@
 }
 
 .wind .weather:after {
-    animation-name: weather2-wind;
-    -webkit-animation-name : weather2-wind; 
+    animation-name: weather2wind;
+    -webkit-animation-name : weather2wind; 
 }
 
 .wind .weather:before,.wind .weather:after {
-    -webkit-animation-name: weather-wind;
-    animation-name: weather-wind;
+    -webkit-animation-name: weatherwind;
+    animation-name: weatherwind;
 }
 
 /* animation keyframes */
-@-webkit-keyframes weather-wind {
+@-webkit-keyframes weatherwind {
     from { background-position: 0 0px; }
+    to { background-position: 256 1024px; }
 }
-@keyframes weather-wind {
+@keyframes weatherwind {
     from { background-position: 0 0px; }
+    to { background-position: 256 1024px; }
 }
-@-webkit-keyframes weather2-wind {
+@-webkit-keyframes weather2wind {
     from { background-position: 64px 64px; }
     to { background-position: 64px 1088px; }
 }
-@keyframes weather2-wind {
+@keyframes weather2wind {
+    from { background-position: 320px 64px; }
+    to { background-position: 320px 1088px; }
 }
 
