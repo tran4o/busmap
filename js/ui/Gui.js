@@ -476,14 +476,14 @@ Class("Gui",
 	        		ctx.strokeStyle = "#ffffff";
 	        		if (part.id == cbus && part.wbest && animFrame && part.speedExact >= CONFIG.constraints.stopSpeedLimitKmh) 
 	        		{
-	        		    ctx.font = "bold 9.5px \"Lucida Console\", Monaco, monospace";
+	        		    ctx.font = "bold 9.5px Tahoma, Geneva, sans-serif";
 	        			if (animFrame-1) {
 			        		ctx.fillText(part.wbest[0],0,3);
 	        			} else {
 			        		ctx.fillText(part.wbest[1],0,3);
 	        			}
 	        		} else {
-	        		    ctx.font = "bold 13.5px \"Lucida Console\", Monaco, monospace";
+	        		    ctx.font = "bold 13.5px Tahoma, Geneva, sans-serif";
 		        		ctx.fillText(part.code,0,5);
 	        		}
 	        		/*if (part.elapsed) {
