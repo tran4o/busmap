@@ -423,7 +423,7 @@ Class("Gui",
 					var col = part.color;
 					if (typeof crrBus != "undefined" && part.id == crrBus) {
 						r*=2;
-						col="#FF4040";
+						col="rgba(255, 64, 64,0.75)";
 					}
 					var tt = undefined;
 					if (opc <= 0.01)
@@ -464,7 +464,7 @@ Class("Gui",
 	        	    ctx.fillStyle = col;
 	        	    ctx.fill();
 	        	    ctx.lineWidth = 3;
-	        		ctx.strokeStyle = "rgba(255,255,255,0.6)";
+	        		ctx.strokeStyle = "rgba(255,255,255,0.75)";
 	        	    ctx.stroke();
 
 	        	    ctx.font = "normal 13.5px Lato-Regular";
