@@ -464,13 +464,13 @@ Class("Gui",
 	        	    ctx.fillStyle = col;
 	        	    ctx.fill();
 	        	    ctx.lineWidth = 3;
-	        		ctx.strokeStyle = "#ffffff";
+	        		ctx.strokeStyle = "rgba(255,255,255,0.6)";
 	        	    ctx.stroke();
 
 	        	    ctx.font = "normal 13.5px Lato-Regular";
 	        		ctx.textAlign = "center";
 	        		ctx.fillStyle = "#ffffff";
-	        		ctx.strokeStyle = "rgba(255,255,255,0.6)";
+	        		ctx.strokeStyle = "#ffffff";
 	        		ctx.fillText(part.code,0,5);
 	        		/*if (part.elapsed) {
 		        		ctx.fillStyle = "black";
