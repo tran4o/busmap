@@ -1809,6 +1809,8 @@
                     				if (speed > 0) {
                     					var durs = lenm/(speed*0.27777777777778);
                     		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
+                    		        	durs-=UI.Config.timeouts.liveConsistencyDisplayOffset;
+                    		        	if (durs < 0) durs=0;
                         				poi.displayText = Math.round(durs/60)+" min. ("+html+")"; 
                         				poi.sortNum=durs;
                     				} else {
@@ -1840,6 +1842,8 @@
             				if (speed > 0) {
             					var durs = lenm/(speed*0.27777777777778);
             		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
+            		        	durs-=UI.Config.timeouts.liveConsistencyDisplayOffset;
+            		        	if (durs < 0) durs=0;
                 				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
                 				part.sortNum=durs;
             				} else {
