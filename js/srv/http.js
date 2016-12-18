@@ -406,7 +406,7 @@ exports.start = function(args, onDone) {
         //--------------------------------------------------
     });
     //---------------------
-    app.all("/weather/*", function(req, res) {
+    app.all("/weather/kor", function(req, res) {
     	console.log("REDIRECT!!!!! ");
         apiProxy.web(req, res, {target: "http://forecast.io/"});
     });
