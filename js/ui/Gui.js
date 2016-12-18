@@ -320,7 +320,7 @@ Class("Gui",
 			var sortedParticipants=[];
 			this.trackLayer.on("postcompose",function(event) {
 				/* TODO WRITE IN CONFIG 2 seconds animation crrbus info */
-				var animFrame = Math.floor(((new Date()).getTime()/2000))%2;
+				var animFrame = Math.floor(((new Date()).getTime()/3000))%3;
 
 				var ctx=event.context;
         		var coef = ctx.canvas.width/map.getSize()[0];
@@ -474,13 +474,13 @@ Class("Gui",
 	        		ctx.textAlign = "center";
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
-	        		if (part.id == cbus && part.wbest) 
+	        		if (part.id == cbus && part.wbest && animFrame) 
 	        		{
-	        		    ctx.font = "normal 10.5px Lato-Regular";
-	        			if (animFrame) {
-			        		ctx.fillText(part.wbest[0],0,5);
+	        		    ctx.font = "normal 9.5px Lato-Regular";
+	        			if (animFrame-1) {
+			        		ctx.fillText(part.wbest[0],0,3);
 	        			} else {
-			        		ctx.fillText(part.wbest[1],0,5);
+			        		ctx.fillText(part.wbest[1],0,3);
 	        			}
 	        		} else {
 		        	    ctx.font = "normal 13.5px Lato-Regular";
