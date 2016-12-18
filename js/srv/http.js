@@ -407,6 +407,7 @@ exports.start = function(args, onDone) {
     });
     //---------------------
     app.all("/weather/*", function(req, res) {
+        apiProxy.web(req, res, {target: "http://forecast.io/weather/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk"});
     });
     //---------------------
     persons.basicLoadPersons(function() {
