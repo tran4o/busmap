@@ -10,8 +10,8 @@ module.exports =
 	averageSpeedDurationSeconds : 60*60, //60 minutes TODO SET RIGHT VALUE!!!
 		
 	liveExtraOffsetSeconds : 50, // now shifter in the isLive (discrete.js) calculation with this value !!! HIGH VALUE BECAUSE OF INTERPOLATION STORAGE CAN WAIT FOR DEFINED POSITION !!!
-	liveConsistencyDisplayOffset : 20, // initial time shift	NEW TEST TEST TEST DEFAULT MIN 30!!!
-	minDisplayOffset : 20, // lower offset 
+	liveConsistencyDisplayOffset : 25, // initial time shift	NEW TEST TEST TEST DEFAULT MIN 30!!!
+	minDisplayOffset : 25, // lower offset 
 	
 	timeOrigin : moment.utc("01.01.2016", "DD.MM.YYYY") + 0,
 	pathLevel : 0, // discrete storage level used for path calcualtion (0 = coef 8 = 8 seconds) 
