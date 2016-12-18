@@ -477,7 +477,7 @@ Class("Gui",
 	        		if (part.id == cbus && part.wbest && animFrame && part.speedExact >= CONFIG.constraints.stopSpeedLimitKmh) 
 	        		{
 	        			if (animFrame-1) {
-		        		    ctx.font = "bold 9.5px Tahoma, Geneva, sans-serif";
+		        		    ctx.font = "bold 10.5px Tahoma, Geneva, sans-serif";
 			        		ctx.fillText(part.wbest[0],0,3);
 	        			} else {
 		        		    ctx.font = "bold 8.5px Tahoma, Geneva, sans-serif";
