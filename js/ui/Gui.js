@@ -322,7 +322,8 @@ Class("Gui",
 				var ctx=event.context;
         		var coef = ctx.canvas.width/map.getSize()[0];
 				ctx.scale(coef,coef);
-				if (that.pathByPerson && that.personColor) 
+				/* NEW REWRITE */
+				if (typeof crrBus == "undefined" && that.pathByPerson && that.personColor) 
 	        	{
 		        	var ctime = that.getCrrTime();
 		    		var ltime = ctime - UI.Config.path.durationInSeconds*1000;
