@@ -144,9 +144,9 @@
 }
 @-webkit-keyframes weather2windslow {
     from { background-position: 64px 64px; }
-    to { background-position: 1088px 1088px; }
+    to { background-position: 2112px 1024px; }
 }
 @keyframes weather2windslow {
    from { background-position: 64px 64px; }
-    to { background-position: 1088px 1088px; }
+    to { background-position: 2112px 1088px; }
 }
