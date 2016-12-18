@@ -1785,7 +1785,7 @@
 	        	part.speedExact=speedExact;	        	
 	        	part.glon=glon;
 	        	part.glat=glat;
-	        	
+	        	part.wbest=undefined;
     			//---------------------------------
 	        	// BUS MODE -> ESTIMATION OF TIME TO CURRENT POI
         		if (elapsed != undefined && levent && (($scope.poiByCode && $scope.crrPoiCode) || crrBus)) 
@@ -1795,6 +1795,8 @@
         				if (crrBus == part.id) 
         				{
             				// BUS         				
+        					var best = undefined;
+        					var wbest = undefined;
             				for (var i in $scope.pois) 
             				{
                     			var poi = $scope.pois[i];
@@ -1808,10 +1810,14 @@
                         			var lenm = trackLength*de;
                     				if (speed > 0) {
                     					var durs = lenm/(speed*0.27777777777778);
-                    		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                     		        	durs-=UI.Config.timeouts.liveConsistencyDisplayOffset;
                     		        	if (durs < 0) durs=0;
+                    		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                         				poi.displayText = Math.round(durs/60)+" min. ("+html+")"; 
+                    		        	if (best == undefined || durs < best) {
+                    		        		best=durs;
+                    		        		wbest=[html,poi.displayText];
+                    		        	}
                         				poi.sortNum=durs;
                     				} else {
                     					// SPEED NOT AVAIL -> display distance in km
@@ -1820,6 +1826,7 @@
                     				}
                     			}
             				}
+            				part.wbest=wbest;
         				}
         			} else {
         				// STATION 
@@ -1841,9 +1848,9 @@
                 			var lenm = trackLength*de;
             				if (speed > 0) {
             					var durs = lenm/(speed*0.27777777777778);
-            		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
             		        	durs-=UI.Config.timeouts.liveConsistencyDisplayOffset;
             		        	if (durs < 0) durs=0;
+            		        	var html=moment(GUI.getCrrTime()+durs*1000).format("HH:mm")+"";
                 				part.displayText = Math.round(durs/60)+" min. ("+html+")"; 
                 				part.sortNum=durs;
             				} else {

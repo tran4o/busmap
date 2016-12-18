@@ -319,6 +319,9 @@ Class("Gui",
 			});
 			var sortedParticipants=[];
 			this.trackLayer.on("postcompose",function(event) {
+				/* TODO WRITE IN CONFIG 2 seconds animation crrbus info */
+				var animFrame = ((new Date()).getTime()/2000)%2;
+
 				var ctx=event.context;
         		var coef = ctx.canvas.width/map.getSize()[0];
 				ctx.scale(coef,coef);
@@ -422,7 +425,7 @@ Class("Gui",
 					if (!part.isWatched)
 						r*=0.85;
 					var col = part.color;
-					if (typeof crrBus != "undefined" && part.id == crrBus) {
+					if (part.id == cbus) {
 						r*=2;
 						col="rgba(255, 64, 64,0.75)";
 					}
@@ -472,7 +475,17 @@ Class("Gui",
 	        		ctx.textAlign = "center";
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
-	        		ctx.fillText(part.code,0,5);
+	        		
+	        		
+	        		if (part.id == cbus && part.wbest) {
+	        			if (animFrame) {
+			        		ctx.fillText(part.wbest[0],0,5);
+	        			} else {
+			        		ctx.fillText(part.wbest[1],0,5);
+	        			}
+	        		} else {
+		        		ctx.fillText(part.code,0,5);
+	        		}
 	        		/*if (part.elapsed) {
 		        		ctx.fillStyle = "black";
 	        			ctx.fillText(Math.round(part.elapsed*1000)/1000,0,-15+2);
