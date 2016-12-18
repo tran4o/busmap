@@ -1379,11 +1379,8 @@ body.root-gui {
 	height : 100%;
 }
 
-body.fullscreen #forecast_embed {
-	display:none;
-}
-
 #forecast_embed {
+	display : none;
 	position : absolute;
 	z-index: 999999 !important;
 	right : 0;
@@ -1395,3 +1392,8 @@ body.fullscreen #forecast_embed {
     transform: scale(0.75, 0.75);
     pointer-events : none;
 }
+
+body.fullscreen #forecast_embed {
+	display:block;
+}
+
