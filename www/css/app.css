@@ -1391,6 +1391,7 @@ body.root-gui {
 	-webkit-transform: scale(0.75, 0.75); /* Safari */
     transform: scale(0.75, 0.75);
     pointer-events : none;
+    opacity : 0.76;
 }
 
 body.fullscreen #forecast_embed {
