@@ -1260,6 +1260,9 @@
 	        }
 	        function refreshPathData() 
 	        {
+	        	// NO PATHS FOR POI & BUS MODE
+	        	if (crrBus || $scope.crrPoiCode)
+	        		return;
 	        	if (refreshPathHndlr)
 	        		clearTimeout(refreshPathHndlr);
 	        	refreshPathHndlr=setTimeout(replacePaths,250);
