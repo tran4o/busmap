@@ -1865,6 +1865,7 @@
             				}
             				//console.log(part.code+" | TVAL : "+tval);
             			}
+        				part.wbest=wbest;
         			}
         		}
     			//---------------------------------
