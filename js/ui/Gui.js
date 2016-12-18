@@ -320,7 +320,7 @@ Class("Gui",
 			var sortedParticipants=[];
 			this.trackLayer.on("postcompose",function(event) {
 				/* TODO WRITE IN CONFIG 2 seconds animation crrbus info */
-				var animFrame = ((new Date()).getTime()/2000)%2;
+				var animFrame = Math.floor(((new Date()).getTime()/2000))%2;
 
 				var ctx=event.context;
         		var coef = ctx.canvas.width/map.getSize()[0];
