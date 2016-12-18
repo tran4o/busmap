@@ -2193,13 +2193,14 @@
 					for (var i in sorted) 
 					{
 						var id = $scope.participants[i].id;
-						var part = sorted.shift();						
-						$("#estpers-name-"+id).html(part.first_name+" "+part.last_name+" "+(part.age ? "("+part.age+((" "+(part.gender||"")).toUpperCase())+")" : ""));
+						var part = sorted.shift();			
+						
+						$(document.getElementById("estpers-name-"+id)).html(part.first_name+" "+part.last_name+" "+(part.age ? "("+part.age+((" "+(part.gender||"")).toUpperCase())+")" : ""));
 						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
-						$("#estpers-img-"+id).attr("src",img);
+						$(document.getElementById("estpers-img-"+id)).attr("src",img);
 						part = participantsCache[part.id];
 						if (part && part.displayText)
-							$("#estpers-"+id).html(part.displayText);
+							$(document.getElementById("estpers-"+id)).html(part.displayText);
 					}
 					var sorted=[];
 					for (var i in $scope.pois)
@@ -2214,12 +2215,12 @@
 					for (var i in $scope.pois) {
 						var code = $scope.pois[i].code;
 						var poi = sorted.shift();
-						$("#estpois-"+code).html(poi.displayText||"");
-						$("#estpois-name-"+code).html(poi.name||"");
+						$(document.getElementById("estpois-"+code)).html(poi.displayText||"");
+						$(document.getElementById("estpois-name-"+code)).html(poi.name||"");
 						if (poi.image) 
-							$("#estpois-img-"+code).attr("src","img/"+poi.image);
+							$(document.getElementById("estpois-img-"+code)).attr("src","img/"+poi.image);
 						else
-							$("#estpois-img-"+code).attr("src","");
+							$(document.getElementById("#estpois-img-"+code)).attr("src","");
 					}
 				}
 	        }
