@@ -420,12 +420,11 @@ Class("Gui",
 					var r = 1;
 					if (!part.isWatched)
 						r*=0.85;
-					
+					var col = part.color;
 					if (typeof crrBus != "undefined" && part.id == crrBus) {
 						r*=2;
-						part.color="#FF4040";
+						col="#FF4040";
 					}
-					var col = part.color;
 					var tt = undefined;
 					if (opc <= 0.01)
 						continue;
@@ -462,7 +461,7 @@ Class("Gui",
 	        		ctx.scale(r,r);
 	        		ctx.beginPath();
 	        		ctx.arc(0, 0, 17, 0, 2 * Math.PI, false);
-	        	    ctx.fillStyle = part.color;
+	        	    ctx.fillStyle = col;
 	        	    ctx.fill();
 	        	    ctx.lineWidth = 3;
 	        		ctx.strokeStyle = "#ffffff";
@@ -488,7 +487,7 @@ Class("Gui",
 			        		ctx.rotate(hackRotation(part.rotation));
 						}
 		        		ctx.scale(32,32);
-		        		ctx.drawImage(Utils.renderArrow(32,32,part.color),0.55,-0.5,1,1);
+		        		ctx.drawImage(Utils.renderArrow(32,32,col),0.55,-0.5,1,1);
 		        		ctx.scale(1/32,1/32);
 					}
 
@@ -504,7 +503,7 @@ Class("Gui",
 							var tr = 30*to+10;
 			        		ctx.beginPath();
 			        		ctx.arc(0, 0, tr, 0, 2 * Math.PI, false);
-			        	    ctx.strokeStyle = part.color;
+			        	    ctx.strokeStyle = col;
 			        	    ctx.lineWidth = 0.5+(5.5*to);
 			        	    ctx.globalAlpha=sop*(1-to);
 			        	    ctx.stroke();
@@ -541,8 +540,8 @@ Class("Gui",
 			        		urad[axk] = drad/Math.sqrt((a1[2]-a1[0])*(a1[2]-a1[0])+(a1[3]-a1[1])*(a1[3]-a1[1])); //????
  		        		}
 		        		ctx.globalAlpha=opc;	
-		        	    ctx.strokeStyle=part.color;
-		        	    ctx.fillStyle=part.color;
+		        	    ctx.strokeStyle=col;
+		        	    ctx.fillStyle=col;
 		        	    ctx.lineWidth = 2*opacity+0.1;
 
 		        		gc = ol.proj.transform([part.glon,part.glat],'EPSG:4326','EPSG:3857');
