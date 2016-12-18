@@ -566,7 +566,7 @@ Class("Gui",
 			        	    ctx.fill();
 			        	    ctx.globalAlpha=opc;
 			        	    ctx.lineWidth = 1.5;
-			        	    ctx.strokeStyle="rgba(255,255,255,0.5)";
+			        	    ctx.strokeStyle="#ffff00";
 			        	    ctx.stroke();
 						}
 						//---------------------------------------------
