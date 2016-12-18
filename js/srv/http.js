@@ -36,9 +36,6 @@ exports.start = function(args, onDone) {
         return;
     }
     //------------------------------------------------
-    
-    var httpProxy = require('http-proxy');
-    var apiProxy = httpProxy.createProxyServer();
     var port = parseInt(inst.json.server.httpPort);
     app.use(require("compression")());
     app.use(bodyParser.json()); // for parsing application/json
@@ -406,8 +403,13 @@ exports.start = function(args, onDone) {
         //--------------------------------------------------
     });
     //---------------------
+    
+    var httpProxy = require('http-proxy');
     app.all("/weather/*", function(req, res) {
-        apiProxy.web(req, res, {target: "http://forecast.io/weather/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk"});
+        apiProxy.web(req, res);
+    });
+    apiProxy.on('error', function (error, req, res) {
+        console.log('proxy error', error);
     });
     //---------------------
     persons.basicLoadPersons(function() {
