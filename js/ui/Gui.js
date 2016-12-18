@@ -471,30 +471,21 @@ Class("Gui",
 	        		ctx.strokeStyle = "rgba(255,255,255,0.75)";
 	        	    ctx.stroke();
 
-	        	    ctx.font = "normal 13.5px Lato-Regular";
 	        		ctx.textAlign = "center";
 	        		ctx.fillStyle = "#ffffff";
 	        		ctx.strokeStyle = "#ffffff";
 	        		
 	        		console.log("CBUS : "+cbus+" == "+part.id);
-	        		if (part.id == cbus/* && that.participantsCache*/) {
-	        			var pp = part; //that.participantsCache[part.id];
-	        			if (pp) 
-	        			{
-		        			console.log("UFFF GUI : ",pp.wbest,pp);
-			        		if (pp.wbest) {
-			        			if (animFrame) {
-					        		ctx.fillText(pp.wbest[0],0,5);
-			        			} else {
-					        		ctx.fillText(pp.wbest[1],0,5);
-			        			}
-			        		} else {
-				        		ctx.fillText(part.code,0,5);
-			        		}
+	        		if (part.id == cbus && part.wbest) 
+	        		{
+	        		    ctx.font = "normal 10.5px Lato-Regular";
+	        			if (animFrame) {
+			        		ctx.fillText(part.wbest[0],0,5);
 	        			} else {
-			        		ctx.fillText(part.code,0,5);
+			        		ctx.fillText(part.wbest[1],0,5);
 	        			}
 	        		} else {
+		        	    ctx.font = "normal 13.5px Lato-Regular";
 		        		ctx.fillText(part.code,0,5);
 	        		}
 	        		/*if (part.elapsed) {
