@@ -43,21 +43,9 @@
     -webkit-animation-name: weather2;
     animation-name: weather2;
 }
-/* rain (fast, rain.png) */
-.weather.rain:before, .weather.rain:after {
-    background-image: url(../images/rain.png);
-    -webkit-animation-duration: 2s;
-    animation-duration: 2s;
-}
 .weather.rain:after {
     -webkit-animation-duration: 1.5s;
     animation-duration: 1.5s;
-}
-/* snow (slow, snow.png) */
-.weather.snow:before, .weather.snow:after {
-    background-image: url(../images/snow.png);
-    -webkit-animation-duration: 6s;
-    animation-duration: 6s;
 }
 .weather.snow:after {
     -webkit-animation-duration: 4.5s;
@@ -79,4 +67,29 @@
 @keyframes weather2 {
     from { background-position: 64px 64px; }
     to { background-position: 64px 1088px; }
+}
+
+
+/* rain (fast, rain.png) */
+.weather.rain:before, .weather.rain:after {
+    background-image: url(../images/rain.png);
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+}
+/* snow (slow, snow.png) */
+.weather.snow:before, .weather.snow:after {
+    background-image: url(../images/snow.png);
+    -webkit-animation-duration: 6s;
+    animation-duration: 6s;
+}
+
+/* rain (fast, rain.png) */
+.wind .weather.rain:before, .weather.rain:after {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+}
+/* snow (slow, snow.png) */
+wind .weather.snow:before, .weather.snow:after {
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
 }
