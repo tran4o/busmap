@@ -45,7 +45,7 @@
 }
 /* rain (fast, rain.png) */
 .weather.rain:before, .weather.rain:after {
-    background-image: url(rain.png);
+    background-image: url(../images/rain.png);
     -webkit-animation-duration: 2s;
     animation-duration: 2s;
 }
@@ -55,7 +55,7 @@
 }
 /* snow (slow, snow.png) */
 .weather.snow:before, .weather.snow:after {
-    background-image: url(snow.png);
+    background-image: url(../images/snow.png);
     -webkit-animation-duration: 6s;
     animation-duration: 6s;
 }
