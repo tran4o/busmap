@@ -1378,3 +1378,11 @@ body.root-gui {
 .weather-main .weather {
 	height : 100%;
 }
+
+.forecast_embed {
+	position : absolute;
+	z-index: 999999 !important;
+	right : 0;
+	bottom : 0;
+	border : 0;	
+}
