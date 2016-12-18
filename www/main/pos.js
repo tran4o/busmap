@@ -2228,7 +2228,7 @@
 							if (k) {
 								var tc = code.substring(0,k);
 								var tp = pbc[tc];
-								if (tb && tp.name)
+								if (tp && tp.name)
 									name=tp.name;
 							}
 						}
