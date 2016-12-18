@@ -1376,4 +1376,9 @@ body.root-gui {
 	z-index: 999999 !important;
 	opacity: 0.5;
 	pointer-events: none;	
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
 }
