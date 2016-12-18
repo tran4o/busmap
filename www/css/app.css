@@ -1382,3 +1382,6 @@ body.root-gui {
 	right:0;
 	bottom:0;
 }
+.weather-main .weather {
+	height : 100%;
+}
