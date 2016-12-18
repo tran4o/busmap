@@ -79,12 +79,12 @@
 
 /* animation keyframes */
 @-webkit-keyframes weather {
-     from { background-position: 0 0px; }
-    to { background-position: 256 1024px; }
+     from { background-position: 0px 0px; }
+    to { background-position: 256px 1024px; }
 }
 @keyframes weather {
-   from { background-position: 0 0px; }
-    to { background-position: 256 1024px; }
+   from { background-position: 0px 0px; }
+    to { background-position: 256px 1024px; }
 }
 @-webkit-keyframes weather2 {
     from { background-position: 64px 64px; }
