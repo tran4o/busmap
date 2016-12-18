@@ -2203,8 +2203,13 @@
 							$(document.getElementById("estpers-"+id)).html(part.displayText);
 					}
 					var sorted=[];
-					for (var i in $scope.pois)
-						sorted.push($scope.pois[i]);
+					var pbc={};
+					for (var i in $scope.pois) {
+						var p = $scope.pois[i];
+						if (p.code) 
+							pbc[p.code]=p;
+						sorted.push(p);
+					}
 					sorted.sort(function(a,b) {
 						if (a.sortNum < b.sortNum)
 							return -1;
@@ -2212,11 +2217,23 @@
 							return 1;
 						return 0;
 					});
+					
 					for (var i in $scope.pois) {
 						var code = $scope.pois[i].code;
 						var poi = sorted.shift();
+						var name = poi.name;
+						if (!name) {
+							name="&nbsp;";
+							var k = name.indexOf(":");
+							if (k) {
+								var tc = code.substring(0,k);
+								var tp = pbc[tc];
+								if (tb && tp.name)
+									name=tp.name;
+							}
+						}
 						$(document.getElementById("estpois-"+code)).html(poi.displayText||"-");
-						$(document.getElementById("estpois-name-"+code)).html(poi.name||"-");
+						$(document.getElementById("estpois-name-"+code)).html(name);
 						if (poi.image) 
 							$(document.getElementById("estpois-img-"+code)).attr("src","img/"+poi.image);
 						else
