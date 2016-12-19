@@ -1374,10 +1374,10 @@ body.root-gui {
 	top:0;
 	right:0;
 	bottom:0;
+	display:none;
 }
 .weather-main .weather {
 	height : 100%;
-	display : none;
 }
 
 #forecast_embed {
