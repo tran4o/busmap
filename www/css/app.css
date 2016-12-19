@@ -1377,6 +1377,7 @@ body.root-gui {
 }
 .weather-main .weather {
 	height : 100%;
+	display : none;
 }
 
 #forecast_embed {
