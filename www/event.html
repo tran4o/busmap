@@ -283,7 +283,7 @@
 	</div>
 	<img id="main-logo" style="z-index:9999;" src="images/logo2.png"/>
 	
-	<iframe id="forecast_embed" type="text/html" frameborder="0" src="http://forecast.io/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk"> </iframe>
+	<iframe id="forecast_embed" type="text/html" frameborder="0"> </iframe>
 	<div class="rainy weather-main" style="display:block">
 		<div class="flashDiv"></div>    
     	<img id="raindrop1" src="images/raindrop1.png" width="0" height="0">
@@ -359,6 +359,7 @@
 	  function getWeather() 
 	  {
 		  LR.getWeather(function(res) {
+			  $("#forecast_embed").attr("src","http://forecast.io/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk&t="+(new Date()).getTime());
 			  setWeather(res);
 			  setTimeout(getWeather,15*60*1000 /* 15 min */);
 		  });
