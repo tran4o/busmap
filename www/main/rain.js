@@ -45,9 +45,10 @@ function rain(context,weather)
 	            particleArray[i].y += particleArray[i].speed*(isSnow ? 0.2 : 1);
 	            if (particleArray[i].y < context.canvas.height) // more or delete?
 	            {
+	            	np.push(particleArray[i]);
 		            particleArray[i].x += particleArray[i].drift*(Math.random()*0.3+1)*(isSnow ? 0.2 : 1);
-		            if (particleArray[i].x < context.canvas.width)
-		            	np.push(particleArray[i]);
+		            if (particleArray[i].x > context.canvas.width)
+		            	particleArray[i].x-=context.canvas.width;
 	            }
 	        }
 	    }
