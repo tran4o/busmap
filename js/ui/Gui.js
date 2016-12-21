@@ -206,8 +206,8 @@ Class("Gui",
 			this.popup2.setOffset([0,148]);
 			var ts;
 			this.tileLayer = new ol.layer.Tile({
-	        	source: ( ts = new ol.source.OSM())
-	        	//,visible: false
+	        	source: ( ts = new ol.source.OSM()),
+	        	visible: false
 	        });
 			
 			
@@ -224,7 +224,6 @@ Class("Gui",
 			      imageExtent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
 			      //,projection : proj
 			    })
-				,visible: false
 			  });
 			
 			
