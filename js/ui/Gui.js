@@ -532,7 +532,7 @@ Class("Gui",
 	        		ctx.setTransform(1, 0, 0, 1, 0, 0);	//RESET MATRIX
 					ctx.scale(coef,coef);
 					
-					if (/*!cbus &&*/ part.isWatched && part.glon && part.glat) 
+					if (!cbus && part.isWatched && part.glon && part.glat) 
 					{
 						// TRACKING INFO ---					
 		        		// PRECACHE
