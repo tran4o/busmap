@@ -80,7 +80,9 @@ var CONFIG =
 		popupEnsureVisibleWidth : 200,
 		popupEnsureVisibleHeight: 120,
 		maxParticipantsInToolbar : 50,
-		stopSpeedLimitKmh : consts.stopSpeedLimitKmh
+		stopSpeedLimitKmh : consts.stopSpeedLimitKmh,
+		offDutyDistanceMeters : 300,	// MUST BE BIGGER THAN constants.upperLimitSumTrackingGPSTolerances (250 default)
+		offDutyElapsedNotChangedTriggerSeconds : 40		
 	},
 	simulation : {
 		pingInterval : 10,  // interval in seconds to ping with gps data

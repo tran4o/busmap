@@ -1677,7 +1677,8 @@
         				lat = glat;
 	        			/*lon = l1[0]+(l2[0]-l1[0])*fract;
 	        			lat = l1[1]+(l2[1]-l1[1])*fract;*/
-        			}        			
+        			}      
+        			
         			
 	        		//8,9 = hdop,speed_in_kmh
         			if (l1[8] && l2[8])
@@ -1786,6 +1787,35 @@
 	        	part.glon=glon;
 	        	part.glat=glat;
 	        	part.wbest=undefined;
+    			//---------------------------------
+    			if (part.avail >= 1 && glon && glat && lon && lat) 
+    			{
+    				var dist = WGS84SPHERE.haversineDistance([lon,lat],[glon,glat]);
+    				if (dist > UI.Config.constraints.offDutyDistanceMeters) 
+    				{
+    					if (!part.offDuty) {
+        					if (part.offDutyElapsed == undefined) {
+        						part.offDutyElapsed=elapsed;
+        						part.offDutyElapsedTime=(new Date()).getTime();
+        					} else {
+        						if (part.offDutyElapsed == elapsed && (new Date()).getTime()-part.offDutyElapsedTime > UI.Config.constraints.offDutyElapsedNotChangedTriggerSeconds*1000) {
+        		    				part.offDuty=true;
+        						} else {
+        							if (part.offDutyElapsed != elapsed) 
+        							{
+            							part.offDuty=false;
+                						part.offDutyElapsed=elapsed;
+                						part.offDutyElapsedTime=(new Date()).getTime();
+        							}
+        						}
+        					}
+    					}
+    				} else {
+        				part.offDuty=false;
+        				delete part.offDutyElapsed;
+        				delete part.offDutyElapsedTime;
+    				}
+    			} 
     			//---------------------------------
 	        	// BUS MODE -> ESTIMATION OF TIME TO CURRENT POI
         		if (elapsed != undefined && levent && (($scope.poiByCode && $scope.crrPoiCode) || crrBus)) 
@@ -2209,19 +2239,34 @@
 					});
 					
 					// TODO WRITE ME CLEANER
-					if ($scope.crrPoiCode)
-						window.crrBus = sorted[0].id;
+					if ($scope.crrPoiCode) {
+						for (var k=0;k<sorted.length;k++) {
+							var p = sorted[k];
+							if (!p.offDuty) {
+								window.crrBus = p.id;
+								break;
+							}
+						}
+					}
+					
+					var kr = $(".mdlistprs");
+					for (var i=0;i<kr.length;i++)
+						kr[i].style.display="none";
+					
 					for (var i in sorted) 
 					{
 						var id = $scope.participants[i].id;
 						var part = sorted.shift();			
-						
 						$(document.getElementById("estpers-name-"+id)).html(part.first_name+" "+part.last_name+" "+(part.age ? "("+part.age+((" "+(part.gender||"")).toUpperCase())+")" : ""));
 						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
 						$(document.getElementById("estpers-img-"+id)).attr("src",img);
 						part = participantsCache[part.id];
-						if (part && part.displayText)
-							$(document.getElementById("estpers-"+id)).html(part.displayText);
+						if (part) 
+						{
+							if (part.displayText)
+								$(document.getElementById("estpers-"+id)).html(part.displayText);
+							document.getElementById("hidep"+id).style.display=part.offDuty ? "none" : "flex";
+						}
 					}
 					var sorted=[];
 					var pbc={};

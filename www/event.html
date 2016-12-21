@@ -48,6 +48,7 @@
 	<!-- ui components-->
     <script src="main/play.js"></script>
     <script src="main/pos.js"></script>
+    <script src="main/rain.js"></script>
 	<style>
 	.btn-fullscreen {
 		bottom:8.25em;
@@ -233,7 +234,7 @@
 		<div style="position : absolute;right:0;top:0;margin-top:0.7em;margin-right:0.7em;border-radius:7px;background-color:rgba(0,0,0,0.2)">
 			<md-list ng-if="!crrBus" style="padding:0;">
   				<div ng-click="selectCrrPoi()" style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrPoiName}}</div>
-	  			<md-list-item ng-repeat="person in participants" class="noleft" style="padding-left:0.75em;padding-right:0.75em;">
+	  			<md-list-item id="hidep{{person.id}}" ng-repeat="person in participants" class="noleft mdlistprs" style="padding-left:0.75em;padding-right:0.75em;">
 	    			<img id="estpers-img-{{person.id}}" style="border-radius:100%;border:2px solid {{person.color}}" alt="{{ person.firstName}} {{ person.lastName }}" ng-src="{{person.image || (person.gender == 'm' ? 'images/missing-male.png' : (person.gender == 'f' ? 'images/missing-female.png':null))  }}" class="md-avatar">	    			
 	    			<p id="estpers-name-{{person.id}}" style='text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>{{person.first_name}} {{ person.last_name}} {{ (person.age ? "("+person.age+((" "+(person.gender||"")).toUpperCase())+")" : "") }}</p>
 	    			<p style="margin-left:1em;color:white;font-weight:bold;" id="estpers-{{person.id}}">-</p>
@@ -283,17 +284,16 @@
 	<img id="main-logo" style="z-index:9999;" src="images/logo2.png"/>
 	
 	<iframe id="forecast_embed" type="text/html" frameborder="0" src="http://forecast.io/embed/#lat=41.6541368&lon=24.6935049&name=Pamporovo&units=uk"> </iframe>
-	<div class="rainy weather-main">
-		<div class="weather rain">
-			
-		</div>
+	<div class="rainy weather-main" style="display:block">
+		<div class="flashDiv"></div>    
+    	<img id="raindrop1" src="images/raindrop1.png" width="0" height="0">
+   	 	<img id="raindrop2" src="images/raindrop2.png" width="0" height="0">
+    	<img id="raindrop3" src="images/raindrop3.png" width="0" height="0">
+    	<img id="snowflake1" src="images/snow1.png" width="0" height="0">
+   	 	<img id="snowflake2" src="images/snow2.png" width="0" height="0">
+    	<img id="snowflake3" src="images/snow3.png" width="0" height="0">
 	</div>
-	<div class="snowy weather-main">
-		<div class="weather snow">
-			
-		</div>
-	</div>
-	<div id="background-wrap" class="cloudy weather-main">
+	<div id="background-wrap" class="cloudy weather-main" style="display:block">
 	    <div class="x1">
 	        <div class="cloud"></div>
 	    </div>
@@ -314,5 +314,52 @@
 	        <div class="cloud"></div>
 	    </div>
 	</div>
+	<script>
+	  var tmr = setInterval(checkLoaded,250);
+	  function checkLoaded() 
+	  {
+		  if (typeof LR == "undefined")
+			  return;
+		  clearInterval(tmr);
+		  getWeather();		  
+	  }
+	  function getWeather() 
+	  {
+		  LR.getWeather(function(res) {
+			  res=res||{};
+			  console.warn(res);
+			  var wind = res.wind || 0;
+			  wind*=2;
+			  if (wind < 0.5)
+				  wind=0.5;
+			  var spd = 60/wind/20;
+			  if (res.clouds <= 0.07)
+				  res.clouds = 0;
+			  if (!res.clouds || res.clouds <= 0) {
+				  $("#background-wrap").css("display","none");
+			  } else {
+				  $("#background-wrap").css("display","block");
+				  $(".x1,.x2,.x3,.x4,.x5").css("display","block");
+				  if (res.clouds < 1) {
+					  if (res.clouds <= 0.75) 
+						  $(".x1").css("display","none");
+					  if (res.clouds <= 0.5) 
+						  $(".x5").css("display","none");
+					  if (res.clouds <= 0.35)
+						  $(".x3").css("display","none");
+					  if (res.clouds <= 0.15)
+						  $(".x4").css("display","none");
+				  } 
+			  }
+			  $(".x1").css("animation","animateCloud "+(spd*35)+"s linear infinite");
+			  $(".x2").css("animation","animateCloud "+(spd*20)+"s linear infinite");
+			  $(".x3").css("animation","animateCloud "+(spd*30)+"s linear infinite");
+			  $(".x4").css("animation","animateCloud "+(spd*18)+"s linear infinite");
+			  $(".x5").css("animation","animateCloud "+(spd*25)+"s linear infinite");
+			  window.weather=res;
+			  setTimeout(getWeather,15*60*1000 /* 15 min */);
+		  });
+	  }
+	</script>
 </body>
 </html>

@@ -16,6 +16,7 @@ var gps = require("./gps");
 var dstorage = require("../db/discreteStorage");
 var dlocation = require("../db/discreteLocation");
 var kml = require("./kml");
+var weather = require("./weather");
 
 exports.start = function(args, onDone) {
     events.initTrackingStoredProcedure();
@@ -397,6 +398,11 @@ exports.start = function(args, onDone) {
         });
         socket.on("getPersonPath", function(data) {
             persons.getPersonPath(auth, data, function(res) {
+                socket.emit(data.__code, res);
+            });
+        });
+        socket.on("weather",function(data) {
+            weather.getCachedWeather(data, function(res) {
                 socket.emit(data.__code, res);
             });
         });

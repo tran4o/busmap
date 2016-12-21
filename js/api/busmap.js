@@ -42,6 +42,11 @@ _socket.on("connect",onConnect);
 		//-----------------------------------------------------------
 		var api=
 		{
+			getWeather : function(onDone) {
+				exec("weather",{},"done",function(res) {
+					onDone(res);
+				});
+			},
 			clearCache : function() {
 				events={};persons={};chunks={};
 			},

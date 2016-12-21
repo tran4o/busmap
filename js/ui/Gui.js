@@ -219,7 +219,7 @@ Class("Gui",
 			
 			this.staticImageLayer = new ol.layer.Image({
 			    source: new ol.source.ImageStatic({
-			      url: 'img/background.svg',
+			      url: 'img/background.png',
 			      imageSize: [1295, 950],
 			      imageExtent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
 			      //,projection : proj
@@ -321,7 +321,6 @@ Class("Gui",
 			this.trackLayer.on("postcompose",function(event) {
 				/* TODO WRITE IN CONFIG 2 seconds animation crrbus info */
 				var animFrame = Math.floor(((new Date()).getTime()/3000))%3;
-
 				var ctx=event.context;
         		var coef = ctx.canvas.width/map.getSize()[0];
 				ctx.scale(coef,coef);
@@ -383,7 +382,10 @@ Class("Gui",
 			    {
 	    			if (that.isForceParticipantHidden && that.isForceParticipantHidden(i))
 	    				continue;
-					arr.push(that.participantsCache[i]);
+	    			p=that.participantsCache[i];
+	    			if (p.offDuty)
+	    				continue;
+					arr.push(p);
 				}
 			    // UFFFF
 			    var cbus = typeof crrBus != "undefined" ? crrBus : undefined;
@@ -530,7 +532,7 @@ Class("Gui",
 	        		ctx.setTransform(1, 0, 0, 1, 0, 0);	//RESET MATRIX
 					ctx.scale(coef,coef);
 					
-					if (!cbus && part.isWatched && part.glon && part.glat) 
+					if (/*!cbus &&*/ part.isWatched && part.glon && part.glat) 
 					{
 						// TRACKING INFO ---					
 		        		// PRECACHE
@@ -628,6 +630,13 @@ Class("Gui",
 				}
         		ctx.setTransform(1, 0, 0, 1, 0, 0);	//RESET MATRIX
 	        	ctx.globalAlpha=1;
+	        	if (typeof weather != "undefined") {
+		        	if (!ctx.rain)
+		        		ctx.rain = new rain(ctx,weather);
+		        	else
+		        		ctx.rain.setData(weather);
+		        	ctx.rain.paint();
+	        	}
 			});
 			
 			var proxiesLayer=this.proxiesLayer;
