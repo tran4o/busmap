@@ -323,40 +323,43 @@
 		  clearInterval(tmr);
 		  getWeather();		  
 	  }
+	  function setWeather(res) {
+		  res=res||{};
+		  console.warn(res);
+		  var wind = res.wind || 0;
+		  wind*=2;
+		  if (wind < 0.5)
+			  wind=0.5;
+		  var spd = 60/wind/20;
+		  if (res.clouds <= 0.07)
+			  res.clouds = 0;
+		  if (!res.clouds || res.clouds <= 0) {
+			  $("#background-wrap").css("display","none");
+		  } else {
+			  $("#background-wrap").css("display","block");
+			  $(".x1,.x2,.x3,.x4,.x5").css("display","block");
+			  if (res.clouds < 1) {
+				  if (res.clouds <= 0.75) 
+					  $(".x1").css("display","none");
+				  if (res.clouds <= 0.5) 
+					  $(".x5").css("display","none");
+				  if (res.clouds <= 0.35)
+					  $(".x3").css("display","none");
+				  if (res.clouds <= 0.15)
+					  $(".x4").css("display","none");
+			  } 
+		  }
+		  $(".x1").css("animation","animateCloud "+(spd*35)+"s linear infinite");
+		  $(".x2").css("animation","animateCloud "+(spd*20)+"s linear infinite");
+		  $(".x3").css("animation","animateCloud "+(spd*30)+"s linear infinite");
+		  $(".x4").css("animation","animateCloud "+(spd*18)+"s linear infinite");
+		  $(".x5").css("animation","animateCloud "+(spd*25)+"s linear infinite");
+		  window.weather=res;
+	  }
 	  function getWeather() 
 	  {
 		  LR.getWeather(function(res) {
-			  res=res||{};
-			  console.warn(res);
-			  var wind = res.wind || 0;
-			  wind*=2;
-			  if (wind < 0.5)
-				  wind=0.5;
-			  var spd = 60/wind/20;
-			  if (res.clouds <= 0.07)
-				  res.clouds = 0;
-			  if (!res.clouds || res.clouds <= 0) {
-				  $("#background-wrap").css("display","none");
-			  } else {
-				  $("#background-wrap").css("display","block");
-				  $(".x1,.x2,.x3,.x4,.x5").css("display","block");
-				  if (res.clouds < 1) {
-					  if (res.clouds <= 0.75) 
-						  $(".x1").css("display","none");
-					  if (res.clouds <= 0.5) 
-						  $(".x5").css("display","none");
-					  if (res.clouds <= 0.35)
-						  $(".x3").css("display","none");
-					  if (res.clouds <= 0.15)
-						  $(".x4").css("display","none");
-				  } 
-			  }
-			  $(".x1").css("animation","animateCloud "+(spd*35)+"s linear infinite");
-			  $(".x2").css("animation","animateCloud "+(spd*20)+"s linear infinite");
-			  $(".x3").css("animation","animateCloud "+(spd*30)+"s linear infinite");
-			  $(".x4").css("animation","animateCloud "+(spd*18)+"s linear infinite");
-			  $(".x5").css("animation","animateCloud "+(spd*25)+"s linear infinite");
-			  window.weather=res;
+			  setWeather(res);
 			  setTimeout(getWeather,15*60*1000 /* 15 min */);
 		  });
 	  }
