@@ -2261,10 +2261,9 @@
 						var img = part.image || (part.gender == 'm' ? 'images/missing-male.png' : (part.gender == 'f' ? 'images/missing-female.png':null))
 						$(document.getElementById("estpers-img-"+id)).attr("src",img);
 						part = participantsCache[part.id];
-						if (part) 
+						if (part  && part.displayText) 
 						{
-							if (part.displayText)
-								$(document.getElementById("estpers-"+id)).html(part.displayText);
+							$(document.getElementById("estpers-"+id)).html(part.displayText);
 							document.getElementById("hidep"+id).style.display=part.offDuty ? "none" : "flex";
 						}
 					}
