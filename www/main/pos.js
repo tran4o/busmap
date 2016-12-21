@@ -27,7 +27,7 @@
     // TODO 1000 (1sec) config option
     
     var notifTimes={};
-    var doNotNotify=(localStorage.getItem("doNotify") != "true");
+    var doNotNotify=true; // BUS MODE SKIP NOTIF
     var pendingNotif=false;
 	function notification(person,ct,type,data,alias) 
 	{
