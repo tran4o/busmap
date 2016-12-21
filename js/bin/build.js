@@ -18,7 +18,7 @@ var b1 = browserify({
   plugin: [watchify]
 });
 
-//b1.plugin('minifyify', {output: inst.installDir+"/tmp/t1.js.dbg",map: inst.installDir+"/tmp/t1.js.map"});
+b1.plugin('minifyify', {output: inst.installDir+"/tmp/t1.js.dbg",map: inst.installDir+"/tmp/t1.js.map"});
 b1.on('update', bundle1);
 
 bundle1();
@@ -32,7 +32,7 @@ var b2 = browserify({
 });
 
 b2.on('update', bundle2);
-//b2.plugin('minifyify', {output: inst.installDir+"/tmp/t2.js.dbg",map: inst.installDir+"/tmp/t2.js.map"});
+b2.plugin('minifyify', {output: inst.installDir+"/tmp/t2.js.dbg",map: inst.installDir+"/tmp/t2.js.map"});
 
 bundle2();
 
