@@ -24,7 +24,7 @@ function rain(context,weather)
 	function Particle() {
 	    this.x = Math.round(Math.random() * context.canvas.width);
 	    this.y = Math.round(Math.random() * context.canvas.height)-context.canvas.height-16;
-	    this.drift = windSpeed*3.2+3;//4;
+	    this.drift = windSpeed*2.3+4;//4;
 	    this.speed = Math.random()*5*intensity/2.5+3*windSpeed;
 	    if (this.speed < 15)
 	    	this.speed=15;
