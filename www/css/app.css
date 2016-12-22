@@ -628,7 +628,11 @@ md-dialog.fixed-dialog {
 }
 
 .ol-viewport {
-	background-color : #FFFFFF !important;
+	background: url(../images/background.jpg) no-repeat center center fixed; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
 }
 
 .ol-attribution {

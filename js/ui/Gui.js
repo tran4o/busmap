@@ -217,14 +217,14 @@ Class("Gui",
 		        extent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
 		    });*/
 			
-			this.staticImageLayer = new ol.layer.Image({
+			/*this.staticImageLayer = new ol.layer.Image({
 			    source: new ol.source.ImageStatic({
 			      url: 'img/background.png',
 			      imageSize: [950,1295],
 			      imageExtent: [2744859.2781254444, 5106894.651222586, 2753936.1752343094, 5119267.895176248]
 			      //,projection : proj
 			    })
-			  });
+			  });*/
 			
 			
 			var canvas;
@@ -649,7 +649,7 @@ Class("Gui",
 			  target: this.target,
 			  layers: [
 			        this.tileLayer,
-			        this.staticImageLayer,
+			        //this.staticImageLayer,
 					this.trackLayer,
 					this.elapsedLayer
 			  ],
