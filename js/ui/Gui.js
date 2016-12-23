@@ -486,7 +486,12 @@ Class("Gui",
 			        		ctx.fillText(part.wbest[1],0,3);
 	        			}
 	        		} else {
-        				ctx.drawImage(document.getElementById("bbus"),-17,-17,34,34);
+        				
+	        			if (part.elapsed > 0.5)
+	        				ctx.drawImage(document.getElementById("bbus"),-17,-17,34,34);
+	        			else
+	        				ctx.drawImage(document.getElementById("bbusr"),-17,-17,34,34);
+        				
 	        		    //ctx.font = "bold 13.5px Tahoma, Geneva, sans-serif";
 		        		//ctx.fillText(part.code,0,5);
 	        		}
