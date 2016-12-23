@@ -1791,6 +1791,10 @@
     			if (part.avail >= 1 && glon && glat && lon && lat) 
     			{
     				var dist = WGS84SPHERE.haversineDistance([lon,lat],[glon,glat]);
+    				
+    				// TODO TODO TODO TODO 
+    				dist = 0; 
+    				
     				if (dist > UI.Config.constraints.offDutyDistanceMeters) 
     				{
     					if (!part.offDuty) {
