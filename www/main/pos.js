@@ -1894,8 +1894,8 @@
             		        	}
             				} else {
             					// SPEED NOT AVAIL -> display distance in km
-                				part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km";
-                				part.sortNum=1000;
+                				//part.displayText = parseFloat(Math.round(lenm / 1000 * 100) / 100).toFixed(2)+" km";
+                				//part.sortNum=1000;
             				}
             				//console.log(part.code+" | TVAL : "+tval);
             			}
