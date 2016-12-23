@@ -839,7 +839,7 @@
 	        });
 	        function setCurrentTime(time) {
 	        	timeline.setCustomTime(time,"crr");
-	        	var html=moment(time).format("HH:mm:ss")+"";
+	        	var html=moment(time+UI.Config.timeouts.liveConsistencyDisplayOffset*1000).format("HH:mm:ss")+"";
 	        	var sel=$("#crrt-timer");
 	        	if (sel && sel.length && sel[0].innerHTML != html) {
 	        		sel[0].innerHTML=html;
