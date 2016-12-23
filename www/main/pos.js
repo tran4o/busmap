@@ -2243,7 +2243,7 @@
 					});
 					
 					// TODO WRITE ME CLEANER
-					if ($scope.crrPoiCode) {
+					if ($scope.crrPoiCode && $scope.poiByCode && $scope.poiByCode[$scope.crrPoiCode]) {
 						for (var k=0;k<sorted.length;k++) {
 							var p = sorted[k];
 							if (!p.offDuty) {
