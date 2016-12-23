@@ -486,8 +486,7 @@ Class("Gui",
 			        		ctx.fillText(part.wbest[1],0,3);
 	        			}
 	        		} else {
-        				
-	        			if (part.elapsed > 0.5)
+	        			if ((part.elapsed%1) > 0.5)
 	        				ctx.drawImage(document.getElementById("bbus"),-17,-17,34,34);
 	        			else
 	        				ctx.drawImage(document.getElementById("bbusr"),-17,-17,34,34);
