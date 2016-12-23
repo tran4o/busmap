@@ -291,7 +291,7 @@ var STYLES=
 				image : new ol.style.Icon({
 					src : "/img/"+icn.image,
 					scale : (icn.scale || 1),
-					opacity : 0.15
+					opacity : 0.5
 				}),
 				geometry: new ol.geom.Point(p)
 			 }));
