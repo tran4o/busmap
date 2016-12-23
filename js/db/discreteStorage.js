@@ -55,7 +55,7 @@ exports.getChunk = function(auth,event,person,level,chunk,onDone)
 			if (!r.liveTimestamp || r.liveTimestamp >= ctime) {
 				return r;
 			} else if (r.liveTimestamp) {
-				console.log("TIME OUT LIVE CHUNK DISCRETE STORAGE : "+key);
+				//console.log("TIME OUT LIVE CHUNK DISCRETE STORAGE : "+key);
 				cache.del(key); // timeout out
 			}
 		} else {
