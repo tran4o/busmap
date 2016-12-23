@@ -290,7 +290,7 @@ var STYLES=
 			arr.push(new ol.style.Style({
 				image : new ol.style.Icon({
 					src : "/img/"+icn.image,
-					scale : (icn.scale || 1),
+					scale : (icn.scale || 1)/2,
 					opacity : 0.5
 				}),
 				geometry: new ol.geom.Point(p)
