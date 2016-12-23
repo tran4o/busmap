@@ -338,7 +338,7 @@
 	            				for (var i=0;i<res.length;i++) {
 	            					var p = res[i];
 	            					p.selected=!favsh || !favsh[p.id];
-	            					if (window.crrBus == undefined && p.imei == $scope.crrBus) {
+	            					if (typeof window.crrBus != "number" && p.imei == $scope.crrBus) {
 	            						window.crrBus=crrBus=p.id;
 	            					}
 	            				}
