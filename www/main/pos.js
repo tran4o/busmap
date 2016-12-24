@@ -375,7 +375,9 @@
 	        var trackLength = track.getTrackLength();
 			GUI = new Gui({track:track, isSkipExtent : levent == undefined, initialZoom : 9,isEventMode : levent != undefined });
 			GUI.getIsWatched = function(pid) {
-				return wset[pid];
+				/* BUSMODE TODO REWRITE */ 
+				return true;
+				//return wset[pid];
 			};
 			GUI.getCrrTime=function() {
 				return timeline.getCustomTime("crr").getTime();
