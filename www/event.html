@@ -231,7 +231,7 @@
 	      </md-content>
 	    </md-sidenav>		
 
-		<div style="position : absolute;right:0;top:0;margin-top:0.7em;margin-right:0.7em;border-radius:7px;background-color:rgba(0,0,0,0.2)">
+		<div style="position : absolute;right:0;bottom:10vh;margin-top:0.7em;margin-right:0.7em;border-radius:7px;background-color:rgba(0,0,0,0.2)">
 			<md-list ng-if="!crrBus" style="padding:0;">
   				<div ng-click="selectCrrPoi()" style="color:rgba(255,255,255,0.9);font-size:150%;font-weight:bold;padding:0.25em;text-align:center;border-bottom : 2px solid rgba(0,0,0,0.2);">{{crrPoiName || "BUS STATION"}}</div>
 	  			<md-list-item id="hidep{{person.id}}" ng-repeat="person in participants" class="noleft mdlistprs" style="padding-left:0.75em;padding-right:0.75em;">
