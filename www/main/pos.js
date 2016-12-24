@@ -1417,12 +1417,12 @@
 	        	for (var i in oset) if (!done[i]) {
 	        		done[i]=1;
 	        		if (participantsCache[i]) 
-	        			participantsCache[i].isWatched=fwset[i];
+	        			participantsCache[i].isWatched=true; // TODO REWRITE fwset[i];
 	        	}
 	        	for (var i in nset) if (!done[i]) {
 	        		done[i]=1;
 	        		if (participantsCache[i]) 
-	        			participantsCache[i].isWatched=fwset[i];
+	        			participantsCache[i].isWatched=true; // TODO REWRITE fwset[i];
 	        	}
 	        	refreshGraphData();
 	        	refreshPathData();
@@ -1778,7 +1778,7 @@
 	        function setParticipantLocation(part,lon,lat,elapsed,hdop,glon,glat,speed,acceleration,rotation,rank,speedExact) 
 	        {
 	        	part.rank=rank;
-	        	part.isWatched=fwset[part.id];
+	        	part.isWatched=true; // TODO REWRITE fwset[part.id];
 	        	part.hdop=hdop;
 	        	var tp = ol.proj.transform([lon,lat],'EPSG:4326', 'EPSG:3857');
 		        part.elapsed=elapsed;
