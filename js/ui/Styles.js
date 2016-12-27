@@ -296,7 +296,7 @@ var STYLES=
 				}),
 				geometry: new ol.geom.Point(p)
 			 }));*/
-		   if (feature.name) 
+		  /* if (feature.name) 
 		   {
 	            arr.push(new ol.style.Style({
 	                text: new ol.style.Text({
@@ -313,7 +313,7 @@ var STYLES=
 	                    offsetY: 0
 	                })
 	            }));
-		   }
+		   }*/
 		} else {
 			arr.push(new ol.style.Style({
 				image : new ol.style.Icon(({
