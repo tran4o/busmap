@@ -287,14 +287,15 @@ var STYLES=
 			var g = feature.getGeometry().getCoordinates();
 			//var p = [g[0]+(icn.x || 0)*resolution,g[1]-(icn.y || 0)*resolution];
 			var p = [g[0]+(icn.x || 0),g[1]-(icn.y || 0)];
-			arr.push(new ol.style.Style({
+			// TODO TODO REWRITE ME HACK HACK
+			/*arr.push(new ol.style.Style({
 				image : new ol.style.Icon({
 					src : "/img/"+icn.image,
 					scale : (icn.scale || 1)/1.5,
 					opacity : 0.5
 				}),
 				geometry: new ol.geom.Point(p)
-			 }));
+			 }));*/
 		   if (feature.name) 
 		   {
 	            arr.push(new ol.style.Style({
