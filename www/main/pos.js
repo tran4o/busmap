@@ -2247,8 +2247,8 @@
 					// TODO WRITE ME CLEANER
 					if ($scope.crrPoiCode && $scope.poiByCode && $scope.poiByCode[$scope.crrPoiCode]) {
 						for (var k=0;k<sorted.length;k++) {
-							var p = sorted[k];
-							if (!p.offDuty) {
+							var p = participantsCache[sorted[k].id];
+							if (p && !p.offDuty) {
 								window.crrBus = p.id;
 								break;
 							}
