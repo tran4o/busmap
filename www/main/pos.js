@@ -2237,9 +2237,15 @@
 							return 1;
 						if (!a)
 							return 0;
-						if (a.sortNum < b.sortNum)
+						var sa = a.sortNum;
+						var sb = b.sortNum;
+						if (sa == undefined)
+							sa = 1e20;
+						if (sb == undefined)
+							sb = 1e20;
+						if (sa < sb)
 							return -1;
-						if (a.sortNum > b.sortNum)
+						if (sa > sb)
 							return 1;
 						return 0;
 					});
