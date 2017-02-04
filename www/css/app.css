@@ -1216,7 +1216,7 @@ body.root-gui {
 	position : absolute;
 	z-index : 9999;
 	top : 0;
-	left : 1em;
+	right : 0.5em;
 	height : auto;
 	width : 200px;
 }
