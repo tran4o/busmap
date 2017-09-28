@@ -1,30 +1,34 @@
 # BusMap
 
-1) building
+## building
 
+```bash
 npm build
+```
 
-2) installing (devel) 
-npm link			/ sudo npm link
+## installing (devel) 
 
-3) BIN
+```bash
+npm link	# or  sudo npm link
+```
 
-	lr <command> 	// general cli interface
+## BIN
 
-available commands :
+	js/cmd/bm.js <command> 	// general cli interface
 
-1) lr db create
-2) lr db drop
+### available commands :
 
-3) lr cleanup	 (clears db (json) cache (location/data)
+1) ```bash bm.js db create```
+2) ```bash bm.js db drop```
+3) ```bash bm.js cleanup```	 (clears db (json) cache (location/data)
 
 
-Running the instance 
--------------------
-(used 3 differend tmux sessions)
+# Running the instance 
 
-Start collecting mqtt data and store it in the db
-1) gps			
+_(used 3 differend tmux sessions)_
+
+Start collecting mqtt data and store it in the db:
+1) gps
  
 To be removed watchifier for building browserified js 
 2) build
@@ -32,18 +36,16 @@ To be removed watchifier for building browserified js
 the http server 
 3) http
 
+# Project structure
+
+* js/bin/** 			bin and cli scripts
+* js/srv/**			server components. IMPORTANT IS http.js > all transfer happens here
+* js/api/busmap.js	- RMI api for middleware and clients (NODEJS / WEB)
 
 
-Basic JS structure
-------------------
-js/bin/** 			bin and cli scripts
-js/srv/**			server components. IMPORTANT IS http.js > all transfer happens here
+# Root of admin interface 
+_(will be moved?) packed?_
 
-js/api/busmap.js	- RMI api for middleware and clients (NODEJS / WEB)
-
-
-Root of admin interface (will be moved?) packed?
----------------------------------------------
 /www/admin/home/script 				-> downloaded binaries, patched sometimes (TODO ?!) 			
 /www/admin/home/pos.js 				-> basic widget for displaying pos / play event widget
  
