@@ -18,10 +18,9 @@ npm link	# or  sudo npm link
 
 ### available commands :
 
-1) ```bash bm.js db create```
-2) ```bash bm.js db drop```
-3) ```bash bm.js cleanup```	 (clears db (json) cache (location/data)
-
+1) ```js/cmd/bm.js db create```
+2) ```js/cmd/bm.js db drop```
+3) ```js/cmd/bm.js cleanup```	 (clears db (json) cache (location/data)
 
 # Running the instance 
 
@@ -35,6 +34,15 @@ To be removed watchifier for building browserified js
 
 the http server 
 3) http
+
+# Overnight maintainance
+
+add this to cron:
+
+```cron
+1 0 * * * cd ~/busmap; /usr/bin/node js/cmd/clone.js 
+```
+and set ~/busmap to respective location of this service
 
 # Project structure
 
