@@ -1,5 +1,12 @@
 # BusMap
 
+
+## prerequisites
+
+* posgresql 9.5+
+* postgis 2.3+ 
+* node 6.x+
+
 ## building
 
 ```bash
